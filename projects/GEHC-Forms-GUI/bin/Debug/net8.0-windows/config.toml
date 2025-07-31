@@ -1,0 +1,4 @@
+# GEHC Battery Pack Simulator Settings
+
+ComPort = "" # Will be saved automatically
+BaudRate = 115200 # Default baud rate

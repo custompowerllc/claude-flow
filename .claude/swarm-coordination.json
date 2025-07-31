@@ -1,0 +1,143 @@
+{
+  "swarm_configuration": {
+    "deployment_timestamp": "2025-07-28T00:00:00Z",
+    "swarm_id": "core-dev-swarm-001",
+    "coordination_mode": "hierarchical_with_mesh_backup",
+    "agents": {
+      "researcher": {
+        "agent_id": "researcher-001",
+        "status": "deployed",
+        "capabilities": ["code_analysis", "pattern_recognition", "documentation_research", "dependency_tracking", "knowledge_synthesis"],
+        "role": "information_gathering",
+        "priority": "high",
+        "communication_channels": ["shared_memory", "task_queue", "result_broadcast"],
+        "memory_namespace": "research_findings",
+        "hooks": {
+          "pre_task": "memory_store research_context",
+          "post_task": "memory_search research_*"
+        }
+      },
+      "planner": {
+        "agent_id": "planner-001", 
+        "status": "deployed",
+        "capabilities": ["task_decomposition", "dependency_analysis", "resource_allocation", "timeline_estimation", "risk_assessment"],
+        "role": "strategic_coordination",
+        "priority": "high",
+        "communication_channels": ["shared_memory", "task_distribution", "agent_coordination"],
+        "memory_namespace": "planning_decisions",
+        "hooks": {
+          "pre_task": "memory_store planner_start",
+          "post_task": "memory_store planner_end"
+        }
+      },
+      "coder": {
+        "agent_id": "coder-001",
+        "status": "deployed", 
+        "capabilities": ["code_generation", "refactoring", "optimization", "api_design", "error_handling"],
+        "role": "implementation_specialist",
+        "priority": "high",
+        "communication_channels": ["shared_memory", "code_repository", "test_feedback"],
+        "memory_namespace": "implementation_context",
+        "hooks": {
+          "pre_task": "check existing tests",
+          "post_task": "npm run lint --if-present"
+        }
+      },
+      "tester": {
+        "agent_id": "tester-001",
+        "status": "deployed",
+        "capabilities": ["unit_testing", "integration_testing", "e2e_testing", "performance_testing", "security_testing"],
+        "role": "quality_validation",
+        "priority": "high", 
+        "communication_channels": ["shared_memory", "test_results", "quality_metrics"],
+        "memory_namespace": "test_context",
+        "hooks": {
+          "pre_task": "check test framework",
+          "post_task": "npm test -- --reporter=json"
+        }
+      },
+      "reviewer": {
+        "agent_id": "reviewer-001",
+        "status": "deployed",
+        "capabilities": ["code_review", "security_audit", "performance_analysis", "best_practices", "documentation_review"],
+        "role": "quality_assurance",
+        "priority": "medium",
+        "communication_channels": ["shared_memory", "review_feedback", "quality_reports"],
+        "memory_namespace": "review_context", 
+        "hooks": {
+          "pre_task": "memory_store review_checklist",
+          "post_task": "memory store review summary"
+        }
+      }
+    },
+    "communication_protocols": {
+      "shared_memory": {
+        "enabled": true,
+        "namespaces": ["research_findings", "planning_decisions", "implementation_context", "test_context", "review_context"],
+        "cross_agent_access": true,
+        "persistence": true
+      },
+      "task_distribution": {
+        "mode": "coordinator_managed",
+        "coordinator": "planner",
+        "parallel_execution": true,
+        "load_balancing": true
+      },
+      "result_aggregation": {
+        "enabled": true,
+        "aggregator": "planner", 
+        "format": "structured_yaml",
+        "validation": true
+      }
+    },
+    "sparc_integration": {
+      "enabled": true,
+      "phases": {
+        "specification": {
+          "primary_agent": "researcher",
+          "supporting_agents": ["planner"],
+          "parallel_operations": ["requirements_analysis", "constraint_validation"]
+        },
+        "pseudocode": {
+          "primary_agent": "planner",
+          "supporting_agents": ["researcher", "coder"],
+          "parallel_operations": ["algorithm_design", "pattern_analysis"]
+        },
+        "architecture": {
+          "primary_agent": "planner", 
+          "supporting_agents": ["coder", "reviewer"],
+          "parallel_operations": ["component_design", "integration_planning"]
+        },
+        "refinement": {
+          "primary_agent": "coder",
+          "supporting_agents": ["tester", "reviewer"],
+          "parallel_operations": ["tdd_implementation", "quality_validation"]
+        },
+        "completion": {
+          "primary_agent": "reviewer",
+          "supporting_agents": ["tester", "planner"],
+          "parallel_operations": ["integration_testing", "documentation_validation"]
+        }
+      }
+    },
+    "performance_optimization": {
+      "batchtools_enabled": true,
+      "parallel_processing": true,
+      "concurrent_file_operations": true,
+      "batch_memory_operations": true,
+      "pipeline_processing": true,
+      "resource_management": {
+        "max_concurrent_agents": 5,
+        "memory_limit_per_agent": "512MB",
+        "cpu_allocation": "auto"
+      }
+    }
+  },
+  "operational_status": {
+    "swarm_health": "healthy",
+    "agents_deployed": 5,
+    "communication_active": true,
+    "memory_synchronized": true,
+    "ready_for_tasks": true
+  }
+}

@@ -1,0 +1,19 @@
+﻿[general]
+title = "Sikorsky 7S2P and 5S1P Bootloader GUI"
+device = "Sikorsky_One"
+
+[serial]
+channel = 0
+default-baud-rate = 115_200
+data-bits = 8
+parity = "none"
+stop-bits = "one"
+handshake = "none"
+
+[bootloader]
+hex-file-content = [ { max-size = 90_112, signature = "custom-power-sikorsky-one" } ]
+upgrade-tasks = [ { firmware-index = 0, id-prefix = 0x1CAB0000 } ]
+reboot-time = 1_000
+normal-timeout = 5_000
+verify-timeout = 10_000
+auto-exit = true

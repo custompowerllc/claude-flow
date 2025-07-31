@@ -1,0 +1,82 @@
+{
+  "learningProtocols": {
+    "transferLearning": {
+      "enabled": true,
+      "compatibilityMatrix": {
+        "coder": {
+          "compatible": ["reviewer", "tester", "analyzer"],
+          "transferTypes": ["code_patterns", "best_practices", "debugging_strategies"]
+        },
+        "researcher": {
+          "compatible": ["planner", "architect", "innovator"],
+          "transferTypes": ["domain_knowledge", "research_methodologies", "insight_patterns"]
+        },
+        "coordinator": {
+          "compatible": ["memory-manager", "consensus-builder"],
+          "transferTypes": ["coordination_strategies", "optimization_patterns", "decision_frameworks"]
+        }
+      }
+    },
+    "federatedLearning": {
+      "enabled": true,
+      "globalModel": {
+        "version": "1.0.0",
+        "participants": 8,
+        "trainingRounds": 50,
+        "convergenceThreshold": 0.95
+      },
+      "localModels": {
+        "updateFrequency": "realtime",
+        "aggregationMethod": "federated-averaging",
+        "privacyPreservation": true
+      }
+    },
+    "knowledgeSharing": {
+      "protocols": [
+        {
+          "name": "semantic-knowledge-transfer",
+          "description": "Transfer knowledge using semantic embeddings and concept mapping",
+          "accuracy": 0.89,
+          "latency": "25ms"
+        },
+        {
+          "name": "pattern-based-learning",
+          "description": "Share learned patterns and heuristics across agent types",
+          "accuracy": 0.92,
+          "latency": "15ms"
+        },
+        {
+          "name": "collaborative-insight-synthesis",
+          "description": "Combine insights from multiple agents for enhanced understanding",
+          "accuracy": 0.94,
+          "latency": "35ms"
+        }
+      ]
+    }
+  },
+  "adaptiveBehavior": {
+    "learningMechanisms": [
+      {
+        "type": "reinforcement-learning",
+        "scope": "coordination-optimization",
+        "performance": {
+          "improvement": "23%",
+          "convergenceTime": "47s"
+        }
+      },
+      {
+        "type": "meta-learning",
+        "scope": "task-adaptation",
+        "performance": {
+          "improvement": "31%",
+          "convergenceTime": "62s"
+        }
+      }
+    ],
+    "behaviorAdaptation": {
+      "contextualAdaptation": true,
+      "performanceFeedback": "continuous",
+      "strategyEvolution": "genetic-algorithm"
+    }
+  }
+}

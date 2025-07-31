@@ -1,0 +1,388 @@
+{
+  "specialized_development_swarm": {
+    "version": "1.0.0",
+    "created": "2025-07-28",
+    "swarm_type": "specialized_development",
+    "coordination_mode": "concurrent_collaboration",
+    "batchtools_optimization": true,
+    
+    "agents": {
+      "system_architect": {
+        "name": "system-architect",
+        "role": "High-level system design and architecture decisions",
+        "domain": "architecture",
+        "specialization": [
+          "System design patterns",
+          "Scalability planning", 
+          "Technology stack evaluation",
+          "Microservices architecture",
+          "Cloud infrastructure design",
+          "Performance optimization strategies",
+          "Cross-system integration"
+        ],
+        "responsibilities": [
+          "Design scalable system architectures",
+          "Document architectural decisions (ADRs)",
+          "Create system diagrams (C4 model)",
+          "Evaluate technology choices and trade-offs",
+          "Define architectural patterns and principles"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["backend-dev", "mobile-dev", "ml-developer", "cicd-engineer"],
+          "secondary_collaborations": ["api-docs", "code-analyzer", "template-generator"],
+          "decision_authority": "architectural_patterns",
+          "approval_required": ["major_architectural_changes", "technology_stack_decisions"]
+        },
+        "tools": ["Read", "Write", "Grep", "Glob", "WebSearch"],
+        "autonomous": false,
+        "batchtools_config": {
+          "parallel_analysis": true,
+          "concurrent_validation": true,
+          "batch_documentation": true
+        }
+      },
+      
+      "backend_dev": {
+        "name": "backend-dev", 
+        "role": "API development and server-side architecture",
+        "domain": "backend",
+        "specialization": [
+          "REST/GraphQL API design",
+          "Database architecture",
+          "Server-side logic implementation",
+          "Authentication/authorization systems",
+          "Microservices development",
+          "API performance optimization",
+          "Data modeling and validation"
+        ],
+        "responsibilities": [
+          "Design and implement APIs",
+          "Create secure authentication systems", 
+          "Develop efficient database queries",
+          "Implement proper error handling",
+          "Write comprehensive API tests"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["system-architect", "mobile-dev", "api-docs"],
+          "secondary_collaborations": ["ml-developer", "cicd-engineer", "code-analyzer"],
+          "provides_apis_for": ["mobile-dev", "ml-developer"],
+          "receives_architecture_from": ["system-architect"]
+        },
+        "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Grep", "Glob"],
+        "autonomous": true,
+        "batchtools_config": {
+          "parallel_implementation": true,
+          "concurrent_testing": true,
+          "batch_api_creation": true
+        }
+      },
+      
+      "mobile_dev": {
+        "name": "mobile-dev",
+        "role": "React Native mobile application development", 
+        "domain": "mobile",
+        "specialization": [
+          "Cross-platform React Native development",
+          "Native module integration",
+          "Mobile UI/UX optimization",
+          "Performance tuning for mobile",
+          "Offline capabilities",
+          "Push notifications",
+          "App store deployment strategies"
+        ],
+        "responsibilities": [
+          "Develop React Native components",
+          "Implement navigation and state management",
+          "Handle platform-specific code",
+          "Integrate with backend APIs",
+          "Optimize mobile performance"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["backend-dev", "system-architect"],
+          "secondary_collaborations": ["api-docs", "cicd-engineer", "code-analyzer"],
+          "consumes_apis_from": ["backend-dev"],
+          "receives_architecture_from": ["system-architect"]
+        },
+        "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Grep", "Glob"],
+        "autonomous": true,
+        "batchtools_config": {
+          "parallel_platform_development": true,
+          "concurrent_ui_optimization": true,
+          "batch_component_creation": true
+        }
+      },
+      
+      "ml_developer": {
+        "name": "ml-developer",
+        "role": "Machine learning model development and deployment",
+        "domain": "data_science",
+        "specialization": [
+          "ML model development and training", 
+          "Data preprocessing and feature engineering",
+          "Model evaluation and validation",
+          "MLOps pipeline creation",
+          "AI/ML API integration",
+          "Model deployment and monitoring",
+          "Data science workflow optimization"
+        ],
+        "responsibilities": [
+          "Create and train ML models",
+          "Implement data preprocessing pipelines",
+          "Evaluate model performance",
+          "Prepare models for production deployment",
+          "Integrate ML capabilities with applications"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["backend-dev", "system-architect"],
+          "secondary_collaborations": ["cicd-engineer", "api-docs", "code-analyzer"],
+          "provides_models_for": ["backend-dev"],
+          "receives_infrastructure_from": ["system-architect"]
+        },
+        "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "NotebookRead", "NotebookEdit"],
+        "autonomous": false,
+        "batchtools_config": {
+          "parallel_model_training": true,
+          "concurrent_data_processing": true,
+          "batch_feature_engineering": true
+        }
+      },
+      
+      "cicd_engineer": {
+        "name": "cicd-engineer",
+        "role": "CI/CD pipelines and DevOps automation",
+        "domain": "devops",
+        "specialization": [
+          "GitHub Actions workflow creation",
+          "Pipeline automation and optimization",
+          "Infrastructure as code",
+          "Container orchestration",
+          "Monitoring and logging setup",
+          "Security scanning integration",
+          "Release management automation"
+        ],
+        "responsibilities": [
+          "Create efficient CI/CD pipelines",
+          "Implement deployment strategies",
+          "Configure monitoring and logging",
+          "Set up security scanning",
+          "Automate release processes"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["system-architect", "backend-dev", "mobile-dev", "ml-developer"],
+          "secondary_collaborations": ["api-docs", "code-analyzer", "template-generator"],
+          "provides_deployment_for": ["backend-dev", "mobile-dev", "ml-developer"],
+          "receives_requirements_from": ["system-architect"]
+        },
+        "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Grep", "Glob"],
+        "autonomous": true,
+        "batchtools_config": {
+          "parallel_pipeline_creation": true,
+          "concurrent_deployment_validation": true,
+          "batch_workflow_optimization": true
+        }
+      },
+      
+      "api_docs": {
+        "name": "api-docs",
+        "role": "OpenAPI documentation and API specification",
+        "domain": "documentation", 
+        "specialization": [
+          "OpenAPI 3.0 specification creation",
+          "Interactive API documentation",
+          "Schema validation and examples",
+          "API versioning documentation",
+          "Developer experience optimization",
+          "Documentation automation"
+        ],
+        "responsibilities": [
+          "Create comprehensive API documentation",
+          "Maintain OpenAPI specifications",
+          "Generate interactive documentation",
+          "Document API changes and versions",
+          "Ensure developer-friendly documentation"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["backend-dev", "ml-developer"],
+          "secondary_collaborations": ["mobile-dev", "system-architect"],
+          "documents_apis_from": ["backend-dev", "ml-developer"],
+          "serves_documentation_to": ["mobile-dev", "external-developers"]
+        },
+        "tools": ["Read", "Write", "Edit", "MultiEdit", "Grep", "Glob"],
+        "autonomous": true,
+        "batchtools_config": {
+          "parallel_documentation_generation": true,
+          "concurrent_validation": true,
+          "batch_spec_creation": true
+        }
+      },
+      
+      "code_analyzer": {
+        "name": "code-analyzer",
+        "role": "Code quality analysis and optimization",
+        "domain": "quality_assurance",
+        "specialization": [
+          "Static code analysis",
+          "Security vulnerability scanning", 
+          "Performance profiling",
+          "Code complexity analysis",
+          "Technical debt assessment",
+          "Code style enforcement",
+          "Refactoring recommendations"
+        ],
+        "responsibilities": [
+          "Perform comprehensive code reviews",
+          "Identify code smells and anti-patterns",
+          "Assess technical debt",
+          "Recommend refactoring opportunities",
+          "Ensure coding standards compliance"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["backend-dev", "mobile-dev", "ml-developer"],
+          "secondary_collaborations": ["template-generator", "cicd-engineer"],
+          "analyzes_code_from": ["backend-dev", "mobile-dev", "ml-developer"],
+          "provides_quality_gates_for": ["cicd-engineer"]
+        },
+        "tools": ["Read", "Grep", "Glob", "WebSearch"],
+        "autonomous": true,
+        "batchtools_config": {
+          "parallel_analysis": true,
+          "concurrent_quality_checks": true,
+          "batch_report_generation": true
+        }
+      },
+      
+      "template_generator": {
+        "name": "base-template-generator",
+        "role": "Boilerplate creation and project scaffolding",
+        "domain": "template_generation",
+        "specialization": [
+          "Project scaffolding and initialization",
+          "Component template creation",
+          "Configuration file generation",
+          "Best practice implementation",
+          "Framework integration templates",
+          "Reusable code pattern creation"
+        ],
+        "responsibilities": [
+          "Generate clean, well-structured templates",
+          "Create boilerplate code following best practices", 
+          "Scaffold new projects and components",
+          "Provide foundation templates for rapid development",
+          "Ensure template consistency across projects"
+        ],
+        "coordination_protocols": {
+          "primary_collaborations": ["system-architect", "backend-dev", "mobile-dev"],
+          "secondary_collaborations": ["ml-developer", "cicd-engineer", "api-docs"],
+          "provides_templates_for": ["backend-dev", "mobile-dev", "ml-developer"],
+          "receives_patterns_from": ["system-architect", "code-analyzer"]
+        },
+        "tools": ["Read", "Write", "Edit", "MultiEdit", "Grep", "Glob"],
+        "autonomous": true,
+        "batchtools_config": {
+          "parallel_template_generation": true,
+          "concurrent_pattern_implementation": true,
+          "batch_scaffolding": true
+        }
+      }
+    },
+    
+    "coordination_protocols": {
+      "communication_matrix": {
+        "system_architect": {
+          "downstream": ["backend-dev", "mobile-dev", "ml-developer", "cicd-engineer"],
+          "bidirectional": ["api-docs", "code-analyzer", "template-generator"]
+        },
+        "backend_dev": {
+          "upstream": ["system-architect"],
+          "downstream": ["mobile-dev", "api-docs"],
+          "bidirectional": ["ml-developer", "cicd-engineer", "code-analyzer"]
+        },
+        "mobile_dev": {
+          "upstream": ["system-architect", "backend-dev"],
+          "bidirectional": ["cicd-engineer", "code-analyzer", "template-generator"]
+        },
+        "ml_developer": {
+          "upstream": ["system-architect"],
+          "bidirectional": ["backend-dev", "cicd-engineer", "api-docs", "code-analyzer"]
+        },
+        "cicd_engineer": {
+          "upstream": ["system-architect"],
+          "provides_services_to": ["backend-dev", "mobile-dev", "ml-developer", "api-docs"]
+        },
+        "api_docs": {
+          "primary_sources": ["backend-dev", "ml-developer"],
+          "serves": ["mobile-dev", "external-developers"]
+        },
+        "code_analyzer": {
+          "analyzes": ["backend-dev", "mobile-dev", "ml-developer", "template-generator"],
+          "reports_to": ["system-architect", "cicd-engineer"]
+        },
+        "template_generator": {
+          "receives_requirements_from": ["system-architect", "code-analyzer"],
+          "provides_templates_to": ["backend-dev", "mobile-dev", "ml-developer"]
+        }
+      },
+      
+      "decision_hierarchy": {
+        "architectural": ["system-architect"],
+        "implementation": ["backend-dev", "mobile-dev", "ml-developer"],
+        "quality": ["code-analyzer"],
+        "deployment": ["cicd-engineer"],
+        "documentation": ["api-docs"],
+        "templating": ["template-generator"]
+      },
+      
+      "knowledge_sharing": {
+        "technical_patterns": "shared_memory_space",
+        "best_practices": "cross_agent_consultation",
+        "lessons_learned": "persistent_memory_bank",
+        "decision_rationale": "architectural_decision_records"
+      }
+    },
+    
+    "batchtools_optimization": {
+      "concurrent_execution_patterns": {
+        "parallel_development": {
+          "frontend_backend_sync": ["mobile-dev", "backend-dev"],
+          "documentation_implementation_sync": ["api-docs", "backend-dev"],
+          "quality_implementation_sync": ["code-analyzer", "backend-dev", "mobile-dev"],
+          "deployment_preparation": ["cicd-engineer", "backend-dev", "mobile-dev", "ml-developer"]
+        },
+        "batch_processing": {
+          "template_generation": "parallel_scaffolding_for_multiple_components",
+          "code_analysis": "concurrent_quality_checks_across_domains",
+          "documentation": "parallel_spec_generation_for_multiple_apis",
+          "testing": "concurrent_test_execution_across_platforms"
+        }
+      },
+      
+      "performance_optimizations": {
+        "memory_management": "shared_context_optimization",
+        "parallel_processing": "concurrent_agent_execution",
+        "resource_allocation": "dynamic_load_balancing",
+        "cache_strategies": "intelligent_result_caching"
+      }
+    },
+    
+    "capability_matrix": {
+      "cross_domain_expertise": {
+        "fullstack_development": ["system-architect", "backend-dev", "mobile-dev", "api-docs"],
+        "mlops_pipeline": ["system-architect", "ml-developer", "backend-dev", "cicd-engineer"], 
+        "quality_assurance": ["code-analyzer", "cicd-engineer", "template-generator"],
+        "documentation_ecosystem": ["api-docs", "system-architect", "template-generator"],
+        "rapid_prototyping": ["template-generator", "backend-dev", "mobile-dev"]
+      },
+      
+      "specialization_depth": {
+        "high_complexity": ["system-architect", "ml-developer", "mobile-dev"],
+        "moderate_complexity": ["backend-dev", "cicd-engineer", "api-docs", "code-analyzer"],
+        "foundational_support": ["template-generator"]
+      },
+      
+      "autonomy_levels": {
+        "requires_approval": ["system-architect", "ml-developer"],
+        "fully_autonomous": ["backend-dev", "mobile-dev", "cicd-engineer", "api-docs", "code-analyzer", "template-generator"]
+      }
+    }
+  }
+}

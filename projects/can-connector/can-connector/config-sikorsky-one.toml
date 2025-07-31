@@ -1,0 +1,11 @@
+﻿[general]
+title = "Sikorsky 7S2P and 5S1P GUI"
+device = "Sikorsky_One"
+
+[modbus]
+translator = "Sikorsky_One_Modbus"
+default-baud-rate = 115_200
+data-bits = 8
+parity = "even"
+stop-bits = "one"
+handshake = "none"

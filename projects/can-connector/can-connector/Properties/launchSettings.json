@@ -1,0 +1,84 @@
+{
+  "profiles": {
+    "egalet-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-egalet.toml"
+    },
+    "ga-lifepo-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-ga-lifepo.toml"
+    },
+    "aerosonde-one-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-one.toml"
+    },
+    "aerosonde-one-test-customer": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-one-customer.toml"
+    },
+    "aerosonde-two-lite-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-two-lite.toml"
+    },
+    "aerosonde-two-lite-test-customer": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-two-lite-customer.toml"
+    },
+    "aerosonde-two-afe-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-two-afe.toml"
+    },
+    "aerosonde-two-afe-test-customer": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-two-afe-customer.toml"
+    },
+    "aerosonde-three-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-three.toml"
+    },
+    "aerosonde-three-charger": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-three-charger.toml"
+    },
+    "universal-tester-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-universal-tester.toml"
+    },
+    "avd-one": {
+      "commandName": "Project",
+      "commandLineArgs": "config-avd-one.toml"
+    },
+    "sikorsky-one-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-sikorsky-one.toml"
+    },
+    "sikorsky-one-bootloader-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-sikorsky-one-bootloader.toml"
+    },
+    "ga-lifepo-next-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-ga-lifepo-next.toml"
+    },
+    "ga-lifepo-next-bootloader-test": {
+      "commandName": "Project",
+      "commandLineArgs": "config-ga-lifepo-next-bootloader.toml"
+    },
+    "aerosonde-three-test-customer": {
+      "commandName": "Project",
+      "commandLineArgs": "config-aerosonde-three-customer.toml"
+    },
+    "avd-one-customer": {
+      "commandName": "Project",
+      "commandLineArgs": "config-avd-one-customer.toml"
+    },
+    "avd-one-programmer": {
+      "commandName": "Project",
+      "commandLineArgs": "config-avd-one-programmer.toml"
+    },
+    "GE-Healthcare": {
+      "commandName": "Project",
+      "commandLineArgs": "config-GE-Healthcare.toml"
+    }
+  }
+}

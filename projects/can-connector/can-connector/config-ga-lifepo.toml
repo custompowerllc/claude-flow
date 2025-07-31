@@ -1,0 +1,11 @@
+﻿[general]
+title = "General Atomics P3E (STM32L051) Pack GUI"
+device = "GA_LiFePO4"
+
+[modbus]
+translator = "GA_LiFePO4_Modbus"
+default-baud-rate = 9_600
+data-bits = 8
+parity = "even"
+stop-bits = "one"
+handshake = "none"

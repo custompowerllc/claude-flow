@@ -1,0 +1,52 @@
+Code,Description
+0x00,ManufacturerAccess: Specific version or manufacturer-defined information
+0x01,RemainingCapacityAlarm: Low-capacity alarm threshold in mAh/10mWh
+0x02,RemainingTimeAlarm: Remaining time alarm threshold in minutes
+0x03,BatteryMode: Battery operational modes and capabilities
+0x04,AtRate: Value used for AtRateTimeToFull/Empty calculations in mA/10mW
+0x05,AtRateTimeToFull: Time to fully charge the battery at AtRate (minutes)
+0x06,AtRateTimeToEmpty: Time to fully discharge the battery at AtRate (minutes)
+0x07,AtRateOK: Boolean indicating if the battery can sustain the AtRate value
+0x08,Temperature: Battery's internal temperature (°C)
+0x09,Voltage: Cell-pack voltage (mV)
+0x0A,Current: Current being supplied to or accepted by the battery (mA)
+0x0B,AverageCurrent: One-minute rolling average of current (mA)
+0x0C,MaxError: Expected margin of error in state-of-charge (%)
+0x0D,RelativeStateOfCharge: Remaining capacity as a percentage of full charge (%)
+0x0E,AbsoluteStateOfCharge: Remaining capacity as a percentage of design capacity (%)
+0x0F,RemainingCapacity: Remaining battery capacity at C/5 discharge rate (mAh/10mWh)
+0x10,FullChargeCapacity: Predicted pack capacity when fully charged
+0x11,RunTimeToEmpty: Predicted remaining battery life
+0x12,AverageTimeToEmpty: One-minute average of remaining time
+0x13,AverageTimeToFull: One-minute average time to full charge
+0x14,ChargingCurrent: Desired charging current
+0x15,ChargingVoltage: Desired charging voltage
+0x17,CycleCount: Number of cycles the battery has experienced
+0x18,DesignCapacity: The battery's design capacity
+0x19,DesignVoltage: The battery's design voltage
+0x1A,SpecificationInfo: SMBus specification version
+0x2C,Temperature_6: Returns the cell-pack's internal temperature (°C)
+0x2D,Temperature_7: Returns the cell-pack's internal temperature (°C)
+0x2E,Temperature_8: Returns the cell-pack's internal temperature (°C)
+0x33,CellVoltage13: Returns the voltage of cell 13 (mV)
+0x34,CellVoltage12: Returns the voltage of cell 12 (mV)
+0x35,CellVoltage11: Returns the voltage of cell 11 (mV)
+0x36,CellVoltage10: Returns the voltage of cell 10 (mV)
+0x37,CellVoltage9: Returns the voltage of cell 9 (mV)
+0x38,CellVoltage8: Returns the voltage of cell 8 (mV)
+0x39,CellVoltage7: Returns the voltage of cell 7 (mV)
+0x3A,CellVoltage6: Returns the voltage of cell 6 (mV)
+0x3B,CellVoltage5: Returns the voltage of cell 5 (mV)
+0x3C,CellVoltage4: Returns the voltage of cell 4 (mV)
+0x3D,CellVoltage3: Returns the voltage of cell 3 (mV)
+0x3E,CellVoltage2: Returns the voltage of cell 2 (mV)
+0x3F,CellVoltage1: Returns the voltage of cell 1 (mV)
+0x40,BattPackPSNr: Returns the battery pack's parallel and serial number
+0x41,CellCp0: Returns the battery cell's capacity (mAh)
+0x42,DchaEndCellVolt: Returns the battery cell's end of discharge voltage (mV)
+0x43,Currt State: Returns battery's charge/discharge status or balancing state
+0x45,CrtStAlwMaxDchPwr: Returns max allowed discharging power at the status @SOC@T
+0x46,Fault: Returns Fault messages
+0x4B,Warning: Returns Warning messages
+0x4C,History Record: Return the last 5 warning/fault and all the data at that time.
+0x4F,"BatterySOH: Returns the healthy status of battery, reflects battery aging status, related to IR, capacity etc."

@@ -1,0 +1,63 @@
+{
+  "monitoring_config": {
+    "metrics_collection": {
+      "interval": 2000,
+      "batch_size": 100,
+      "retention_period": "7d",
+      "compression": true
+    },
+    "performance_metrics": {
+      "throughput": {
+        "enabled": true,
+        "unit": "tasks_per_second",
+        "aggregation": "avg"
+      },
+      "latency": {
+        "enabled": true,
+        "percentiles": [50, 90, 95, 99],
+        "unit": "milliseconds"
+      },
+      "error_rate": {
+        "enabled": true,
+        "threshold": 0.05,
+        "alert_enabled": true
+      },
+      "resource_utilization": {
+        "cpu": { "threshold": 0.8, "alert": true },
+        "memory": { "threshold": 0.85, "alert": true },
+        "network": { "threshold": 0.9, "alert": false }
+      }
+    },
+    "bottleneck_detection": {
+      "enabled": true,
+      "algorithms": ["statistical", "ml", "time_series"],
+      "sensitivity": "medium",
+      "auto_remediation": true
+    },
+    "sla_monitoring": {
+      "availability": {
+        "target": 99.9,
+        "measurement_window": 300,
+        "alert_threshold": 99.5
+      },
+      "response_time": {
+        "target": 1000,
+        "percentile": 95,
+        "alert_threshold": 1500
+      }
+    },
+    "anomaly_detection": {
+      "enabled": true,
+      "models": ["isolation_forest", "lstm", "statistical"],
+      "training_period": "24h",
+      "sensitivity": 0.05
+    }
+  },
+  "alerting": {
+    "channels": ["console", "memory"],
+    "escalation_rules": {
+      "critical": { "immediate": true, "escalate_after": 300 },
+      "warning": { "immediate": false, "escalate_after": 900 }
+    }
+  }
+}

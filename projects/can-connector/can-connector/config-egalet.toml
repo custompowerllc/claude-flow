@@ -1,0 +1,11 @@
+﻿[general]
+title = "Egalet Debugger"
+device = "Egalet"
+
+[serial]
+channel = 0
+default-baud-rate = 115_200
+data-bits = 8
+parity = "none"
+stop-bits = "one"
+handshake = "none"

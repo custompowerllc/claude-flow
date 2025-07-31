@@ -1,0 +1,110 @@
+{
+  "swarm_id": "swarm-coord-1738016462000",
+  "topology": "hierarchical-primary",
+  "status": "operational",
+  "timestamp": "2025-01-28T01:34:22.000Z",
+  "coordinators": {
+    "hierarchical": {
+      "status": "active",
+      "role": "queen",
+      "priority": "primary",
+      "capabilities": ["command_control", "task_delegation", "strategic_planning", "resource_allocation"],
+      "agents_managed": 0,
+      "max_agents": 20,
+      "operational": true
+    },
+    "mesh": {
+      "status": "ready",
+      "role": "backup",
+      "priority": "secondary", 
+      "capabilities": ["peer_communication", "fault_tolerance", "distributed_routing"],
+      "peers_connected": 0,
+      "max_peers": 15,
+      "operational": true
+    },
+    "adaptive": {
+      "status": "ready",
+      "role": "optimizer",
+      "priority": "tertiary",
+      "capabilities": ["dynamic_optimization", "topology_adaptation", "performance_tuning"],
+      "optimizations_applied": 0,
+      "operational": true
+    },
+    "collective_intelligence": {
+      "status": "ready", 
+      "role": "decision_maker",
+      "priority": "support",
+      "capabilities": ["decision_making", "consensus_building", "knowledge_aggregation"],
+      "decisions_made": 0,
+      "operational": true
+    },
+    "memory_manager": {
+      "status": "ready",
+      "role": "memory_coordinator", 
+      "priority": "support",
+      "capabilities": ["distributed_memory", "state_synchronization", "memory_optimization"],
+      "memory_nodes": 0,
+      "operational": true
+    },
+    "load_balancer": {
+      "status": "ready",
+      "role": "workload_distributor",
+      "priority": "support",
+      "capabilities": ["work_stealing", "capability_routing", "queue_management"],
+      "tasks_balanced": 0,
+      "operational": true
+    },
+    "performance_monitor": {
+      "status": "ready",
+      "role": "health_tracker",
+      "priority": "support", 
+      "capabilities": ["real_time_monitoring", "bottleneck_detection", "sla_tracking"],
+      "alerts_active": 0,
+      "operational": true
+    },
+    "resource_allocator": {
+      "status": "ready",
+      "role": "resource_manager",
+      "priority": "support",
+      "capabilities": ["predictive_scaling", "resource_optimization", "fault_tolerance"],
+      "allocations_made": 0,
+      "operational": true
+    },
+    "topology_optimizer": {
+      "status": "ready",
+      "role": "network_optimizer",
+      "priority": "support",
+      "capabilities": ["topology_reconfiguration", "latency_optimization", "agent_placement"],
+      "optimizations_performed": 0,
+      "operational": true
+    }
+  },
+  "communication_protocols": {
+    "primary": "hierarchical_command",
+    "backup": "mesh_gossip",
+    "adaptive": "topology_switching",
+    "fault_tolerance": "byzantine_consensus"
+  },
+  "load_balancing": {
+    "strategy": "capability_based",
+    "work_stealing": true,
+    "queue_management": "priority_weighted"
+  },
+  "fault_tolerance": {
+    "replication_factor": 3,
+    "heartbeat_interval": 5000,
+    "failure_detection_timeout": 15000,
+    "auto_recovery": true
+  },
+  "performance_monitoring": {
+    "metrics_collection_interval": 2000,
+    "bottleneck_detection": true,
+    "sla_monitoring": true,
+    "anomaly_detection": true
+  },
+  "resource_allocation": {
+    "dynamic_scaling": true,
+    "predictive_scaling": true,
+    "resource_optimization": true
+  }
+}

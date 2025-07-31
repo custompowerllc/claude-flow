@@ -1,0 +1,11 @@
+﻿[general]
+title = "Avery Dennison 2S"
+device = "Avd_One"
+
+[serial]
+channel = 0
+default-baud-rate = 9_600
+data-bits = 8
+parity = "none"
+stop-bits = "one"
+handshake = "none"

@@ -1,0 +1,11 @@
+﻿[general]
+title = "Universal Tester Debugger"
+device = "Universal_Tester"
+
+[serial]
+channel = 0
+default-baud-rate = 115_200
+data-bits = 8
+parity = "none"
+stop-bits = "one"
+handshake = "none"

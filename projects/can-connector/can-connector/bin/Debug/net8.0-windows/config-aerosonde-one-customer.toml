@@ -1,0 +1,22 @@
+﻿[general]
+title = "Textron Aerosonde CAN Connector Version 4.0.0"
+device = "Aerosonde_One"
+
+[komodo]
+port = 0
+bitrate = 1_000_000
+timeout = 0
+latency = 0
+physical-loopback = false
+ext-id-filter = { filter-and = 0x0FFF0000, filter-cmp = 0x00000000, accept-rmt = false }
+
+[bootloader]
+hex-file-content = [ { max-size = 90_112, signature = "custom-power-textron-aerosonde-mk2.0" } ]
+upgrade-tasks = [ { firmware-index = 0, id-prefix = 0x00000000 } ]
+reboot-time = 1_000
+normal-timeout = 5_000
+verify-timeout = 10_000
+auto-exit = true
+
+[aerosonde]
+advanced-mode = false

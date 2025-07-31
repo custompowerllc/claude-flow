@@ -1,0 +1,26 @@
+﻿[general]
+title = "Textron Aerosonde MK4.8 Charger CAN Connector Version 4.0.0"
+device = "Aerosonde_Three_Charger"
+
+[komodo]
+port = 0
+bitrate = 1_000_000
+timeout = 0
+latency = 0
+physical-loopback = false
+ext-id-filter = { filter-and = 0x1FF00000, filter-cmp = 0x13300000, accept-rmt = false }
+
+[bootloader]
+hex-file-content = [ 
+        { max-size = 524_288, signature = "custom-power-textron-aerosonde-mk4.8-charger-mainboard" },
+        { max-size = 524_288, signature = "custom-power-textron-aerosonde-mk4.8-charger-display" }
+    ]
+upgrade-tasks = [ 
+        { firmware-index = 0, id-prefix = 0x13310000 },
+        { firmware-index = 1, id-prefix = 0x13320000 },
+        { firmware-index = 1, id-prefix = 0x13330000 }
+    ]
+reboot-time = 1_000
+normal-timeout = 5_000
+verify-timeout = 10_000
+auto-exit = false
