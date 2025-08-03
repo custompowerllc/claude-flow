@@ -1,0 +1,27 @@
+# Modbus Virtual Battery Simulator - Dependencies
+
+# Core Modbus and Serial Communication
+pymodbus==3.5.2          # Modbus RTU server implementation
+pyserial==3.5            # Serial port communication  
+pyserial-asyncio==0.6    # Async serial support
+
+# CLI and User Interface
+rich==13.7.0             # Rich terminal output and TUI
+click==8.1.7             # Command-line interface framework
+prompt-toolkit==3.0.43  # Interactive CLI components
+
+# Data and Configuration
+pydantic==2.5.0          # Configuration validation
+pyyaml==6.0.1            # YAML configuration files
+numpy==1.24.3            # Numerical computations for battery modeling
+
+# Utilities and Testing
+loguru==0.7.2            # Enhanced logging
+pytest==7.4.3           # Testing framework
+pytest-asyncio==0.21.1  # Async testing support
+
+# Development Dependencies (optional)
+black==23.12.0           # Code formatting
+flake8==6.1.0            # Code linting
+mypy==1.8.0              # Type checking
+pre-commit==3.6.0        # Git hooks for code quality
