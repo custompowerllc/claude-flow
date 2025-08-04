@@ -225,12 +225,12 @@ class WebSocketBroadcaster:
         """Coroutine to send queued data to clients"""
         while self.running:
             try:
-                # Check for queued data with timeout
+                # Check for queued data with non-blocking get
                 try:
-                    data = self.data_queue.get(timeout=0.1)
+                    data = self.data_queue.get_nowait()
                     await self.broadcast_data(data)
                 except queue.Empty:
-                    await asyncio.sleep(0.01)  # Small delay to prevent busy waiting
+                    await asyncio.sleep(0.1)  # Wait longer when no data available
             except Exception as e:
                 print(f"Error in data sender: {e}")
                 await asyncio.sleep(0.1)
