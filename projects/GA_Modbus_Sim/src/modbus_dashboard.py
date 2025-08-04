@@ -38,6 +38,20 @@ except ImportError:
     except ImportError:
         TOML_AVAILABLE = False
 
+# Set matplotlib backend - try GUI first, fall back to headless if needed
+import os
+import platform
+
+# Assume GUI is available initially
+is_headless = False
+gui_available = True
+
+# Restore original matplotlib behavior - let it choose the best GUI backend
+import matplotlib
+# Don't force any backend - let matplotlib auto-detect the best available
+print("Attempting to use matplotlib GUI...")
+is_headless = False  # Assume GUI will work
+
 # Try to import required libraries
 try:
     import matplotlib.pyplot as plt
@@ -211,15 +225,18 @@ class WebSocketDataSource:
             self.last_sequence = sequence
         
         if message_type == 'data' and self.data_callback:
-            payload = message.get('payload', {})
+            # Get the main data container (from WebSocket format)
+            data_container = message.get('data', {})
+            modbus_data = data_container.get('modbus_data', {})
+            
             timestamp_str = message.get('timestamp', datetime.now().isoformat())
             try:
                 timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
             except:
                 timestamp = datetime.now()
             
-            # Convert to format expected by dashboard
-            self.data_callback(payload, timestamp)
+            # Convert to format expected by dashboard (pass the modbus_data directly)
+            self.data_callback(modbus_data, timestamp)
             
         elif message_type == 'status' and self.status_callback:
             status_info = message.get('payload', {})
@@ -576,6 +593,16 @@ class ModbusDashboard:
             # Update statistics
             self.stats['record_count'] += 1
             
+            # Immediate axis adjustment on first data point for instant usability
+            if len(self.timestamps) == 1:
+                try:
+                    # Force immediate relim and autoscale on first data
+                    for ax in [self.ax_cells, self.ax_pack, self.ax_current, self.ax_delta, self.ax_soc, self.ax_temp]:
+                        ax.relim()
+                        ax.autoscale_view()
+                except:
+                    pass
+            
         except Exception as e:
             print(f"Error processing WebSocket data: {e}")
     
@@ -734,8 +761,6 @@ class ModbusDashboard:
         self.ax_cells.set_xlabel('Time')
         self.ax_cells.set_ylabel('Voltage (V)')
         self.ax_cells.grid(True, alpha=0.3)
-        # Disable scientific notation for cell voltages
-        self.ax_cells.ticklabel_format(style='plain', axis='y')
         
         # Pack voltage and current (right column)
         self.ax_pack = self.fig.add_subplot(gs[0, 2])
@@ -743,8 +768,6 @@ class ModbusDashboard:
         self.ax_pack.set_xlabel('Time')
         self.ax_pack.set_ylabel('Voltage (V)')
         self.ax_pack.grid(True, alpha=0.3)
-        # Disable scientific notation for pack voltage
-        self.ax_pack.ticklabel_format(style='plain', axis='y')
         
         self.ax_current = self.fig.add_subplot(gs[1, 2])
         self.ax_current.set_title('Current', fontweight='bold', color='orange')
@@ -772,6 +795,20 @@ class ModbusDashboard:
         self.ax_temp.set_xlabel('Time')
         self.ax_temp.set_ylabel(f'Temperature (°{self.temp_unit})')
         self.ax_temp.grid(True, alpha=0.3)
+        
+        # Set initial sensible Y-axis ranges for better initial visibility
+        # These ranges account for defective/runaway cells and edge cases
+        self.ax_cells.set_ylim(2.0, 4.2)    # Cell voltage range: 2.0V-4.2V (includes defective cells)
+        self.ax_pack.set_ylim(22.0, 29.0)   # Pack voltage range: 22V-29V (8S pack with margin)
+        self.ax_current.set_ylim(-10.0, 10.0)  # Current range: ±10A (with margin for edge cases)
+        self.ax_delta.set_ylim(0, 100)      # Cell delta range: 0-100mV (typical + edge cases)
+        self.ax_soc.set_ylim(0, 100)        # SOC range: 0-100%
+        self.ax_temp.set_ylim(10.0, 50.0)   # Temperature range: 10-50°C (with margin for edge cases)
+        
+        # Force voltage axes to use fixed decimal format (not scientific notation)
+        from matplotlib.ticker import FormatStrFormatter
+        self.ax_cells.yaxis.set_major_formatter(FormatStrFormatter('%.3f'))
+        self.ax_pack.yaxis.set_major_formatter(FormatStrFormatter('%.3f'))
         
         # Statistics subplot (entire bottom row)
         self.ax_stats = self.fig.add_subplot(gs[3, :])
@@ -1274,9 +1311,10 @@ class ModbusDashboard:
             ax.xaxis.set_major_locator(mdates.AutoDateLocator())
             plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
             
-            # Disable scientific notation for voltage plots
+            # Apply 3 decimal place formatting for voltage plots
             if ax in [self.ax_cells, self.ax_pack]:
-                ax.ticklabel_format(style='plain', axis='y')
+                from matplotlib.ticker import FormatStrFormatter
+                ax.yaxis.set_major_formatter(FormatStrFormatter('%.3f'))
         
         # Update statistics text
         self.update_stats_display()
@@ -1431,9 +1469,10 @@ class ModbusDashboard:
                     ax.xaxis.set_major_locator(mdates.AutoDateLocator())
                     plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
                     
-                    # Disable scientific notation for voltage plots
+                    # Force 3 decimal places for voltage plots (replaces ticklabel_format)
                     if ax in [self.ax_cells, self.ax_pack]:
-                        ax.ticklabel_format(style='plain', axis='y')
+                        from matplotlib.ticker import FormatStrFormatter
+                        ax.yaxis.set_major_formatter(FormatStrFormatter('%.3f'))
             else:
                 # Quick update without formatting overhead
                 for ax in [self.ax_cells, self.ax_pack, self.ax_current, 
@@ -1447,8 +1486,73 @@ class ModbusDashboard:
         # Update statistics display
         self.update_stats_display()
         
+        # Force early auto-scaling after first few data points for immediate usability
+        if len(self.timestamps) == 5:  # After 5 data points (~2.5 seconds)
+            self.set_smart_axis_limits()
+        
+        # Force GUI refresh
+        try:
+            self.fig.canvas.draw_idle()
+            self.fig.canvas.flush_events()
+        except:
+            pass
+        
         # Check for peak cell delta and capture screenshot if enabled
         self.check_peak_delta_for_screenshot()
+    
+    def set_smart_axis_limits(self):
+        """Set smart axis limits based on actual data with margins for edge cases"""
+        try:
+            if len(self.timestamps) < 2:
+                return
+                
+            # Cell voltages - adjust based on actual data but keep safety margins
+            if any(self.cell_voltages.values()):
+                all_cell_values = [v for voltages in self.cell_voltages.values() for v in voltages if voltages]
+                if all_cell_values:
+                    min_v, max_v = min(all_cell_values), max(all_cell_values)
+                    # Add 10% margin but keep within safety bounds (2.0V-4.2V)
+                    margin = max((max_v - min_v) * 0.1, 0.05)  # Minimum 50mV margin
+                    new_min = max(2.0, min_v - margin)  # Don't go below 2.0V
+                    new_max = min(4.2, max_v + margin)  # Don't go above 4.2V
+                    self.ax_cells.set_ylim(new_min, new_max)
+            
+            # Pack voltage - adjust based on actual data
+            if self.pack_voltage:
+                min_v, max_v = min(self.pack_voltage), max(self.pack_voltage)
+                margin = max((max_v - min_v) * 0.1, 0.5)  # Minimum 0.5V margin
+                new_min = max(22.0, min_v - margin)  # Don't go below 22V
+                new_max = min(29.0, max_v + margin)  # Don't go above 29V
+                self.ax_pack.set_ylim(new_min, new_max)
+            
+            # Current - adjust based on actual data
+            if self.current:
+                min_i, max_i = min(self.current), max(self.current)
+                margin = max(abs(max_i - min_i) * 0.1, 1.0)  # Minimum 1A margin
+                self.ax_current.set_ylim(min_i - margin, max_i + margin)
+            
+            # Cell delta - adjust based on actual data
+            if self.cell_delta:
+                max_delta = max(self.cell_delta)
+                # Set upper limit to 110% of max delta or minimum 50mV
+                new_max = max(max_delta * 1.1, 50)
+                self.ax_delta.set_ylim(0, new_max)
+            
+            # Temperature - adjust based on actual data
+            if self.temperature1 or self.temperature2:
+                all_temps = []
+                if self.temperature1:
+                    all_temps.extend(self.temperature1)
+                if self.temperature2:
+                    all_temps.extend(self.temperature2)
+                if all_temps:
+                    min_t, max_t = min(all_temps), max(all_temps)
+                    margin = max((max_t - min_t) * 0.1, 2.0)  # Minimum 2°C margin
+                    self.ax_temp.set_ylim(min_t - margin, max_t + margin)
+                    
+        except Exception as e:
+            # If smart scaling fails, keep the initial sensible ranges
+            print(f"Smart axis scaling failed: {e}")
     
     def check_peak_delta_for_screenshot(self):
         """Check for peak cell delta and capture screenshot data"""
@@ -1626,8 +1730,7 @@ class ModbusDashboard:
         self.peak_detected = False
         self.peak_detection_time = None
         self.recovery_data = []
-        print("Screenshot feature DISABLED
-")
+        print("Screenshot feature DISABLED")
     
     def cleanup(self):
         """Clean up resources, including WebSocket connections"""
@@ -1656,22 +1759,43 @@ class ModbusDashboard:
                 return
             else:
                 print(f"Displaying historical data from: {self.csv_file}")
+                
+                # Show historical data plot
                 print("Close window to exit...")
-                # In historical mode, just show the plot
-                plt.show()
+                try:
+                    plt.show()
+                except Exception as e:
+                    print(f"GUI failed: {e}, saving plot instead...")
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                    plot_file = f"dashboard_plot_{timestamp}.png"
+                    plt.savefig(plot_file, dpi=300, bbox_inches='tight')
+                    print(f"Plot saved as: {plot_file}")
         else:
             print(f"Starting real-time dashboard for: {self.csv_file}")
             print("Press Ctrl+C to stop...")
             
             # Create animation for real-time updates with optimizations
-            ani = animation.FuncAnimation(self.fig, self.update_plots, 
+            self.ani = animation.FuncAnimation(self.fig, self.update_plots, 
                                         interval=self.update_interval,
                                         blit=False, cache_frame_data=False,
                                         repeat=True, save_count=1)
             
+            # Force initial draw
+            self.fig.canvas.draw()
+            
             try:
-                # Show plot
-                plt.show()
+                # Show GUI dashboard
+                print("Displaying GUI dashboard...")
+                try:
+                    plt.show()
+                except Exception as e:
+                    print(f"GUI failed: {e}")
+                    print("Falling back to background mode...")
+                    try:
+                        while True:
+                            time.sleep(1.0)
+                    except KeyboardInterrupt:
+                        print("\nStopping dashboard...")
             finally:
                 # Clean up WebSocket connections
                 self.cleanup()
