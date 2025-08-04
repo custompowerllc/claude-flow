@@ -133,7 +133,6 @@ sequenceDiagram
         alt Connection successful
             WSConnection->>Dashboard: Connection restored
             Dashboard->>UIDisplay: Show "Connected via WebSocket"
-            break Resume normal operation
         else Connection failed
             Dashboard->>Dashboard: Wait 2 seconds (exponential backoff)
             Dashboard->>UIDisplay: Update retry counter
