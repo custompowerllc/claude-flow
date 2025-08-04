@@ -213,38 +213,38 @@ graph TB
     SWARM[🐝 Claude Flow Swarm<br/>Hierarchical Topology<br/>7 Agents, Parallel Mode]:::orchestrator
     
     %% Agent 1: Security Manager
-    A1[Agent 1: security-manager<br/>🛡️ Security Lead<br/>Coordination & Strategy]:::security
-    A1_TASKS[📋 Tasks:<br/>• Review vulnerability report<br/>• Create implementation plan<br/>• Coordinate agent activities<br/>• Validate security fixes<br/>• Generate audit checklist<br/>• Document improvements]:::task
+    A1[Agent 1: security-manager<br/>Security Lead<br/>Coordination Strategy]:::security
+    A1_TASKS[Tasks: Review vulnerabilities, Create plan, Coordinate agents, Validate fixes, Generate audit, Document improvements]:::task
     
     %% Agent 2: Code Analyzer
-    A2[Agent 2: code-analyzer<br/>🔍 Vulnerability Scanner<br/>Pattern Detection & Analysis]:::analyzer
-    A2_TASKS[📋 Tasks:<br/>• Scan Python files for vulns<br/>• Map file path operations<br/>• Find WebSocket handlers<br/>• Locate shared state access<br/>• Identify resource patterns<br/>• Generate vuln report]:::task
+    A2[Agent 2: code-analyzer<br/>Vulnerability Scanner<br/>Pattern Detection]:::analyzer
+    A2_TASKS[Tasks: Scan Python files, Map file operations, Find WebSocket handlers, Locate shared state, Identify patterns, Generate report]:::task
     
     %% Agent 3: Backend Developer
-    A3[Agent 3: backend-dev<br/>🌐 WebSocket Expert<br/>API Security & Validation]:::implementer
-    A3_TASKS[📋 Tasks:<br/>• Implement JSON schema validation<br/>• Create WebSocketManager class<br/>• Add connection tracking<br/>• Implement graceful shutdown<br/>• Create security utilities<br/>• Update message handlers]:::task
+    A3[Agent 3: backend-dev<br/>WebSocket Expert<br/>API Security]:::implementer
+    A3_TASKS[Tasks: Implement JSON validation, Create WebSocketManager, Add connection tracking, Implement shutdown, Create utilities, Update handlers]:::task
     
     %% Agent 4: Resource Coder
-    A4[Agent 4: coder<br/>🔧 Resource Manager<br/>Leak Prevention & Cleanup]:::implementer
-    A4_TASKS[📋 Tasks:<br/>• Fix serial port cleanup<br/>• Add context managers<br/>• Implement exception handling<br/>• Create resource tracking<br/>• Fix thread cleanup<br/>• Add connection pooling]:::task
+    A4[Agent 4: coder<br/>Resource Manager<br/>Leak Prevention]:::implementer
+    A4_TASKS[Tasks: Fix serial cleanup, Add context managers, Implement exception handling, Create resource tracking, Fix thread cleanup, Add pooling]:::task
     
     %% Agent 5: Thread Safety Coder
-    A5[Agent 5: coder<br/>⚡ Thread Safety Implementer<br/>Synchronization & Locking]:::implementer
-    A5_TASKS[📋 Tasks:<br/>• Create ThreadSafeDataStore<br/>• Identify shared state<br/>• Add locking mechanisms<br/>• Implement thread-safe collections<br/>• Fix race conditions<br/>• Add sync utilities]:::task
+    A5[Agent 5: coder<br/>Thread Safety Expert<br/>Synchronization]:::implementer
+    A5_TASKS[Tasks: Create ThreadSafeDataStore, Identify shared state, Add locking, Implement collections, Fix race conditions, Add utilities]:::task
     
     %% Agent 6: Security Tester
-    A6[Agent 6: tester<br/>🧪 Security Validator<br/>Testing & Verification]:::validator
-    A6_TASKS[📋 Tasks:<br/>• Create injection test cases<br/>• Develop path traversal tests<br/>• Write leak detection tests<br/>• Create stress tests<br/>• Implement regression tests<br/>• Automate security testing]:::task
+    A6[Agent 6: tester<br/>Security Validator<br/>Testing Verification]:::validator
+    A6_TASKS[Tasks: Create injection tests, Develop traversal tests, Write leak detection, Create stress tests, Implement regression, Automate testing]:::task
     
     %% Agent 7: Performance Monitor
-    A7[Agent 7: performance-benchmarker<br/>📊 Performance Monitor<br/>Impact Analysis & Optimization]:::monitor
-    A7_TASKS[📋 Tasks:<br/>• Establish performance baseline<br/>• Measure validation overhead<br/>• Profile resource changes<br/>• Test thread safety impact<br/>• Optimize critical paths<br/>• Generate performance report]:::task
+    A7[Agent 7: performance-benchmarker<br/>Performance Monitor<br/>Impact Analysis]:::monitor
+    A7_TASKS[Tasks: Establish baseline, Measure overhead, Profile changes, Test impact, Optimize paths, Generate report]:::task
     
     %% Memory System
-    MEMORY[(🧠 Shared Memory System<br/>Namespace: GA_Modbus_Sim_Security<br/>Cross-Agent Coordination)]:::memory
+    MEMORY[(Shared Memory System<br/>Namespace: GA_Modbus_Sim_Security<br/>Cross-Agent Coordination)]:::memory
     
     %% Hook System
-    HOOKS[🪝 Claude Flow Hooks<br/>Pre/Post/Notify<br/>Automated Coordination]:::hook
+    HOOKS[Claude Flow Hooks<br/>Pre/Post/Notify<br/>Automated Coordination]:::hook
     
     %% Connections - Orchestration
     SWARM --> A1
@@ -300,7 +300,7 @@ graph TB
 ## Detailed Agent Specializations
 
 ```mermaid
-graph LR
+graph TB
     %% Define styles for agent types
     classDef security fill:#e74c3c,stroke:#c0392b,color:#fff,font-weight:bold
     classDef analyzer fill:#3498db,stroke:#2980b9,color:#fff,font-weight:bold
@@ -311,50 +311,85 @@ graph LR
     classDef file fill:#ecf0f1,stroke:#95a5a6,color:#2c3e50
     classDef critical fill:#c0392b,stroke:#a93226,color:#fff
 
-    %% Agent Types and File Assignments
-    subgraph "🛡️ Security Manager (security-manager)"
-        SM[Security Lead]:::security
-        SM_FILES[Files:<br/>• CODERABBIT_FIXES.md (read)<br/>• security_plan.md (create)<br/>• audit_checklist.md (create)]:::file
-    end
+    %% Agent 1: Security Manager
+    SM[Agent 1: Security Manager]:::security
+    SM_SPEC[security-manager type: Strategic coordination and vulnerability prioritization]:::file
+    SM_FILES[Primary Files: CODERABBIT_FIXES.md, security_plan.md, audit_checklist.md]:::file
     
-    subgraph "🔍 Vulnerability Scanner (code-analyzer)"
-        VS[Pattern Detection]:::analyzer
-        VS_FILES[Files:<br/>• All .py files (scan)<br/>• vulnerability_map.json (create)<br/>• security_report.md (create)]:::file
-    end
+    %% Agent 2: Vulnerability Scanner  
+    VS[Agent 2: Vulnerability Scanner]:::analyzer
+    VS_SPEC[code-analyzer type: Pattern detection and static analysis]:::file
+    VS_FILES[Primary Files: All Python files, vulnerability_map.json, security_report.md]:::file
     
-    subgraph "🌐 WebSocket Expert (backend-dev)"
-        WE[API Security]:::backend
-        WE_FILES[Files:<br/>• modbus_dashboard.py (modify)<br/>• validation.py (create)<br/>• websocket_manager.py (create)]:::file
-    end
+    %% Agent 3: WebSocket Expert
+    WE[Agent 3: WebSocket Expert]:::backend
+    WE_SPEC[backend-dev type: API security and message validation]:::file
+    WE_FILES[Primary Files: modbus_dashboard.py, validation.py, websocket_manager.py]:::file
     
-    subgraph "🔧 Resource Manager (coder)"
-        RM[Leak Prevention]:::coder
-        RM_FILES[Files:<br/>• modbus_server.py (modify)<br/>• modbus_standalone_logger.py (modify)<br/>• resources.py (create)]:::file
-    end
+    %% Agent 4: Resource Manager
+    RM[Agent 4: Resource Manager]:::coder
+    RM_SPEC[coder type: Resource leak prevention and cleanup]:::file
+    RM_FILES[Primary Files: modbus_server.py, modbus_standalone_logger.py, resources.py]:::file
     
-    subgraph "⚡ Thread Safety (coder)"
-        TS[Synchronization]:::coder
-        TS_FILES[Files:<br/>• data_manager.py (modify)<br/>• threading.py (create)<br/>• thread_safe_store.py (create)]:::file
-    end
+    %% Agent 5: Thread Safety
+    TS[Agent 5: Thread Safety Expert]:::coder
+    TS_SPEC[coder type: Synchronization and race condition prevention]:::file
+    TS_FILES[Primary Files: data_manager.py, threading.py, thread_safe_store.py]:::file
     
-    subgraph "🧪 Security Validator (tester)"
-        SV[Testing]:::tester
-        SV_FILES[Files:<br/>• test_validation.py (create)<br/>• test_security.py (create)<br/>• test_threading.py (create)]:::file
-    end
+    %% Agent 6: Security Validator
+    SV[Agent 6: Security Validator]:::tester
+    SV_SPEC[tester type: Security testing and validation suites]:::file
+    SV_FILES[Primary Files: test_validation.py, test_security.py, test_threading.py]:::file
     
-    subgraph "📊 Performance Monitor (performance-benchmarker)"
-        PM[Impact Analysis]:::monitor
-        PM_FILES[Files:<br/>• benchmark_security.py (create)<br/>• performance_report.json (create)<br/>• optimization_log.md (create)]:::file
-    end
+    %% Agent 7: Performance Monitor
+    PM[Agent 7: Performance Monitor]:::monitor
+    PM_SPEC[performance-benchmarker type: Impact analysis and optimization]:::file
+    PM_FILES[Primary Files: benchmark_security.py, performance_report.json, optimization_log.md]:::file
     
-    %% Critical Fixes Assignment
-    CRITICAL_FIXES[🚨 CRITICAL FIXES<br/>WebSocket Injection<br/>Path Traversal<br/>Resource Leaks<br/>Thread Safety<br/>Serial Port Cleanup]:::critical
+    %% Critical Fixes
+    CRITICAL[CRITICAL SECURITY FIXES]:::critical
+    CRIT1[WebSocket Message Injection Prevention]:::critical
+    CRIT2[Path Traversal Protection Implementation]:::critical
+    CRIT3[Resource Leak Detection and Cleanup]:::critical
+    CRIT4[Thread Safety and Race Condition Fixes]:::critical
+    CRIT5[Serial Port Resource Management]:::critical
     
-    %% Agent to Critical Fix Mapping
-    VS --> CRITICAL_FIXES
-    WE --> CRITICAL_FIXES
-    RM --> CRITICAL_FIXES
-    TS --> CRITICAL_FIXES
+    %% Connections
+    SM --> SM_SPEC
+    SM_SPEC --> SM_FILES
+    
+    VS --> VS_SPEC
+    VS_SPEC --> VS_FILES
+    
+    WE --> WE_SPEC
+    WE_SPEC --> WE_FILES
+    
+    RM --> RM_SPEC
+    RM_SPEC --> RM_FILES
+    
+    TS --> TS_SPEC
+    TS_SPEC --> TS_FILES
+    
+    SV --> SV_SPEC
+    SV_SPEC --> SV_FILES
+    
+    PM --> PM_SPEC
+    PM_SPEC --> PM_FILES
+    
+    %% Critical Fix Assignments
+    CRITICAL --> CRIT1
+    CRITICAL --> CRIT2
+    CRITICAL --> CRIT3
+    CRITICAL --> CRIT4
+    CRITICAL --> CRIT5
+    
+    VS --> CRIT1
+    WE --> CRIT1
+    WE --> CRIT2
+    RM --> CRIT2
+    RM --> CRIT3
+    TS --> CRIT4
+    RM --> CRIT5
 ```
 
 ## Task Execution Matrix
@@ -375,26 +410,26 @@ graph TB
     P4[Phase 4: Testing & Validation]:::phase4
     
     %% Phase 1 Tasks (30 min)
-    P1 --> T1_1[Agent 1: Review CodeRabbit report<br/>Create security strategy]
-    P1 --> T1_2[Agent 2: Scan all Python files<br/>Map vulnerabilities]
+    P1 --> T1_1[Agent 1: Review CodeRabbit report and Create security strategy]
+    P1 --> T1_2[Agent 2: Scan all Python files and Map vulnerabilities]
     P1 --> T1_SYNC[Memory Sync: Store findings]:::sync
     
     %% Phase 2 Tasks (60 min)
-    P2 --> T2_1[Agent 3: Implement WebSocket validation<br/>Create JSON schema]
-    P2 --> T2_2[Agent 4: Fix resource leaks<br/>Add context managers]
-    P2 --> T2_3[Agent 7: Establish baseline<br/>Monitor performance]
+    P2 --> T2_1[Agent 3: Implement WebSocket validation and Create JSON schema]
+    P2 --> T2_2[Agent 4: Fix resource leaks and Add context managers]
+    P2 --> T2_3[Agent 7: Establish baseline and Monitor performance]
     P2 --> T2_SYNC[Memory Sync: Store implementations]:::sync
     
     %% Phase 3 Tasks (45 min)
-    P3 --> T3_1[Agent 5: Create ThreadSafeDataStore<br/>Add locking mechanisms]
-    P3 --> T3_2[Agent 4: Fix serial port cleanup<br/>Exception handling]
-    P3 --> T3_3[Agent 1: Coordinate fixes<br/>Validate completeness]
+    P3 --> T3_1[Agent 5: Create ThreadSafeDataStore and Add locking mechanisms]
+    P3 --> T3_2[Agent 4: Fix serial port cleanup and Exception handling]
+    P3 --> T3_3[Agent 1: Coordinate fixes and Validate completeness]
     P3 --> T3_SYNC[Memory Sync: Store thread fixes]:::sync
     
     %% Phase 4 Tasks (45 min)
-    P4 --> T4_1[Agent 6: Create security tests<br/>Run validation suite]
-    P4 --> T4_2[Agent 7: Performance validation<br/>Optimize if needed]
-    P4 --> T4_3[Agent 1: Final security audit<br/>Generate report]
+    P4 --> T4_1[Agent 6: Create security tests and Run validation suite]
+    P4 --> T4_2[Agent 7: Performance validation and Optimize if needed]
+    P4 --> T4_3[Agent 1: Final security audit and Generate report]
     P4 --> T4_SYNC[Memory Sync: Store results]:::sync
     
     %% Sequential Flow
