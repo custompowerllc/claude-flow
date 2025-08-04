@@ -13,6 +13,24 @@
   ],
   "sessions": [
     {
+      "filename": "logs\\20250804_110846-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:08:46.991887",
+      "end_time": "2025-08-04T11:09:23.166509",
+      "record_count": 57,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_110846-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:08:46.991887",
+      "end_time": "2025-08-04T11:09:23.157881",
+      "record_count": 57,
+      "interval": 0.5
+    },
+    {
       "filename": "logs\\20250804_110749-0001.csv",
       "serial_number": "0001",
       "rma_number": "",
