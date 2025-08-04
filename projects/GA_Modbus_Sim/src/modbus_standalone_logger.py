@@ -157,9 +157,9 @@ class WebSocketBroadcaster:
         self.thread = None
         self.running = False
         
-    async def register_client(self, websocket, path):
+    async def register_client(self, websocket):
         """Register a new WebSocket client"""
-        print(f"DEBUG: register_client called with path: {path}")
+        print(f"DEBUG: register_client called")
         
         try:
             self.clients.add(websocket)
