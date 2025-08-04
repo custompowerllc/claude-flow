@@ -475,23 +475,25 @@ class StandaloneModbusLogger:
         
         params['serial_number'] = serial_number
         
-        # RMA number
+        # RMA number (optional)
         default_rma = self.config['metadata']['rma_number']
         if not default_rma and self.history['rma_numbers']:
             default_rma = self.history['rma_numbers'][0]
         
         if self.console and self.history['rma_numbers']:
             rma_number = Prompt.ask(
-                "RMA number",
-                choices=self.history['rma_numbers'] + ["new"],
-                default=default_rma or "new"
+                "RMA number (optional - press Enter to skip)",
+                choices=self.history['rma_numbers'] + ["new", "skip"],
+                default="skip" if not default_rma else default_rma
             )
-            if rma_number == "new":
-                rma_number = Prompt.ask("Enter new RMA number")
+            if rma_number == "skip":
+                rma_number = ""
+            elif rma_number == "new":
+                rma_number = Prompt.ask("Enter new RMA number (or press Enter to skip)", default="")
         else:
-            rma_number = input(f"RMA number [{default_rma}]: ").strip()
+            rma_number = input(f"RMA number (optional) [{default_rma or 'press Enter to skip'}]: ").strip()
             if not rma_number:
-                rma_number = default_rma
+                rma_number = default_rma or ""
         
         params['rma_number'] = rma_number
         
@@ -626,9 +628,12 @@ class StandaloneModbusLogger:
             self._print_error(f"Output directory does not exist: {output_path}")
             return False
         
-        # Generate filename with timestamp, serial number, and RMA number
+        # Generate filename with timestamp, serial number, and optionally RMA number
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{timestamp}-{serial_number}-{rma_number}.csv"
+        if rma_number:
+            filename = f"{timestamp}-{serial_number}-{rma_number}.csv"
+        else:
+            filename = f"{timestamp}-{serial_number}.csv"
         self.log_file = output_dir / filename
         
         try:
@@ -656,7 +661,8 @@ class StandaloneModbusLogger:
             
             # Update history
             self._add_to_history('serial_numbers', serial_number)
-            self._add_to_history('rma_numbers', rma_number)
+            if rma_number:  # Only add to history if RMA number is provided
+                self._add_to_history('rma_numbers', rma_number)
             self._add_to_history('output_paths', output_path)
             
             # Update config
@@ -931,7 +937,7 @@ Examples:
     # Logging arguments
     parser.add_argument('--output-path', help='Output directory for CSV files')
     parser.add_argument('--serial-number', '--sn', help='Battery serial number')
-    parser.add_argument('--rma-number', '--rma', help='RMA number')
+    parser.add_argument('--rma-number', '--rma', help='RMA number (optional)')
     parser.add_argument('--interval', type=float, default=0.5, help='Logging interval in seconds (default: 0.5)')
     
     # Utility arguments
@@ -977,8 +983,7 @@ def main():
     need_interactive = (
         args.interactive or 
         not args.port or 
-        not args.serial_number or 
-        not args.rma_number
+        not args.serial_number
     )
     
     try:
@@ -993,7 +998,7 @@ def main():
                 'port': args.port,
                 'output_path': args.output_path or logger.config['logging']['output_path'],
                 'serial_number': args.serial_number,
-                'rma_number': args.rma_number
+                'rma_number': args.rma_number or ''  # Default to empty string if not provided
             }
         
         # Connect to Modbus device
