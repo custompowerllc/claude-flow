@@ -159,38 +159,29 @@ class WebSocketBroadcaster:
         
     async def register_client(self, websocket, path):
         """Register a new WebSocket client"""
-        self.clients.add(websocket)
-        print(f"WebSocket client connected from {websocket.remote_address}. Total clients: {len(self.clients)}")
+        print(f"DEBUG: register_client called with path: {path}")
         
         try:
-            # Send welcome message
-            welcome_msg = {
-                "type": "connection",
-                "status": "connected",
-                "message": "Connected to Modbus data stream",
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
+            self.clients.add(websocket)
+            print(f"WebSocket client connected from {websocket.remote_address}. Total clients: {len(self.clients)}")
             
-            try:
-                json_msg = json.dumps(welcome_msg)
-                await websocket.send(json_msg)
-                print(f"✓ Sent welcome message to client")
-            except Exception as e:
-                print(f"✗ Error sending welcome message: {e}")
-                await websocket.close(code=1011, reason="Welcome message error")
-                return
+            # Send simple welcome message
+            print(f"DEBUG: Preparing welcome message...")
+            welcome_msg = '{"type":"connection","status":"connected","message":"Connected to Modbus data stream"}'
+            
+            print(f"DEBUG: Sending welcome message...")
+            await websocket.send(welcome_msg)
+            print(f"✓ Sent welcome message to client")
             
             # Keep connection alive and handle disconnect
+            print(f"DEBUG: Waiting for connection to close...")
             await websocket.wait_closed()
+            print(f"DEBUG: Connection closed normally")
             
-        except websockets.exceptions.ConnectionClosed as e:
-            print(f"WebSocket connection closed: {e}")
         except Exception as e:
-            print(f"✗ Error in register_client: {e}")
-            try:
-                await websocket.close(code=1011, reason=str(e))
-            except:
-                pass
+            print(f"✗ CRITICAL ERROR in register_client: {type(e).__name__}: {e}")
+            import traceback
+            traceback.print_exc()
         finally:
             self.clients.discard(websocket)
             print(f"WebSocket client disconnected. Total clients: {len(self.clients)}")
