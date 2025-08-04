@@ -1,0 +1,95 @@
+# GA Modbus Logger Configuration
+# This file contains all configuration options for the Modbus logging applications
+# All settings are optional - defaults will be used if not specified
+
+[metadata]
+version = "2.0.0"
+description = "GA Modbus Logger with WebSocket Support"
+
+# Connection settings for Modbus RTU
+[connection]
+port = ""  # Serial port (e.g., "COM3", "/dev/ttyUSB0") - empty for auto-detect
+baudrate = 9600
+parity = "E"  # E=Even, O=Odd, N=None
+stopbits = 1
+bytesize = 8
+timeout = 5.0
+
+# Logging configuration
+[logging]
+output_path = "logs"
+format = "csv"  # csv, json, both
+level = "INFO"  # DEBUG, INFO, WARNING, ERROR
+console_output = true
+file_rotation = true
+max_file_size_mb = 100
+backup_count = 5
+
+# Data collection settings
+[data]
+interval_seconds = 1.0
+moving_average_window = 5
+temperature_unit = "celsius"  # celsius, fahrenheit
+enable_delta_filter = true
+delta_threshold_mv = 50  # millivolts
+
+# WebSocket configuration
+[websocket]
+enabled = true
+port = 8765
+host = "localhost"
+max_connections = 10
+message_queue_size = 1000
+compression = true
+ping_interval = 20
+ping_timeout = 10
+
+# WebSocket message settings
+[websocket.messages]
+send_rate_hz = 1.0  # Messages per second
+include_raw_data = false
+buffer_size = 100
+batch_messages = false
+
+# WebSocket reconnection settings
+[websocket.reconnection]
+enabled = true
+max_attempts = 5
+initial_delay_seconds = 1.0
+max_delay_seconds = 30.0
+backoff_multiplier = 2.0
+
+# WebSocket authentication (optional)
+[websocket.auth]
+enabled = false
+api_key = ""
+token_expiry_hours = 24
+
+# Session metadata
+[metadata]
+serial_number = ""
+rma_number = ""
+test_type = ""  # charge, discharge, cycle
+technician = ""
+location = ""
+
+# Historical tracking
+[history]
+max_serial_numbers = 20
+max_rma_numbers = 20
+max_output_paths = 10
+
+# Performance optimization
+[performance]
+buffer_size = 1000
+batch_writes = true
+async_logging = true
+memory_limit_mb = 512
+
+# Development and debugging
+[debug]
+enabled = false
+log_modbus_raw = false
+log_websocket_messages = false
+verbose_errors = false
+save_debug_files = false
