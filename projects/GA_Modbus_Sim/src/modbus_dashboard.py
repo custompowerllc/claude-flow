@@ -17,6 +17,7 @@ from collections import deque
 from typing import Dict, List, Optional, Tuple
 import argparse
 import threading
+import random
 from datetime import timedelta as td
 
 # Import scaling functions
@@ -62,17 +63,327 @@ except ImportError:
     print("Error: numpy is required for dashboard functionality. Install with: pip install numpy")
     NUMPY_AVAILABLE = False
 
+# WebSocket dependencies
+try:
+    import asyncio
+    import websockets
+    import json as websocket_json
+    import concurrent.futures
+    import threading
+    WEBSOCKET_AVAILABLE = True
+except ImportError:
+    print("Warning: websockets not installed. Install with: pip install websockets")
+    WEBSOCKET_AVAILABLE = False
+
+
+class WebSocketDataSource:
+    """WebSocket-based data source for dashboard with automatic reconnection"""
+    
+    def __init__(self, url: str, reconnect_interval: float = 2.0, max_reconnects: int = 30):
+        self.url = url
+        self.websocket = None
+        self.connected = False
+        self.reconnect_interval = reconnect_interval
+        self.max_reconnects = max_reconnects
+        self.reconnect_count = 0
+        self.data_callback = None
+        self.status_callback = None
+        self.error_callback = None
+        self.running = False
+        self.loop = None
+        self.connection_thread = None
+        self.last_sequence = 0
+        
+        # Connection state tracking
+        self.connection_state = "disconnected"  # disconnected, connecting, connected, reconnecting
+        self.last_data_time = None
+        self.connection_start_time = None
+        
+    def set_data_callback(self, callback):
+        """Set callback for data messages"""
+        self.data_callback = callback
+        
+    def set_status_callback(self, callback):
+        """Set callback for status messages"""
+        self.status_callback = callback
+        
+    def set_error_callback(self, callback):
+        """Set callback for error messages"""
+        self.error_callback = callback
+    
+    def start(self):
+        """Start WebSocket connection in separate thread"""
+        if self.running:
+            return
+            
+        self.running = True
+        self.connection_thread = threading.Thread(target=self._run_async_loop, daemon=True)
+        self.connection_thread.start()
+    
+    def stop(self):
+        """Stop WebSocket connection"""
+        self.running = False
+        if self.loop and not self.loop.is_closed():
+            asyncio.run_coroutine_threadsafe(self._disconnect(), self.loop)
+    
+    def _run_async_loop(self):
+        """Run async event loop in thread"""
+        try:
+            self.loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self.loop)
+            self.loop.run_until_complete(self._connection_manager())
+        except Exception as e:
+            if self.error_callback:
+                self.error_callback(f"WebSocket loop error: {e}")
+        finally:
+            if self.loop and not self.loop.is_closed():
+                self.loop.close()
+    
+    async def _connection_manager(self):
+        """Manage WebSocket connection with automatic reconnection"""
+        while self.running:
+            try:
+                await self._connect_and_listen()
+            except Exception as e:
+                if self.running:
+                    if self.error_callback:
+                        self.error_callback(f"Connection error: {e}")
+                    await self._handle_reconnection()
+    
+    async def _connect_and_listen(self):
+        """Connect to WebSocket and listen for messages"""
+        self.connection_state = "connecting"
+        self.connection_start_time = datetime.now()
+        
+        if self.status_callback:
+            self.status_callback(f"Connecting to {self.url}...")
+        
+        try:
+            async with websockets.connect(self.url, ping_interval=20, ping_timeout=10) as websocket:
+                self.websocket = websocket
+                self.connected = True
+                self.connection_state = "connected"
+                self.reconnect_count = 0
+                
+                if self.status_callback:
+                    self.status_callback(f"Connected to WebSocket server")
+                
+                # Listen for messages
+                async for message in websocket:
+                    if not self.running:
+                        break
+                        
+                    try:
+                        data = websocket_json.loads(message)
+                        await self._handle_message(data)
+                        self.last_data_time = datetime.now()
+                    except websocket_json.JSONDecodeError as e:
+                        if self.error_callback:
+                            self.error_callback(f"JSON decode error: {e}")
+                    except Exception as e:
+                        if self.error_callback:
+                            self.error_callback(f"Message handling error: {e}")
+                            
+        except websockets.exceptions.ConnectionClosed:
+            if self.running:
+                if self.status_callback:
+                    self.status_callback("WebSocket connection closed")
+        except Exception as e:
+            if self.running:
+                if self.error_callback:
+                    self.error_callback(f"WebSocket connection failed: {e}")
+        finally:
+            self.connected = False
+            self.websocket = None
+            if self.running:
+                self.connection_state = "reconnecting"
+    
+    async def _handle_message(self, message: dict):
+        """Handle incoming WebSocket message"""
+        message_type = message.get('type', 'unknown')
+        
+        # Track sequence numbers for data integrity
+        if 'sequence' in message:
+            sequence = message['sequence']
+            if self.last_sequence > 0 and sequence != self.last_sequence + 1:
+                if self.error_callback:
+                    self.error_callback(f"Missing messages detected: expected {self.last_sequence + 1}, got {sequence}")
+            self.last_sequence = sequence
+        
+        if message_type == 'data' and self.data_callback:
+            payload = message.get('payload', {})
+            timestamp_str = message.get('timestamp', datetime.now().isoformat())
+            try:
+                timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+            except:
+                timestamp = datetime.now()
+            
+            # Convert to format expected by dashboard
+            self.data_callback(payload, timestamp)
+            
+        elif message_type == 'status' and self.status_callback:
+            status_info = message.get('payload', {})
+            self.status_callback(f"Status: {status_info}")
+            
+        elif message_type == 'error' and self.error_callback:
+            error_info = message.get('payload', {})
+            self.error_callback(f"Server error: {error_info}")
+    
+    async def _handle_reconnection(self):
+        """Handle reconnection logic with exponential backoff"""
+        if not self.running or self.reconnect_count >= self.max_reconnects:
+            if self.reconnect_count >= self.max_reconnects:
+                if self.status_callback:
+                    self.status_callback(f"Max reconnection attempts ({self.max_reconnects}) reached. Falling back to CSV mode.")
+            return
+        
+        self.reconnect_count += 1
+        # Exponential backoff with jitter
+        delay = min(self.reconnect_interval * (2 ** (self.reconnect_count - 1)), 60)
+        delay += random.uniform(0, 1)  # Add jitter
+        
+        if self.status_callback:
+            self.status_callback(f"Reconnection attempt {self.reconnect_count}/{self.max_reconnects} in {delay:.1f}s...")
+        
+        await asyncio.sleep(delay)
+    
+    async def _disconnect(self):
+        """Disconnect from WebSocket"""
+        if self.websocket:
+            await self.websocket.close()
+            self.websocket = None
+        self.connected = False
+        self.connection_state = "disconnected"
+    
+    def is_connected(self) -> bool:
+        """Check if WebSocket is connected"""
+        return self.connected and self.websocket is not None
+    
+    def get_connection_info(self) -> dict:
+        """Get connection status information"""
+        return {
+            'state': self.connection_state,
+            'connected': self.connected,
+            'url': self.url,
+            'reconnect_count': self.reconnect_count,
+            'max_reconnects': self.max_reconnects,
+            'last_data_time': self.last_data_time,
+            'connection_start_time': self.connection_start_time
+        }
+
+
+class DataSourceManager:
+    """Manages multiple data sources with fallback capability"""
+    
+    def __init__(self, csv_file: str, websocket_url: str = None):
+        self.csv_file = csv_file
+        self.websocket_url = websocket_url
+        self.websocket_source = None
+        self.current_mode = 'csv'  # 'websocket', 'csv', 'fallback'
+        self.data_callback = None
+        self.status_callback = None
+        self.websocket_failed = False
+        
+        # Initialize WebSocket if URL provided
+        if websocket_url and WEBSOCKET_AVAILABLE:
+            self.websocket_source = WebSocketDataSource(websocket_url)
+            self.websocket_source.set_data_callback(self._websocket_data_received)
+            self.websocket_source.set_status_callback(self._websocket_status_received)
+            self.websocket_source.set_error_callback(self._websocket_error_received)
+            self.current_mode = 'websocket'
+    
+    def set_data_callback(self, callback):
+        """Set callback for data reception"""
+        self.data_callback = callback
+    
+    def set_status_callback(self, callback):
+        """Set callback for status updates"""
+        self.status_callback = callback
+    
+    def start(self):
+        """Start the appropriate data source"""
+        if self.websocket_source and not self.websocket_failed:
+            if self.status_callback:
+                self.status_callback("Starting WebSocket connection...")
+            self.websocket_source.start()
+        else:
+            if self.status_callback:
+                self.status_callback("Using CSV file mode")
+            self.current_mode = 'csv'
+    
+    def stop(self):
+        """Stop all data sources"""
+        if self.websocket_source:
+            self.websocket_source.stop()
+    
+    def _websocket_data_received(self, payload: dict, timestamp: datetime):
+        """Handle WebSocket data reception"""
+        if self.data_callback:
+            # Convert WebSocket data format to CSV-compatible format
+            self.data_callback(payload, timestamp, source='websocket')
+    
+    def _websocket_status_received(self, status: str):
+        """Handle WebSocket status updates"""
+        if self.status_callback:
+            self.status_callback(f"WebSocket: {status}")
+        
+        # Check for fallback conditions
+        if "fallback to CSV" in status.lower() or "max reconnection attempts" in status.lower():
+            self.websocket_failed = True
+            self.current_mode = 'fallback'
+            if self.status_callback:
+                self.status_callback("Switched to CSV fallback mode")
+    
+    def _websocket_error_received(self, error: str):
+        """Handle WebSocket errors"""
+        if self.status_callback:
+            self.status_callback(f"WebSocket Error: {error}")
+    
+    def get_mode(self) -> str:
+        """Get current data source mode"""
+        return self.current_mode
+    
+    def is_websocket_connected(self) -> bool:
+        """Check if WebSocket is connected"""
+        return (self.websocket_source and 
+                self.websocket_source.is_connected() and 
+                not self.websocket_failed)
+    
+    def get_connection_info(self) -> dict:
+        """Get detailed connection information"""
+        info = {
+            'mode': self.current_mode,
+            'csv_file': self.csv_file,
+            'websocket_url': self.websocket_url,
+            'websocket_failed': self.websocket_failed
+        }
+        
+        if self.websocket_source:
+            info['websocket_info'] = self.websocket_source.get_connection_info()
+        
+        return info
+
 
 class ModbusDashboard:
     """Real-time dashboard for monitoring Modbus data"""
     
-    def __init__(self, csv_file: str, update_interval: int = 1000, com_port: str = None, historical_mode: bool = False, session_type: str = None, export_screenshot: str = None, headless: bool = False):
+    def __init__(self, csv_file: str, update_interval: int = 1000, com_port: str = None, historical_mode: bool = False, session_type: str = None, export_screenshot: str = None, headless: bool = False, websocket_url: str = None):
         self.csv_file = Path(csv_file)
         self.update_interval = update_interval  # milliseconds
         self.historical_mode = historical_mode
         self.session_type = session_type
         self.export_screenshot = export_screenshot
         self.headless = headless
+        self.websocket_url = websocket_url
+        
+        # Initialize data source manager for WebSocket/CSV fallback
+        self.data_source_manager = DataSourceManager(str(csv_file), websocket_url)
+        self.data_source_manager.set_data_callback(self._handle_websocket_data)
+        self.data_source_manager.set_status_callback(self._handle_status_update)
+        
+        # WebSocket connection status
+        self.connection_status = "Initializing..."
+        self.data_source_mode = "csv"  # Track current mode for UI display
         
         # Load metadata if available
         self.metadata = self.load_metadata()
@@ -175,6 +486,104 @@ class ModbusDashboard:
         # If in historical mode, load all data immediately
         if self.historical_mode:
             self.load_all_historical_data()
+        else:
+            # Start WebSocket connection for real-time mode
+            if websocket_url and not historical_mode:
+                self.data_source_manager.start()
+                self.data_source_mode = self.data_source_manager.get_mode()
+    
+    def _handle_websocket_data(self, payload: dict, timestamp: datetime, source: str = 'websocket'):
+        """Handle data received from WebSocket"""
+        try:
+            # Store data source mode
+            self.data_source_mode = source
+            
+            # Convert WebSocket payload to dashboard format and append to data
+            self.timestamps.append(timestamp)
+            
+            # Parse cell voltages (WebSocket data is in mV, convert to V)
+            for i in range(1, 9):
+                cell_key = f'afe_cell_volt{i}'
+                if cell_key in payload:
+                    value = float(payload[cell_key]) / 1000.0  # Convert mV to V
+                    self.cell_voltages[f'cell_{i}'].append(value)
+            
+            # Parse pack voltage (convert from mV to V)
+            if 'afe_pack_volt' in payload:
+                pack_v = float(payload['afe_pack_volt']) / 1000.0
+                self.pack_voltage.append(pack_v)
+            
+            # Parse current (WebSocket data is in mA, convert to A)
+            current_col = 'fg_current' if 'fg_current' in payload else 'afe_current'
+            if current_col in payload:
+                current = float(payload[current_col]) / 1000.0  # Convert mA to A
+                # Apply current spike filtering
+                current = self.filter_current_spike(current)
+                self.current.append(current)
+            
+            # Parse cell delta (keep in mV)
+            if 'afe_cell_volt_delta' in payload:
+                delta = float(payload['afe_cell_volt_delta'])
+                self.cell_delta.append(delta)
+                
+                # Track peak delta and corresponding cell voltages
+                if delta > self.peak_delta_value:
+                    self.peak_delta_value = delta
+                    self.peak_delta_timestamp = timestamp
+                    # Store current cell voltages at peak delta
+                    for i in range(1, 9):
+                        cell_key = f'cell_{i}'
+                        if self.cell_voltages[cell_key]:
+                            self.peak_delta_cell_voltages[cell_key] = self.cell_voltages[cell_key][-1]
+            
+            # Parse SOC
+            if 'fg_state_of_charge' in payload:
+                self.soc.append(float(payload['fg_state_of_charge']))
+            
+            # Parse temperature (WebSocket data might be in Kelvin×10, convert appropriately)
+            if 'afe_temp1' in payload:
+                temp_raw = float(payload['afe_temp1'])
+                if temp_raw > 1000:  # Raw Kelvin×10 format
+                    if SCALE_FUNCTIONS_AVAILABLE:
+                        temp_scaled = scale_temperature(temp_raw, self.temp_unit)
+                    else:
+                        kelvin = temp_raw / 10.0
+                        celsius = kelvin - 273.15
+                        temp_scaled = celsius * 9/5 + 32 if self.temp_unit == 'F' else celsius
+                elif temp_raw > 200:  # Kelvin format
+                    celsius = temp_raw - 273.15
+                    temp_scaled = celsius * 9/5 + 32 if self.temp_unit == 'F' else celsius
+                else:  # Already in Celsius
+                    temp_scaled = temp_raw * 9/5 + 32 if self.temp_unit == 'F' else temp_raw
+                self.temperature1.append(temp_scaled)
+            
+            if 'afe_temp2' in payload:
+                temp_raw = float(payload['afe_temp2'])
+                if temp_raw > 1000:  # Raw Kelvin×10 format
+                    if SCALE_FUNCTIONS_AVAILABLE:
+                        temp_scaled = scale_temperature(temp_raw, self.temp_unit)
+                    else:
+                        kelvin = temp_raw / 10.0
+                        celsius = kelvin - 273.15
+                        temp_scaled = celsius * 9/5 + 32 if self.temp_unit == 'F' else celsius
+                elif temp_raw > 200:  # Kelvin format
+                    celsius = temp_raw - 273.15
+                    temp_scaled = celsius * 9/5 + 32 if self.temp_unit == 'F' else celsius
+                else:  # Already in Celsius
+                    temp_scaled = temp_raw * 9/5 + 32 if self.temp_unit == 'F' else temp_raw
+                self.temperature2.append(temp_scaled)
+            
+            # Update statistics
+            self.stats['record_count'] += 1
+            
+        except Exception as e:
+            print(f"Error processing WebSocket data: {e}")
+    
+    def _handle_status_update(self, status: str):
+        """Handle status updates from WebSocket connection"""
+        self.connection_status = status
+        self.data_source_mode = self.data_source_manager.get_mode()
+        print(f"Connection Status: {status}")  # For debugging
     
     def load_metadata(self) -> Optional[Dict]:
         """Load metadata JSON file if it exists"""
@@ -308,6 +717,12 @@ class ModbusDashboard:
             title += f' | Serial: {self.serial_number}'
         if self.rma_number != "Unknown":
             title += f' | RMA: {self.rma_number}'
+        
+        # Add connection status to title
+        if self.websocket_url:
+            data_source_display = f"WebSocket ({self.data_source_mode.upper()})"
+            title += f' | {data_source_display}'
+        
         self.fig.suptitle(title, fontsize=14, fontweight='bold', color='cyan')
         
         # Create grid layout - 4 rows, with bottom row for statistics
@@ -406,7 +821,14 @@ class ModbusDashboard:
             pass
     
     def read_new_data(self) -> bool:
-        """Read new data from CSV file - optimized for performance"""
+        """Read new data from WebSocket or CSV file (fallback) - optimized for performance"""
+        # If WebSocket is connected, data is handled via callbacks
+        if self.data_source_manager.is_websocket_connected():
+            # WebSocket data is handled via _handle_websocket_data callback
+            # Just return True to continue the update cycle
+            return len(self.timestamps) > 0
+        
+        # Fallback to CSV file reading
         if not self.csv_file.exists():
             return False
         
@@ -912,6 +1334,26 @@ class ModbusDashboard:
         # Update statistics text in horizontal layout
         stats_str = f"Port: {self.com_port} | Serial: {self.serial_number} | RMA: {self.rma_number}"
         
+        # Add WebSocket connection status
+        if self.websocket_url:
+            connection_info = self.data_source_manager.get_connection_info()
+            mode_display = connection_info['mode'].upper()
+            if connection_info['mode'] == 'websocket':
+                ws_info = connection_info.get('websocket_info', {})
+                if ws_info.get('connected', False):
+                    status_color = "🟢"  # Green for connected
+                    status_text = f"{status_color} WebSocket CONNECTED"
+                else:
+                    status_color = "🔴"  # Red for disconnected
+                    reconnect_count = ws_info.get('reconnect_count', 0)
+                    status_text = f"{status_color} WebSocket RECONNECTING ({reconnect_count}/30)"
+            elif connection_info['mode'] == 'fallback':
+                status_text = "🟡 CSV FALLBACK MODE"  # Yellow for fallback
+            else:
+                status_text = "🔵 CSV MODE"  # Blue for CSV-only
+            
+            stats_str += f" | {status_text}"
+        
         if metadata_info:
             stats_str += f" | {metadata_info}"
             
@@ -1188,6 +1630,14 @@ class ModbusDashboard:
         self.recovery_data = []
         print("📸 Screenshot feature DISABLED\n")
     
+    def cleanup(self):
+        """Clean up resources, including WebSocket connections"""
+        try:
+            if hasattr(self, 'data_source_manager') and self.data_source_manager:
+                self.data_source_manager.stop()
+        except Exception as e:
+            print(f"Warning: Error during cleanup: {e}")
+    
     def run(self):
         """Run the dashboard"""
         if self.historical_mode:
@@ -1220,8 +1670,12 @@ class ModbusDashboard:
                                         blit=False, cache_frame_data=False,
                                         repeat=True, save_count=1)
             
-            # Show plot
-            plt.show()
+            try:
+                # Show plot
+                plt.show()
+            finally:
+                # Clean up WebSocket connections
+                self.cleanup()
 
 
 def find_latest_csv(directory: Path, serial_number: str = None, rma_number: str = None) -> Optional[Path]:
@@ -1267,6 +1721,12 @@ Examples:
   
   # View historical charge session data
   python modbus_dashboard.py charge_data.csv --historical --session-type charge
+  
+  # Monitor with WebSocket connection (real-time)
+  python modbus_dashboard.py data.csv --websocket ws://localhost:8765
+  
+  # WebSocket with CSV fallback
+  python modbus_dashboard.py data.csv --websocket ws://localhost:8765 --websocket-fallback
         """
     )
     
@@ -1299,6 +1759,10 @@ Examples:
                        help='Disable current spike filtering')
     parser.add_argument('--current-spike-threshold', type=float, default=50.0,
                        help='Current spike threshold in amperes (default: 50.0)')
+    parser.add_argument('--websocket', '--websocket-url', dest='websocket_url',
+                       help='WebSocket server URL (e.g., ws://localhost:8765) for real-time data')
+    parser.add_argument('--websocket-fallback', '--fallback-csv', dest='fallback_csv', action='store_true',
+                       help='Enable CSV fallback when WebSocket connection fails (default behavior)')
     
     args = parser.parse_args()
     
@@ -1341,6 +1805,14 @@ Examples:
         print(f"Error: CSV file not found: {csv_file}")
         return 1
     
+    # Validate WebSocket availability
+    websocket_url = args.websocket_url
+    if websocket_url and not WEBSOCKET_AVAILABLE:
+        print("Warning: WebSocket functionality requested but websockets library not available.")
+        print("Install with: pip install websockets")
+        print("Falling back to CSV-only mode.")
+        websocket_url = None
+    
     # Create and run dashboard
     try:
         dashboard = ModbusDashboard(str(csv_file), 
@@ -1349,7 +1821,8 @@ Examples:
                                   historical_mode=args.historical,
                                   session_type=args.session_type,
                                   export_screenshot=args.export_screenshot,
-                                  headless=args.no_gui)
+                                  headless=args.no_gui,
+                                  websocket_url=websocket_url)
         
         # Apply performance optimizations
         if args.fast_mode:
@@ -1386,8 +1859,16 @@ Examples:
         dashboard.run()
     except KeyboardInterrupt:
         print("\nDashboard stopped by user")
+        try:
+            dashboard.cleanup()
+        except:
+            pass
     except Exception as e:
         print(f"Error: {e}")
+        try:
+            dashboard.cleanup()
+        except:
+            pass
         return 1
     
     return 0

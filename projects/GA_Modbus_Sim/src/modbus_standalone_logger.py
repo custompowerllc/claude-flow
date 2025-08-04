@@ -85,6 +85,17 @@ except ImportError:
     print("Warning: PyModbus not installed. Install with: pip install pymodbus")
     MODBUS_AVAILABLE = False
 
+# Import WebSocket and asyncio for real-time broadcasting
+try:
+    import asyncio
+    import websockets
+    import threading
+    import queue
+    WEBSOCKETS_AVAILABLE = True
+except ImportError:
+    print("Warning: WebSockets not installed. Install with: pip install websockets")
+    WEBSOCKETS_AVAILABLE = False
+
 
 class MovingAverageFilter:
     """Moving average filter for smoothing cell delta spikes"""
@@ -133,6 +144,185 @@ class MovingAverageFilter:
         return value
 
 
+class WebSocketBroadcaster:
+    """WebSocket server for broadcasting real-time Modbus data"""
+    
+    def __init__(self, host: str = "localhost", port: int = 8765):
+        self.host = host
+        self.port = port
+        self.clients = set()
+        self.data_queue = queue.Queue()
+        self.server = None
+        self.loop = None
+        self.thread = None
+        self.running = False
+        
+    async def register_client(self, websocket, path):
+        """Register a new WebSocket client"""
+        self.clients.add(websocket)
+        print(f"WebSocket client connected from {websocket.remote_address}. Total clients: {len(self.clients)}")
+        
+        try:
+            # Send welcome message
+            welcome_msg = {
+                "type": "connection",
+                "status": "connected",
+                "message": "Connected to Modbus data stream",
+                "timestamp": datetime.now().isoformat()
+            }
+            await websocket.send(json.dumps(welcome_msg))
+            
+            # Keep connection alive and handle disconnect
+            await websocket.wait_closed()
+        except websockets.exceptions.ConnectionClosed:
+            pass
+        finally:
+            self.clients.discard(websocket)
+            print(f"WebSocket client disconnected. Total clients: {len(self.clients)}")
+    
+    async def broadcast_data(self, data: Dict[str, Any]):
+        """Broadcast data to all connected clients"""
+        if not self.clients:
+            return
+        
+        # Prepare broadcast message
+        message = {
+            "type": "data",
+            "timestamp": datetime.now().isoformat(),
+            "data": data
+        }
+        
+        # Convert to JSON
+        json_message = json.dumps(message, default=str)
+        
+        # Broadcast to all clients
+        disconnected_clients = set()
+        for client in self.clients:
+            try:
+                await client.send(json_message)
+            except websockets.exceptions.ConnectionClosed:
+                disconnected_clients.add(client)
+            except Exception as e:
+                print(f"Error broadcasting to client: {e}")
+                disconnected_clients.add(client)
+        
+        # Remove disconnected clients
+        self.clients -= disconnected_clients
+    
+    def queue_data(self, data: Dict[str, Any]):
+        """Queue data for broadcasting (thread-safe)"""
+        try:
+            self.data_queue.put_nowait(data)
+        except queue.Full:
+            # If queue is full, remove oldest item and add new one
+            try:
+                self.data_queue.get_nowait()
+                self.data_queue.put_nowait(data)
+            except queue.Empty:
+                pass
+    
+    async def data_sender(self):
+        """Coroutine to send queued data to clients"""
+        while self.running:
+            try:
+                # Check for queued data with timeout
+                try:
+                    data = self.data_queue.get(timeout=0.1)
+                    await self.broadcast_data(data)
+                except queue.Empty:
+                    await asyncio.sleep(0.01)  # Small delay to prevent busy waiting
+            except Exception as e:
+                print(f"Error in data sender: {e}")
+                await asyncio.sleep(0.1)
+    
+    def start_server(self):
+        """Start the WebSocket server in a separate thread"""
+        if not WEBSOCKETS_AVAILABLE:
+            print("Warning: WebSockets not available. Cannot start WebSocket server.")
+            return False
+        
+        if self.running:
+            print("WebSocket server is already running.")
+            return True
+        
+        def run_server():
+            self.loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self.loop)
+            
+            async def server_main():
+                self.running = True
+                
+                # Start the WebSocket server
+                self.server = await websockets.serve(
+                    self.register_client,
+                    self.host,
+                    self.port,
+                    ping_interval=20,
+                    ping_timeout=10
+                )
+                
+                print(f"WebSocket server started on ws://{self.host}:{self.port}")
+                
+                # Start the data sender coroutine
+                data_sender_task = asyncio.create_task(self.data_sender())
+                
+                try:
+                    # Wait for server shutdown
+                    await self.server.wait_closed()
+                except Exception as e:
+                    print(f"WebSocket server error: {e}")
+                finally:
+                    data_sender_task.cancel()
+                    self.running = False
+            
+            try:
+                self.loop.run_until_complete(server_main())
+            except Exception as e:
+                print(f"Error running WebSocket server: {e}")
+            finally:
+                self.loop.close()
+        
+        # Start server in separate thread
+        self.thread = threading.Thread(target=run_server, daemon=True)
+        self.thread.start()
+        
+        # Give the server a moment to start
+        time.sleep(0.5)
+        
+        return True
+    
+    def stop_server(self):
+        """Stop the WebSocket server"""
+        if not self.running:
+            return
+        
+        self.running = False
+        
+        if self.server and self.loop:
+            # Schedule server shutdown
+            future = asyncio.run_coroutine_threadsafe(self.server.close(), self.loop)
+            try:
+                future.result(timeout=5.0)
+            except Exception as e:
+                print(f"Error stopping WebSocket server: {e}")
+        
+        # Wait for thread to finish
+        if self.thread and self.thread.is_alive():
+            self.thread.join(timeout=5.0)
+        
+        print("WebSocket server stopped.")
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get current WebSocket server status"""
+        return {
+            "running": self.running,
+            "host": self.host,
+            "port": self.port,
+            "connected_clients": len(self.clients),
+            "queue_size": self.data_queue.qsize()
+        }
+
+
 class StandaloneModbusLogger:
     """Standalone Modbus logger with minimal dependencies"""
     
@@ -161,6 +351,15 @@ class StandaloneModbusLogger:
             spike_threshold_multiplier=self.config.get('filter', {}).get('spike_threshold', 2.0)
         )
         self.cell_delta_filter.enabled = self.config.get('filter', {}).get('enabled', True)
+        
+        # WebSocket broadcaster for real-time data streaming
+        websocket_config = self.config.get('websocket', {})
+        self.websocket_broadcaster = WebSocketBroadcaster(
+            host=websocket_config.get('host', 'localhost'),
+            port=websocket_config.get('port', 8765)
+        )
+        self.websocket_enabled = websocket_config.get('enabled', True)
+        self.websocket_auto_start = websocket_config.get('auto_start', True)
         
         # Setup signal handlers
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -191,6 +390,12 @@ class StandaloneModbusLogger:
                 'enabled': True,
                 'window_size': 5,
                 'spike_threshold': 2.0
+            },
+            'websocket': {
+                'enabled': True,
+                'host': 'localhost',
+                'port': 8765,
+                'auto_start': True
             }
         }
         
@@ -320,6 +525,8 @@ class StandaloneModbusLogger:
         print("\nShutting down gracefully...")
         self.stop_logging()
         self.disconnect()
+        if self.websocket_enabled:
+            self.websocket_broadcaster.stop_server()
         sys.exit(0)
     
     def show_banner(self):
@@ -335,6 +542,7 @@ class StandaloneModbusLogger:
             banner_text.append("• Interactive mode with configuration prompts\n", style="green")
             banner_text.append("• Historical tracking of settings and sessions\n", style="green")
             banner_text.append("• Moving average filter for cell delta smoothing\n", style="green")
+            banner_text.append("• WebSocket server for real-time data streaming\n", style="green")
             banner_text.append("• TOML configuration file support\n", style="green")
             
             panel = Panel(
@@ -676,6 +884,13 @@ class StandaloneModbusLogger:
             self.config['logging']['output_path'] = output_path
             self._save_config()
             
+            # Start WebSocket server if enabled and auto-start is configured
+            if self.websocket_enabled and self.websocket_auto_start:
+                if self.websocket_broadcaster.start_server():
+                    self._print_success(f"WebSocket server started on ws://{self.websocket_broadcaster.host}:{self.websocket_broadcaster.port}")
+                else:
+                    self._print_warning("Failed to start WebSocket server, continuing with CSV logging only")
+            
             self._print_success(f"Started logging to: {filename}")
             return True
             
@@ -710,6 +925,11 @@ class StandaloneModbusLogger:
             duration = datetime.now() - self.current_session['start_time']
             self._print_success(f"Stopped logging. Duration: {str(duration).split('.')[0]}, Records: {self.current_session['record_count']}")
         
+        # Stop WebSocket server if it's running
+        if self.websocket_enabled and self.websocket_broadcaster.running:
+            self.websocket_broadcaster.stop_server()
+            self._print_success("WebSocket server stopped")
+        
         self.is_logging = False
         self.current_session = None
         self.log_writer = None
@@ -738,6 +958,22 @@ class StandaloneModbusLogger:
             self.log_writer.writerow(row_data)
             self.current_session['csv_file'].flush()
             self.current_session['record_count'] += 1
+            
+            # Broadcast data via WebSocket if enabled
+            if self.websocket_enabled and self.websocket_broadcaster.running:
+                # Prepare data for WebSocket broadcast (include metadata)
+                broadcast_data = {
+                    'session': {
+                        'serial_number': self.current_session['serial_number'],
+                        'rma_number': self.current_session['rma_number'],
+                        'record_count': self.current_session['record_count']
+                    },
+                    'modbus_data': data,
+                    'timestamp': timestamp
+                }
+                
+                # Queue data for broadcasting (non-blocking)
+                self.websocket_broadcaster.queue_data(broadcast_data)
             
             return True
             
@@ -819,6 +1055,19 @@ class StandaloneModbusLogger:
                 status_text.append("Disabled", style="bold red")
             status_text.append("\n")
             
+            # WebSocket status
+            status_text.append("WebSocket Server: ", style="bold")
+            if self.websocket_enabled:
+                ws_status = self.websocket_broadcaster.get_status()
+                if ws_status['running']:
+                    status_text.append("Running", style="bold green")
+                    status_text.append(f" (Clients: {ws_status['connected_clients']}, Queue: {ws_status['queue_size']})", style="dim")
+                else:
+                    status_text.append("Stopped", style="bold yellow")
+            else:
+                status_text.append("Disabled", style="bold red")
+            status_text.append("\n")
+            
             # Current session info
             if self.current_session:
                 status_text.append("\nCurrent Session:\n", style="bold blue")
@@ -842,6 +1091,14 @@ class StandaloneModbusLogger:
             print(f"Connection: {'Connected' if self.is_connected else 'Disconnected'}")
             print(f"Logging: {'Active' if self.is_logging else 'Inactive'}")
             print(f"Cell Delta Filter: {'Enabled' if self.cell_delta_filter.enabled else 'Disabled'}")
+            
+            # WebSocket status
+            if self.websocket_enabled:
+                ws_status = self.websocket_broadcaster.get_status()
+                status = "Running" if ws_status['running'] else "Stopped"
+                print(f"WebSocket Server: {status} (Clients: {ws_status['connected_clients']})")
+            else:
+                print("WebSocket Server: Disabled")
             
             if self.current_session:
                 print(f"\nCurrent Session:")
@@ -945,6 +1202,12 @@ Examples:
     parser.add_argument('--rma-number', '--rma', help='RMA number (optional)')
     parser.add_argument('--interval', type=float, default=0.5, help='Logging interval in seconds (default: 0.5)')
     
+    # WebSocket arguments
+    parser.add_argument('--websocket-enabled', action='store_true', help='Enable WebSocket server')
+    parser.add_argument('--websocket-disabled', action='store_true', help='Disable WebSocket server')
+    parser.add_argument('--websocket-host', default='localhost', help='WebSocket server host (default: localhost)')
+    parser.add_argument('--websocket-port', type=int, default=8765, help='WebSocket server port (default: 8765)')
+    
     # Utility arguments
     parser.add_argument('--list-ports', action='store_true', help='List available serial ports')
     parser.add_argument('--history', action='store_true', help='Show historical data')
@@ -963,6 +1226,19 @@ def main():
     
     # Create logger instance
     logger = StandaloneModbusLogger()
+    
+    # Override WebSocket settings from command line arguments
+    if args.websocket_enabled:
+        logger.websocket_enabled = True
+    elif args.websocket_disabled:
+        logger.websocket_enabled = False
+    
+    # Update WebSocket configuration if provided
+    if args.websocket_host != 'localhost' or args.websocket_port != 8765:
+        logger.websocket_broadcaster = WebSocketBroadcaster(
+            host=args.websocket_host,
+            port=args.websocket_port
+        )
     
     # Show banner
     logger.show_banner()
@@ -1039,6 +1315,8 @@ def main():
         # Cleanup
         logger.stop_logging()
         logger.disconnect()
+        if logger.websocket_enabled:
+            logger.websocket_broadcaster.stop_server()
 
 
 if __name__ == "__main__":

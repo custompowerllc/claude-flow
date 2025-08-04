@@ -1,0 +1,6 @@
+# WebSocket Integration Dependencies for GA Modbus Simulator
+websockets>=11.0.0
+asyncio
+json
+threading
+queue
