@@ -2,7 +2,9 @@
   "serial_numbers": [
     "0001"
   ],
-  "rma_numbers": [],
+  "rma_numbers": [
+    "test"
+  ],
   "output_paths": [
     "./logs"
   ],
@@ -10,6 +12,24 @@
     "COM3"
   ],
   "sessions": [
+    {
+      "filename": "logs\\20250804_110749-0001.csv",
+      "serial_number": "0001",
+      "rma_number": "",
+      "start_time": "2025-08-04T11:07:49.966345",
+      "end_time": "2025-08-04T11:08:08.973396",
+      "record_count": 30,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_110749-0001.csv",
+      "serial_number": "0001",
+      "rma_number": "",
+      "start_time": "2025-08-04T11:07:49.966345",
+      "end_time": "2025-08-04T11:08:08.965182",
+      "record_count": 30,
+      "interval": 0.5
+    },
     {
       "filename": "logs\\20250804_110608-0001.csv",
       "serial_number": "0001",
