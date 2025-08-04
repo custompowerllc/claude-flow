@@ -168,14 +168,29 @@ class WebSocketBroadcaster:
                 "type": "connection",
                 "status": "connected",
                 "message": "Connected to Modbus data stream",
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
-            await websocket.send(json.dumps(welcome_msg))
+            
+            try:
+                json_msg = json.dumps(welcome_msg)
+                await websocket.send(json_msg)
+                print(f"✓ Sent welcome message to client")
+            except Exception as e:
+                print(f"✗ Error sending welcome message: {e}")
+                await websocket.close(code=1011, reason="Welcome message error")
+                return
             
             # Keep connection alive and handle disconnect
             await websocket.wait_closed()
-        except websockets.exceptions.ConnectionClosed:
-            pass
+            
+        except websockets.exceptions.ConnectionClosed as e:
+            print(f"WebSocket connection closed: {e}")
+        except Exception as e:
+            print(f"✗ Error in register_client: {e}")
+            try:
+                await websocket.close(code=1011, reason=str(e))
+            except:
+                pass
         finally:
             self.clients.discard(websocket)
             print(f"WebSocket client disconnected. Total clients: {len(self.clients)}")
