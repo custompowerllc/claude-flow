@@ -1,11 +1,13 @@
 #!/bin/bash
 # GitHub-specific checkpoint hook functions for Claude settings.json
 
+# Ensure jq is available in PATH
+export PATH="$HOME/.local/bin:$PATH"
+
 # Function to handle pre-edit checkpoints
 pre_edit_checkpoint() {
     local tool_input="$1"
-    # Extract file_path without jq dependency
-    local file=$(echo "$tool_input" | grep -o '"file_path":"[^"]*"' | cut -d'"' -f4)
+    local file=$(echo "$tool_input" | jq -r '.file_path // empty')
     
     if [ -n "$file" ]; then
         local checkpoint_branch="checkpoint/pre-edit-$(date +%Y%m%d-%H%M%S)"
@@ -38,8 +40,7 @@ EOF
 # Function to handle post-edit checkpoints with GitHub release
 post_edit_checkpoint() {
     local tool_input="$1"
-    # Extract file_path without jq dependency
-    local file=$(echo "$tool_input" | grep -o '"file_path":"[^"]*"' | cut -d'"' -f4)
+    local file=$(echo "$tool_input" | jq -r '.file_path // empty')
     
     if [ -n "$file" ] && [ -f "$file" ]; then
         # Check if file was modified - first check if file is tracked
