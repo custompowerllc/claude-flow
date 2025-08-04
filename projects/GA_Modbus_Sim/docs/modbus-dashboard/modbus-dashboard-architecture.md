@@ -5,3 +5,6 @@ Option 1:
 
 Option 2:
  Have the standalone modbus logger open websocket communication and stream data to the modbus dashboard which updates the gui
+
+
+ 
