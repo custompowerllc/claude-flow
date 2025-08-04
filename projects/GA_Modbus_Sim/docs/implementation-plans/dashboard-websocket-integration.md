@@ -539,7 +539,6 @@ sequenceDiagram
         alt Connection successful
             WSConnection->>Dashboard: Connection restored
             Dashboard->>UIDisplay: Show "Connected via WebSocket"
-            break Resume normal operation
         else Connection failed
             Dashboard->>Dashboard: Wait 2 seconds (exponential backoff)
             Dashboard->>UIDisplay: Update retry counter
@@ -550,6 +549,7 @@ sequenceDiagram
 
     Dashboard->>CSVFallback: Initialize CSV file reader
     Dashboard->>UIDisplay: Show "Using CSV fallback mode"
+    
     loop CSV polling mode
         Dashboard->>CSVFallback: Poll for new data
         CSVFallback->>Dashboard: Return new CSV rows
