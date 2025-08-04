@@ -1,0 +1,50 @@
+{
+  "serial_numbers": [
+    "0001"
+  ],
+  "rma_numbers": [],
+  "output_paths": [
+    "./logs"
+  ],
+  "ports": [
+    "COM3"
+  ],
+  "sessions": [
+    {
+      "filename": "logs\\20250804_110421-0001.csv",
+      "serial_number": "0001",
+      "rma_number": "",
+      "start_time": "2025-08-04T11:04:21.482887",
+      "end_time": "2025-08-04T11:04:22.827844",
+      "record_count": 1,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_110421-0001.csv",
+      "serial_number": "0001",
+      "rma_number": "",
+      "start_time": "2025-08-04T11:04:21.482887",
+      "end_time": "2025-08-04T11:04:22.669436",
+      "record_count": 1,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_110302-0001.csv",
+      "serial_number": "0001",
+      "rma_number": "",
+      "start_time": "2025-08-04T11:03:02.896608",
+      "end_time": "2025-08-04T11:04:18.848594",
+      "record_count": 118,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_110302-0001.csv",
+      "serial_number": "0001",
+      "rma_number": "",
+      "start_time": "2025-08-04T11:03:02.896608",
+      "end_time": "2025-08-04T11:04:17.704433",
+      "record_count": 118,
+      "interval": 0.5
+    }
+  ]
+}
