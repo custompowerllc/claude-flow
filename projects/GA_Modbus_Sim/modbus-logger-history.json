@@ -13,6 +13,60 @@
   ],
   "sessions": [
     {
+      "filename": "logs\\20250804_121216-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T12:12:16.154131",
+      "end_time": "2025-08-04T12:12:17.051736",
+      "record_count": 1,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_121216-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T12:12:16.154131",
+      "end_time": "2025-08-04T12:12:17.043693",
+      "record_count": 1,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_115900-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:59:00.510385",
+      "end_time": "2025-08-04T12:12:08.548437",
+      "record_count": 1254,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_115900-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:59:00.510385",
+      "end_time": "2025-08-04T12:12:08.540118",
+      "record_count": 1254,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_112838-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:28:38.521403",
+      "end_time": "2025-08-04T11:57:03.691674",
+      "record_count": 2714,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_112838-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:28:38.521403",
+      "end_time": "2025-08-04T11:57:03.681287",
+      "record_count": 2714,
+      "interval": 0.5
+    },
+    {
       "filename": "logs\\20250804_112438-0001-test.csv",
       "serial_number": "0001",
       "rma_number": "test",
@@ -136,60 +190,6 @@
       "start_time": "2025-08-04T11:11:31.354481",
       "end_time": "2025-08-04T11:12:12.732944",
       "record_count": 65,
-      "interval": 0.5
-    },
-    {
-      "filename": "logs\\20250804_111037-0001-test.csv",
-      "serial_number": "0001",
-      "rma_number": "test",
-      "start_time": "2025-08-04T11:10:37.873673",
-      "end_time": "2025-08-04T11:10:57.901134",
-      "record_count": 29,
-      "interval": 0.5
-    },
-    {
-      "filename": "logs\\20250804_111037-0001-test.csv",
-      "serial_number": "0001",
-      "rma_number": "test",
-      "start_time": "2025-08-04T11:10:37.873673",
-      "end_time": "2025-08-04T11:10:56.677971",
-      "record_count": 29,
-      "interval": 0.5
-    },
-    {
-      "filename": "logs\\20250804_110846-0001-test.csv",
-      "serial_number": "0001",
-      "rma_number": "test",
-      "start_time": "2025-08-04T11:08:46.991887",
-      "end_time": "2025-08-04T11:09:23.166509",
-      "record_count": 57,
-      "interval": 0.5
-    },
-    {
-      "filename": "logs\\20250804_110846-0001-test.csv",
-      "serial_number": "0001",
-      "rma_number": "test",
-      "start_time": "2025-08-04T11:08:46.991887",
-      "end_time": "2025-08-04T11:09:23.157881",
-      "record_count": 57,
-      "interval": 0.5
-    },
-    {
-      "filename": "logs\\20250804_110749-0001.csv",
-      "serial_number": "0001",
-      "rma_number": "",
-      "start_time": "2025-08-04T11:07:49.966345",
-      "end_time": "2025-08-04T11:08:08.973396",
-      "record_count": 30,
-      "interval": 0.5
-    },
-    {
-      "filename": "logs\\20250804_110749-0001.csv",
-      "serial_number": "0001",
-      "rma_number": "",
-      "start_time": "2025-08-04T11:07:49.966345",
-      "end_time": "2025-08-04T11:08:08.965182",
-      "record_count": 30,
       "interval": 0.5
     }
   ]
