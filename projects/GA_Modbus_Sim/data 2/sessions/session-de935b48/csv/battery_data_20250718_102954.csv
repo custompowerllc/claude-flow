@@ -1,0 +1,3 @@
+Timestamp,Cell1_V,Cell2_V,Cell3_V,Cell4_V,Cell5_V,Cell6_V,Cell7_V,Cell8_V,Pack_V,Cell_Delta_V,Temp1,Temp2,Current,SOC,FG_Voltage,FG_Current,FG_Temp,Remaining_Cap,Full_Cap,Design_Cap,Avg_Current,Time_Empty,Time_Full,Internal_Temp,Cycle_Count,SOH,Charging_V,Charging_I,Max_Temp,Min_Temp,Max_Chg_Curr,Max_Dsg_Curr
+2025-07-18 10:29:54.497,3405,3399,3396,3396,3408,3460,3396,3394,27256,66,300.8,301.9,2.726,100,27288000,2.612,302.8,6412,6412,6912,1.305,65535,0,302.2,2,93,0,0,0,0,0,0
+2025-07-18 10:29:55.617,3405,3399,3396,3396,3408,3461,3396,3394,27253,67,300.8,301.9,2.726,100,27288000,2.612,302.8,6412,6412,6912,1.305,65535,0,302.2,2,93,0,0,0,0,0,0

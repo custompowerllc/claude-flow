@@ -1,0 +1,274 @@
+{
+  "0515": {
+    "serial_number": "0515",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.203958",
+    "last_updated": "2025-07-21T17:30:36.204054"
+  },
+  "0518": {
+    "serial_number": "0518",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204012",
+    "last_updated": "2025-07-21T17:30:36.204056"
+  },
+  "0520": {
+    "serial_number": "0520",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204020",
+    "last_updated": "2025-07-21T17:30:36.204058"
+  },
+  "0533": {
+    "serial_number": "0533",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204025",
+    "last_updated": "2025-07-21T17:30:36.204060"
+  },
+  "0535": {
+    "serial_number": "0535",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204030",
+    "last_updated": "2025-07-21T17:30:36.204061"
+  },
+  "0561": {
+    "serial_number": "0561",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204034",
+    "last_updated": "2025-07-21T17:30:36.204063"
+  },
+  "0564": {
+    "serial_number": "0564",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204038",
+    "last_updated": "2025-07-21T17:30:36.204065"
+  },
+  "0583": {
+    "serial_number": "0583",
+    "charge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "discharge_test": {
+      "status": "pending",
+      "last_soc": null,
+      "completion_date": null,
+      "csv_file": null,
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    },
+    "last_health_check": {
+      "timestamp": null,
+      "soc": null,
+      "cell_delta_mv": null,
+      "pack_voltage": null,
+      "cell_voltages": null,
+      "current": null,
+      "temperature": null
+    },
+    "data_files": [],
+    "notes": "",
+    "created_date": "2025-07-21T17:30:36.204047",
+    "last_updated": "2025-07-21T17:30:36.204068"
+  }
+}

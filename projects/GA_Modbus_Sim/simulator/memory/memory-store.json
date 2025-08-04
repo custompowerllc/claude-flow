@@ -1,0 +1,34 @@
+{
+  "default": [
+    {
+      "key": "swarm/analyzer/findings",
+      "value": "COMPREHENSIVE LOGGING ANALYSIS COMPLETE - Found 6 basicConfig calls, 3 logger instances, multiple issues with configuration conflicts and inconsistent formats",
+      "namespace": "default",
+      "timestamp": 1754248048026
+    },
+    {
+      "key": "swarm/analyzer/detailed_findings",
+      "value": "{\n  \"basicConfig_locations\": [\n    {\"file\": \"run_simulator.py\", \"line\": 258, \"level\": \"DEBUG if verbose else INFO\", \"format\": \"timestamp-name-level-message\"},\n    {\"file\": \"src/core/register_handler.py\", \"line\": 412, \"level\": \"INFO\", \"format\": \"timestamp-name-level-message\"},\n    {\"file\": \"src/core/modbus_server.py\", \"line\": 327, \"level\": \"INFO\", \"format\": \"timestamp-name-level-message\"},\n    {\"file\": \"src/utils/com_port_manager.py\", \"line\": 352, \"level\": \"INFO\", \"format\": \"timestamp-name-level-message\"},\n    {\"file\": \"test_simulator.py\", \"line\": 228, \"level\": \"WARNING\", \"format\": \"timestamp-name-level-message\"},\n    {\"file\": \"test_compatibility.py\", \"line\": 60, \"level\": \"WARNING\", \"format\": \"basic\"}\n  ],\n  \"logger_instances\": [\n    {\"file\": \"src/core/register_handler.py\", \"line\": 105, \"name\": \"__name__\", \"level\": \"INFO\"},\n    {\"file\": \"src/core/modbus_server.py\", \"line\": 82, \"name\": \"__name__\", \"level\": \"INFO\"},\n    {\"file\": \"src/utils/com_port_manager.py\", \"line\": 63, \"name\": \"__name__\", \"level\": \"INFO\"}\n  ],\n  \"issues_identified\": [\n    \"Multiple basicConfig calls cause conflicts\",\n    \"Inconsistent logging formats across test files\",\n    \"No centralized logging configuration\",\n    \"Hard-coded log levels in each component\",\n    \"Print statements mixed with logging (290 occurrences)\",\n    \"Test files use different log levels (WARNING vs INFO)\"\n  ]\n}",
+      "namespace": "default",
+      "timestamp": 1754248081023
+    },
+    {
+      "key": "swarm/analyzer/logging_patterns",
+      "value": "{\n  \"log_levels_used\": [\"DEBUG\", \"INFO\", \"WARNING\", \"ERROR\", \"CRITICAL\"],\n  \"most_common_level\": \"INFO\",\n  \"message_patterns\": [\n    \"Component initialization messages\",\n    \"Port discovery and management\",\n    \"Register operations and updates\",\n    \"Error handling and warnings\",\n    \"Server lifecycle events\"\n  ],\n  \"format_consistency\": false,\n  \"centralized_config\": false,\n  \"recommended_improvements\": [\n    \"Create single logging configuration module\",\n    \"Use environment-based log level control\",\n    \"Implement structured logging\",\n    \"Remove print statements in favor of logging\",\n    \"Add rotation and file output options\",\n    \"Implement component-specific loggers with hierarchy\"\n  ]\n}",
+      "namespace": "default",
+      "timestamp": 1754248110103
+    },
+    {
+      "key": "swarm/coder/implementations",
+      "value": "\nLOGGING SYSTEM IMPLEMENTATION COMPLETE:\n\n✅ COMPLETED TASKS:\n1. Created src/utils/log_manager.py with LogManager class\n   - Rotating file handlers with size and time limits\n   - Structured log formatters with JSON option\n   - Component-specific loggers (server, register_handler, cli, simulator, com_port)\n   - Path resolution logic (relative, absolute, environment variables)\n\n2. Created config/logging_config.json with configurable settings\n   - Default 10MB file rotation with 5 backups\n   - Component-specific log files and levels\n   - Support for JSON formatting and console/file output\n   - Path resolution examples and documentation\n\n3. Updated run_simulator.py with logging CLI options\n   - Added comprehensive logging argument group with 9 new options\n   - --verbose, --log-level, --log-config, --log-dir\n   - --no-console-log, --no-file-log, --json-logs\n   - --log-rotation-size, --log-backup-count\n   - Integrated advanced logging with fallback to basic logging\n   - Added logging to key CLI methods (start_server, stop_server, signal handling)\n\n4. Updated src/core/modbus_server.py\n   - Replaced basic logging with LogManager integration\n   - Added component-specific logger for 'server' component\n   - Updated main() function to use advanced logging\n\n5. Updated src/core/register_handler.py  \n   - Replaced basic logging with LogManager integration\n   - Added component-specific logger for 'register_handler' component\n   - Updated main() function to use advanced logging\n\n6. Updated src/utils/com_port_manager.py\n   - Replaced basic logging with LogManager integration\n   - Added component-specific logger for 'com_port' component\n\n🔧 TECHNICAL FEATURES IMPLEMENTED:\n- Multi-component logging with separate log files\n- Rotating file handlers (size + time based rotation)\n- JSON structured logging option\n- Path resolution (relative, absolute, env vars)\n- Runtime configuration updates\n- Component-specific log levels\n- Console and file output control\n- Log cleanup utilities\n- Custom handler support\n- Comprehensive CLI integration\n\n📁 FILES CREATED/MODIFIED:\n- NEW: src/utils/log_manager.py (719 lines)\n- NEW: config/logging_config.json (50 lines)  \n- MODIFIED: run_simulator.py (added 70+ lines of logging integration)\n- MODIFIED: src/core/modbus_server.py (replaced basic logging)\n- MODIFIED: src/core/register_handler.py (replaced basic logging)  \n- MODIFIED: src/utils/com_port_manager.py (replaced basic logging)\n\n✨ READY FOR TESTING AND INTEGRATION\n",
+      "namespace": "default",
+      "timestamp": 1754248354468
+    },
+    {
+      "key": "swarm/docs/updates",
+      "value": "Completed comprehensive logging documentation: README.md updated with logging section, created logging_guide.md, cli_reference.md, troubleshooting_logging.md, logging_file_locations.md, and example configurations in config/logging/ with basic_logging.py, file_logging.py, production_logging.py and documentation README.md",
+      "namespace": "default",
+      "timestamp": 1754248459224
+    }
+  ]
+}

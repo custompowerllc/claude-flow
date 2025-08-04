@@ -1,0 +1,9 @@
+Serial,GA_Status,GA_Defect,CP_Charge_Status,CP_Discharge_Status,Max_Delta_mV,Problem_Cell,Peak_Voltage_mV,High_Delta_Events,Verification_Status,Comments
+0515,Failed (OV),Cell #7,No data,No data,,,,,Pending,Awaiting test data
+0518,Failed (OV),Cell #6,No data,No data,,,,,Pending,Awaiting test data
+0520,Completed,None reported,Tested,Tested,502,Cell #7,3938,1272,Hidden Issue,Cell #7 runaway not reported by GA
+0533,Failed,Cell #6,No data,Tested,702,Cell #6,2474,486,Confirmed,UV during discharge confirmed
+0535,Completed,None reported,Tested,Tested,1048,Cell #6,4411,4258,Critical Runaway,94.6% of records show >100mV delta
+0561,In Progress,None reported,Tested,Tested,533,Cell #8,3940,1254,Concerning,Active runaway during test
+0564,Incomplete,SOC 99%,Partial data,No data,,,3940,,Pending,SOC charging issue
+0583,Failed (OV),Cell #4,No data,No data,,,,,Pending,Awaiting test data

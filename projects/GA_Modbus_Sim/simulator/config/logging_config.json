@@ -1,0 +1,63 @@
+{
+  "version": "1.0",
+  "log_dir": "logs",
+  "default_level": "INFO",
+  "console_output": true,
+  "file_output": true,
+  "json_format": false,
+  "rotation": {
+    "max_file_size": "10MB",
+    "backup_count": 5,
+    "time_rotation": false,
+    "rotation_interval": "daily"
+  },
+  "components": {
+    "server": {
+      "level": "INFO",
+      "file": "modbus_server.log",
+      "description": "Modbus server operations and connections"
+    },
+    "register_handler": {
+      "level": "INFO",
+      "file": "register_handler.log",
+      "description": "Register management and battery simulation"
+    },
+    "cli": {
+      "level": "INFO",
+      "file": "cli.log",
+      "description": "Command line interface operations"
+    },
+    "simulator": {
+      "level": "INFO",
+      "file": "simulator.log",
+      "description": "General simulator operations"
+    },
+    "com_port": {
+      "level": "INFO",
+      "file": "com_port.log",
+      "description": "Serial port management and validation"
+    }
+  },
+  "formatters": {
+    "standard": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "detailed": "%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(funcName)s() - %(message)s",
+    "minimal": "%(levelname)s - %(message)s",
+    "json": null
+  },
+  "path_resolution": {
+    "support_environment_variables": true,
+    "relative_to_project_root": true,
+    "examples": {
+      "relative": "logs/simulator.log",
+      "absolute": "/var/log/ga_modbus/simulator.log",
+      "environment": "${LOG_DIR}/simulator.log"
+    }
+  },
+  "features": {
+    "component_specific_loggers": true,
+    "runtime_level_changes": true,
+    "log_cleanup": true,
+    "custom_handlers": true,
+    "structured_logging": true
+  }
+}

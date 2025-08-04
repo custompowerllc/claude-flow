@@ -1,0 +1,9 @@
+SN#,CUST/DEFECT-GA,CHARGE-CP,DISCHARGE-CP,Verif_Defect,COMMENT
+1-0515,Cell Chg #7 (OV),,,Pending,No test data available
+2-0518,Cell #6 (OV),,,Pending,No test data available
+3-0520,???,Cell #7 502mV delta,Normal,Detected,Hidden issue - Cell #7 runaway during charge
+4-0533,Cell #6,,Cell #6 (UV) 2.474V,Confirmed,702mV max delta confirmed
+5-0535,???,Cell #6 1048mV delta,Normal,Critical,Extreme runaway - Cell #6 reached 4.411V during charge
+6-0561,??? (OV),Cell #6 4.396V (OV),Pending,In Progress,Cell #8 shows 533mV delta
+7-0564,???,Cell #8 3.940V (OV),,Pending,SOC stops 99%
+8-0583,??? (OV),Cell #4-OV,,Pending,No test data available

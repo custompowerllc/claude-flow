@@ -1,0 +1,25 @@
+{
+  "serial_number": "0583",
+  "created": "2025-07-22T16:21:00.003088",
+  "purpose": "Cell runaway/high delta voltage evidence package",
+  "ga_findings": {
+    "serial_number": "0583",
+    "charge": {
+      "status": "failed",
+      "failure_mode": "Cell #4 reached OV limit during full charge cycle",
+      "affected_cell": 4,
+      "issue_type": "overvoltage"
+    },
+    "discharge": {
+      "status": "unknown",
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    }
+  },
+  "included_files": {
+    "csv_json_pairs": [],
+    "screenshots": []
+  },
+  "notes": "Package contains CSV data and dashboard screenshots supporting GA findings of cell voltage runaway issues"
+}

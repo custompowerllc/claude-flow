@@ -1,0 +1,715 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-08-02",
+    "description": "GA BMS Modbus Register Mapping Configuration",
+    "source": "Extracted from modbus_query_test.py",
+    "total_registers": 36,
+    "address_range": {
+      "start": 10,
+      "end": 45
+    },
+    "query_address": 9,
+    "data_type": "INT16",
+    "byte_order": "big_endian"
+  },
+  "register_map": {
+    "10": {
+      "name": "afe_cell_volt1",
+      "description": "AFE Cell Voltage 1",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "11": {
+      "name": "afe_cell_volt2",
+      "description": "AFE Cell Voltage 2",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "12": {
+      "name": "afe_cell_volt3",
+      "description": "AFE Cell Voltage 3",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "13": {
+      "name": "afe_cell_volt4",
+      "description": "AFE Cell Voltage 4",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "14": {
+      "name": "afe_cell_volt5",
+      "description": "AFE Cell Voltage 5",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "15": {
+      "name": "afe_cell_volt6",
+      "description": "AFE Cell Voltage 6",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "16": {
+      "name": "afe_cell_volt7",
+      "description": "AFE Cell Voltage 7",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "17": {
+      "name": "afe_cell_volt8",
+      "description": "AFE Cell Voltage 8",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 4200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "18": {
+      "name": "afe_pack_volt",
+      "description": "AFE Pack Voltage",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 20000,
+        "max": 33600
+      },
+      "category": "afe_pack_voltage",
+      "subsystem": "AFE"
+    },
+    "19": {
+      "name": "afe_cell_volt_delta",
+      "description": "AFE Cell Voltage Delta",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 200
+      },
+      "category": "afe_cell_voltage",
+      "subsystem": "AFE"
+    },
+    "20": {
+      "name": "afe_temp1",
+      "description": "AFE Temperature 1",
+      "unit": "°C*10",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -400,
+        "max": 800
+      },
+      "category": "afe_temperature",
+      "subsystem": "AFE"
+    },
+    "21": {
+      "name": "afe_temp2",
+      "description": "AFE Temperature 2",
+      "unit": "°C*10",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -400,
+        "max": 800
+      },
+      "category": "afe_temperature",
+      "subsystem": "AFE"
+    },
+    "22": {
+      "name": "afe_current",
+      "description": "AFE Current",
+      "unit": "mA",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -50000,
+        "max": 50000
+      },
+      "category": "afe_current",
+      "subsystem": "AFE"
+    },
+    "23": {
+      "name": "afe_adc_gain",
+      "description": "AFE ADC Gain",
+      "unit": "raw",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 100,
+        "max": 1000
+      },
+      "category": "afe_calibration",
+      "subsystem": "AFE"
+    },
+    "24": {
+      "name": "afe_adc_offset",
+      "description": "AFE ADC Offset",
+      "unit": "raw",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -1000,
+        "max": 1000
+      },
+      "category": "afe_calibration",
+      "subsystem": "AFE"
+    },
+    "25": {
+      "name": "afe_ov_limit",
+      "description": "AFE Overvoltage Limit",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 4100,
+        "max": 4300
+      },
+      "category": "afe_limits",
+      "subsystem": "AFE"
+    },
+    "26": {
+      "name": "afe_uv_limit",
+      "description": "AFE Undervoltage Limit",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 2500,
+        "max": 3000
+      },
+      "category": "afe_limits",
+      "subsystem": "AFE"
+    },
+    "27": {
+      "name": "fg_state_of_charge",
+      "description": "Fuel Gauge State of Charge",
+      "unit": "%",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 100
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 100
+      },
+      "category": "fg_state",
+      "subsystem": "FuelGauge"
+    },
+    "28": {
+      "name": "fg_voltage",
+      "description": "Fuel Gauge Voltage",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 20000,
+        "max": 33600
+      },
+      "category": "fg_voltage",
+      "subsystem": "FuelGauge"
+    },
+    "29": {
+      "name": "fg_current",
+      "description": "Fuel Gauge Current",
+      "unit": "mA",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -50000,
+        "max": 50000
+      },
+      "category": "fg_current",
+      "subsystem": "FuelGauge"
+    },
+    "30": {
+      "name": "fg_temperature",
+      "description": "Fuel Gauge Temperature",
+      "unit": "°C*10",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -400,
+        "max": 800
+      },
+      "category": "fg_temperature",
+      "subsystem": "FuelGauge"
+    },
+    "31": {
+      "name": "fg_remaining_capacity",
+      "description": "Fuel Gauge Remaining Capacity",
+      "unit": "mAh",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 50000
+      },
+      "category": "fg_capacity",
+      "subsystem": "FuelGauge"
+    },
+    "32": {
+      "name": "fg_full_charge_cap",
+      "description": "Fuel Gauge Full Charge Capacity",
+      "unit": "mAh",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 30000,
+        "max": 50000
+      },
+      "category": "fg_capacity",
+      "subsystem": "FuelGauge"
+    },
+    "33": {
+      "name": "fg_design_capacity",
+      "description": "Fuel Gauge Design Capacity",
+      "unit": "mAh",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 40000,
+        "max": 50000
+      },
+      "category": "fg_capacity",
+      "subsystem": "FuelGauge"
+    },
+    "34": {
+      "name": "fg_average_current",
+      "description": "Fuel Gauge Average Current",
+      "unit": "mA",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -30000,
+        "max": 30000
+      },
+      "category": "fg_current",
+      "subsystem": "FuelGauge"
+    },
+    "35": {
+      "name": "fg_time_to_empty",
+      "description": "Fuel Gauge Time to Empty",
+      "unit": "min",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 1440
+      },
+      "category": "fg_time",
+      "subsystem": "FuelGauge"
+    },
+    "36": {
+      "name": "fg_time_to_full",
+      "description": "Fuel Gauge Time to Full",
+      "unit": "min",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 480
+      },
+      "category": "fg_time",
+      "subsystem": "FuelGauge"
+    },
+    "37": {
+      "name": "fg_internal_temp",
+      "description": "Fuel Gauge Internal Temperature",
+      "unit": "°C*10",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -400,
+        "max": 800
+      },
+      "category": "fg_temperature",
+      "subsystem": "FuelGauge"
+    },
+    "38": {
+      "name": "fg_cycle_count",
+      "description": "Fuel Gauge Cycle Count",
+      "unit": "cycles",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 5000
+      },
+      "category": "fg_lifetime",
+      "subsystem": "FuelGauge"
+    },
+    "39": {
+      "name": "fg_state_of_health",
+      "description": "Fuel Gauge State of Health",
+      "unit": "%",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 100
+      },
+      "typical_range": {
+        "min": 60,
+        "max": 100
+      },
+      "category": "fg_state",
+      "subsystem": "FuelGauge"
+    },
+    "40": {
+      "name": "fg_charging_voltage",
+      "description": "Fuel Gauge Charging Voltage",
+      "unit": "mV",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 20000,
+        "max": 35000
+      },
+      "category": "fg_charging",
+      "subsystem": "FuelGauge"
+    },
+    "41": {
+      "name": "fg_charging_current",
+      "description": "Fuel Gauge Charging Current",
+      "unit": "mA",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 0,
+        "max": 20000
+      },
+      "category": "fg_charging",
+      "subsystem": "FuelGauge"
+    },
+    "42": {
+      "name": "fg_lifetime_max_temp",
+      "description": "Fuel Gauge Lifetime Maximum Temperature",
+      "unit": "°C*10",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": 200,
+        "max": 800
+      },
+      "category": "fg_lifetime",
+      "subsystem": "FuelGauge"
+    },
+    "43": {
+      "name": "fg_lifetime_min_temp",
+      "description": "Fuel Gauge Lifetime Minimum Temperature",
+      "unit": "°C*10",
+      "data_type": "INT16",
+      "range": {
+        "min": -32768,
+        "max": 32767
+      },
+      "typical_range": {
+        "min": -200,
+        "max": 400
+      },
+      "category": "fg_lifetime",
+      "subsystem": "FuelGauge"
+    },
+    "44": {
+      "name": "fg_lifetime_max_chg",
+      "description": "Fuel Gauge Lifetime Maximum Charge Current",
+      "unit": "mA",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 5000,
+        "max": 30000
+      },
+      "category": "fg_lifetime",
+      "subsystem": "FuelGauge"
+    },
+    "45": {
+      "name": "fg_lifetime_max_dsg",
+      "description": "Fuel Gauge Lifetime Maximum Discharge Current",
+      "unit": "mA",
+      "data_type": "INT16",
+      "range": {
+        "min": 0,
+        "max": 65535
+      },
+      "typical_range": {
+        "min": 5000,
+        "max": 50000
+      },
+      "category": "fg_lifetime",
+      "subsystem": "FuelGauge"
+    }
+  },
+  "categories": {
+    "afe_cell_voltage": {
+      "description": "Individual cell voltage measurements from AFE",
+      "registers": [10, 11, 12, 13, 14, 15, 16, 17, 19],
+      "unit": "mV",
+      "critical": true
+    },
+    "afe_pack_voltage": {
+      "description": "Total pack voltage from AFE",
+      "registers": [18],
+      "unit": "mV",
+      "critical": true
+    },
+    "afe_temperature": {
+      "description": "Temperature measurements from AFE",
+      "registers": [20, 21],
+      "unit": "°C*10",
+      "critical": true
+    },
+    "afe_current": {
+      "description": "Current measurements from AFE",
+      "registers": [22],
+      "unit": "mA",
+      "critical": true
+    },
+    "afe_calibration": {
+      "description": "AFE calibration parameters",
+      "registers": [23, 24],
+      "unit": "raw",
+      "critical": false
+    },
+    "afe_limits": {
+      "description": "AFE protection limits",
+      "registers": [25, 26],
+      "unit": "mV",
+      "critical": false
+    },
+    "fg_state": {
+      "description": "Fuel gauge state parameters",
+      "registers": [27, 39],
+      "unit": "%",
+      "critical": true
+    },
+    "fg_voltage": {
+      "description": "Fuel gauge voltage measurements",
+      "registers": [28],
+      "unit": "mV",
+      "critical": true
+    },
+    "fg_current": {
+      "description": "Fuel gauge current measurements",
+      "registers": [29, 34],
+      "unit": "mA",
+      "critical": true
+    },
+    "fg_temperature": {
+      "description": "Fuel gauge temperature measurements",
+      "registers": [30, 37],
+      "unit": "°C*10",
+      "critical": true
+    },
+    "fg_capacity": {
+      "description": "Fuel gauge capacity parameters",
+      "registers": [31, 32, 33],
+      "unit": "mAh",
+      "critical": true
+    },
+    "fg_time": {
+      "description": "Fuel gauge time estimates",
+      "registers": [35, 36],
+      "unit": "min",
+      "critical": false
+    },
+    "fg_charging": {
+      "description": "Fuel gauge charging parameters",
+      "registers": [40, 41],
+      "unit": "mixed",
+      "critical": false
+    },
+    "fg_lifetime": {
+      "description": "Fuel gauge lifetime statistics",
+      "registers": [38, 42, 43, 44, 45],
+      "unit": "mixed",
+      "critical": false
+    }
+  },
+  "subsystems": {
+    "AFE": {
+      "name": "Analog Front End",
+      "description": "Hardware monitoring subsystem for cell voltages, current, and temperature",
+      "registers": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
+      "critical_parameters": ["cell_voltages", "pack_voltage", "current", "temperature"]
+    },
+    "FuelGauge": {
+      "name": "Fuel Gauge IC",
+      "description": "Dedicated IC for state estimation and capacity tracking",
+      "registers": [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
+      "critical_parameters": ["state_of_charge", "state_of_health", "capacity", "voltage", "current"]
+    }
+  },
+  "modbus_config": {
+    "function_code": 4,
+    "function_name": "Read Input Registers",
+    "start_address": 9,
+    "register_count": 36,
+    "data_address_start": 10,
+    "data_address_end": 45,
+    "word_order": "big_endian",
+    "data_type": "INT16",
+    "response_size_bytes": 72,
+    "typical_response_time_ms": 50
+  },
+  "validation": {
+    "address_offset_handled": true,
+    "register_count_verified": true,
+    "data_type_consistent": true,
+    "parameter_coverage_complete": true,
+    "modbus_standard_compliant": true,
+    "last_validated": "2025-08-02",
+    "validator": "code-analyzer-agent"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "session_id": "de935b48-2a78-4878-a12a-1e4b35c799b5",
+  "serial_number": "0561",
+  "rma_number": "temp",
+  "battery": "",
+  "description": "Auto-created startup session using RMA: temp, Serial: 0561",
+  "created_at": "2025-07-18T08:38:36.027123",
+  "csv_files": [
+    "battery_data_20250718_083840.csv",
+    "battery_data_20250718_102950.csv",
+    "battery_data_20250718_102954.csv"
+  ],
+  "status": "active"
+}

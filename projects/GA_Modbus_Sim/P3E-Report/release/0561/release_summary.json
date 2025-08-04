@@ -1,0 +1,32 @@
+{
+  "serial_number": "0561",
+  "created": "2025-07-22T16:21:37.278006",
+  "purpose": "Cell runaway/high delta voltage evidence package",
+  "ga_findings": {
+    "serial_number": "0561",
+    "charge": {
+      "status": "charging",
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null,
+      "current_soc": "20%",
+      "notes": "Currently charging - SOC at 20%"
+    },
+    "discharge": {
+      "status": "pending",
+      "failure_mode": null,
+      "affected_cell": null,
+      "issue_type": null
+    }
+  },
+  "included_files": {
+    "csv_json_pairs": [
+      "charge/20250722_123401-0561-8765.csv",
+      "charge/20250722_123401-0561-8765.json",
+      "discharge/20250722_110907-0561-8765.csv",
+      "discharge/20250722_110907-0561-8765.json"
+    ],
+    "screenshots": []
+  },
+  "notes": "Package contains CSV data and dashboard screenshots supporting GA findings of cell voltage runaway issues"
+}

@@ -1,0 +1,13 @@
+{
+  "sessions": [
+    {
+      "session_id": "de935b48-2a78-4878-a12a-1e4b35c799b5",
+      "serial_number": "0561",
+      "rma_number": "temp",
+      "battery": "",
+      "created_at": "2025-07-18T08:38:36.027123",
+      "session_dir": "data/sessions/session-de935b48",
+      "status": "active"
+    }
+  ]
+}

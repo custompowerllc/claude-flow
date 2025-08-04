@@ -1,0 +1,4 @@
+Timestamp,afe_cell_volt1,afe_cell_volt2,afe_cell_volt3,afe_cell_volt4,afe_cell_volt5,afe_cell_volt6,afe_cell_volt7,afe_cell_volt8,afe_pack_volt,fg_current,afe_cell_volt_delta,fg_state_of_charge,afe_temp1,afe_temp2
+2025-07-22 10:00:00,3200,3210,3205,3200,3195,3190,3185,3180,25600,1000,15,85,2980,2985
+2025-07-22 10:00:01,3200,3210,3205,3200,3195,3190,3185,3180,25600,1000,30,85,2980,2985
+2025-07-22 10:00:02,3200,3260,3205,3200,3195,3190,3185,3180,25600,1000,75,85,2980,2985

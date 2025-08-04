@@ -1,0 +1,27 @@
+# Test dependencies for Modbus BMS Simulator
+
+# Core testing framework
+pytest>=6.2.0
+pytest-mock>=3.6.0
+pytest-cov>=3.0.0
+pytest-html>=3.1.0
+pytest-xdist>=2.5.0
+pytest-timeout>=2.1.0
+
+# Modbus dependencies
+pymodbus>=3.0.0
+pyserial>=3.5
+
+# Additional test utilities
+coverage>=6.0
+mock>=4.0.3
+parameterized>=0.8.1
+
+# Optional performance testing
+pytest-benchmark>=3.4.1
+
+# Development dependencies
+flake8>=4.0.0
+black>=22.0.0
+isort>=5.10.0
+mypy>=0.910

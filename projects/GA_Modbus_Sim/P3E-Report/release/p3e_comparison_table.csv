@@ -1,0 +1,9 @@
+Serial,GA_Charge_Status,GA_Discharge_Status,GA_Affected_Cell,GA_Failure_Mode,CP_Max_Delta_mV,CP_Problematic_Cell,CP_Peak_Voltage_mV,CP_Evidence_Files,Verification_Status
+0515,Failed,Unknown,Cell #7,OV during charge,,,,Structure only,Pending data
+0518,Failed,Unknown,Cell #6,OV during charge,,,,Structure only,Pending data
+0520,Completed,Ready,,None reported,502,Cell #7,3938,Charge + Discharge,Hidden issue detected
+0533,Failed,Failed,Cell #6,UV during discharge,702,Cell #6,2474,Discharge data,CONFIRMED
+0535,Completed,Ready,Cell #6,Charging anomaly detected,1048,Cell #6,4411,Charge + Discharge,CRITICAL runaway during charge
+0561,Charging,Pending,,In progress,533,Cell #8,3940,Charge + Discharge,Concerning runaway
+0564,Incomplete,Unknown,,SOC stopped at 99%,,,,Structure only,Pending data
+0583,Failed,Unknown,Cell #4,OV during charge,,,,Structure only,Pending data

@@ -1,0 +1,25 @@
+{
+  "csv_file": {
+    "name": "20250723_180955-0535-8765.csv",
+    "full_path": "Y:\\home\\ahu\\development\\GA_Modbus_Python_App\\P3E-Report\\test-artifacts\\0535\\discharge\\20250723_180955-0535-8765.csv"
+  },
+  "session": {
+    "rma_number": "8765",
+    "serial_number": "0535",
+    "com_port": "",
+    "start_timestamp": "2025-07-23T18:09:55.844795",
+    "end_timestamp": "2025-07-23T18:11:01.715692",
+    "baudrate": 9600,
+    "slave_id": 1,
+    "duration_seconds": 65,
+    "record_count": 0
+  },
+  "logging": {
+    "interval": 0.5,
+    "filter_enabled": true,
+    "filter_settings": {
+      "window_size": 5,
+      "spike_threshold": 2.0
+    }
+  }
+}

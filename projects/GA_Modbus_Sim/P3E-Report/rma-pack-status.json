@@ -1,0 +1,285 @@
+{
+  "test_results": {
+    "general_atomics": {
+      "0515": {
+        "serial_number": "0515",
+        "charge": {
+          "status": "failed",
+          "failure_mode": "Cell #7 reached OV limit during full charge cycle",
+          "affected_cell": 7,
+          "issue_type": "overvoltage"
+        },
+        "discharge": {
+          "status": "unknown",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0518": {
+        "serial_number": "0518",
+        "charge": {
+          "status": "failed",
+          "failure_mode": "Cell #6 reached OV limit during full charge cycle",
+          "affected_cell": 6,
+          "issue_type": "overvoltage"
+        },
+        "discharge": {
+          "status": "unknown",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0520": {
+        "serial_number": "0520",
+        "charge": {
+          "status": "completed",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null,
+          "current_soc": "100%",
+          "notes": "Charged to 100% SOC, ready for discharge test"
+        },
+        "discharge": {
+          "status": "ready",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0533": {
+        "serial_number": "0533",
+        "charge": {
+          "status": "failed",
+          "failure_mode": "Cell #6 reached OV limit during full charge cycle",
+          "affected_cell": 6,
+          "issue_type": "overvoltage"
+        },
+        "discharge": {
+          "status": "failed",
+          "failure_mode": "Cell #6 reached UV limit during full discharge cycle",
+          "affected_cell": 6,
+          "issue_type": "undervoltage",
+          "critical_issues": [
+            "Cell #6 voltage: 2.864V (critically low)",
+            "410mV delta (dangerous imbalance)",
+            "Max delta: 702mV (Cell6 failure)"
+          ]
+        }
+      },
+      "0535": {
+        "serial_number": "0535",
+        "charge": {
+          "status": "completed",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null,
+          "current_soc": "100%",
+          "notes": "Charged to 100% SOC, ready for discharge test"
+        },
+        "discharge": {
+          "status": "ready",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0561": {
+        "serial_number": "0561",
+        "charge": {
+          "status": "charging",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null,
+          "current_soc": "20%",
+          "notes": "Currently charging - SOC at 20%"
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0564": {
+        "serial_number": "0564",
+        "charge": {
+          "status": "incomplete",
+          "failure_mode": "SOC stopped at 99%",
+          "affected_cell": null,
+          "issue_type": "incomplete_charge",
+          "notes": "Cell # not captured"
+        },
+        "discharge": {
+          "status": "unknown",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0583": {
+        "serial_number": "0583",
+        "charge": {
+          "status": "failed",
+          "failure_mode": "Cell #4 reached OV limit during full charge cycle",
+          "affected_cell": 4,
+          "issue_type": "overvoltage"
+        },
+        "discharge": {
+          "status": "unknown",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      }
+    },
+    "custom_power": {
+      "0515": {
+        "serial_number": "0515",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0518": {
+        "serial_number": "0518",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0520": {
+        "serial_number": "0520",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0533": {
+        "serial_number": "0533",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0535": {
+        "serial_number": "0535",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0561": {
+        "serial_number": "0561",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0564": {
+        "serial_number": "0564",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      },
+      "0583": {
+        "serial_number": "0583",
+        "charge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        },
+        "discharge": {
+          "status": "pending",
+          "failure_mode": null,
+          "affected_cell": null,
+          "issue_type": null
+        }
+      }
+    }
+  },
+  "metadata": {
+    "last_updated": "2025-07-21",
+    "pack_serial_numbers": ["0515", "0518", "0520", "0533", "0535", "0561", "0564", "0583"],
+    "test_purpose": "Custom Power verification of General Atomics testing results",
+    "general_atomics": {
+      "total_packs": 8,
+      "charge_failures": 8,
+      "discharge_failures": 2,
+      "most_common_failure": "overvoltage during charge",
+      "cells_with_issues": {
+        "cell_4": 1,
+        "cell_6": 4,
+        "cell_7": 2,
+        "cell_8": 1
+      }
+    },
+    "custom_power": {
+      "total_packs": 8,
+      "charge_failures": 0,
+      "discharge_failures": 0,
+      "most_common_failure": null,
+      "cells_with_issues": {},
+      "verification_status": "pending"
+    }
+  }
+}

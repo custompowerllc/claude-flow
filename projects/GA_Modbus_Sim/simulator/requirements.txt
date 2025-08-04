@@ -1,0 +1,12 @@
+# GA Modbus BMS Simulator - Python Dependencies
+# Python 3.6+ required
+
+# Core Modbus communication
+pymodbus>=3.0.0,<4.0
+pyserial>=3.5,<4.0
+
+# Command line interface
+argparse  # Built-in for Python 3.2+
+
+# Additional utilities (development/testing)
+# For testing: pip install -r tests/requirements.txt
