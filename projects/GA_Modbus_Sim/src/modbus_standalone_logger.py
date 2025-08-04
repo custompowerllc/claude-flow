@@ -165,9 +165,15 @@ class WebSocketBroadcaster:
             self.clients.add(websocket)
             print(f"WebSocket client connected from {websocket.remote_address}. Total clients: {len(self.clients)}")
             
-            # Send simple welcome message
+            # Send simple welcome message with timestamp
             print(f"DEBUG: Preparing welcome message...")
-            welcome_msg = '{"type":"connection","status":"connected","message":"Connected to Modbus data stream"}'
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            welcome_msg = json.dumps({
+                "type": "connection",
+                "status": "connected", 
+                "message": "Connected to Modbus data stream",
+                "timestamp": current_time
+            })
             
             print(f"DEBUG: Sending welcome message...")
             await websocket.send(welcome_msg)

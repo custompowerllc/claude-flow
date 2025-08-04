@@ -1341,16 +1341,14 @@ class ModbusDashboard:
             if connection_info['mode'] == 'websocket':
                 ws_info = connection_info.get('websocket_info', {})
                 if ws_info.get('connected', False):
-                    status_color = "🟢"  # Green for connected
-                    status_text = f"{status_color} WebSocket CONNECTED"
+                    status_text = f"WebSocket CONNECTED"
                 else:
-                    status_color = "🔴"  # Red for disconnected
                     reconnect_count = ws_info.get('reconnect_count', 0)
-                    status_text = f"{status_color} WebSocket RECONNECTING ({reconnect_count}/30)"
+                    status_text = f"WebSocket RECONNECTING ({reconnect_count}/30)"
             elif connection_info['mode'] == 'fallback':
-                status_text = "🟡 CSV FALLBACK MODE"  # Yellow for fallback
+                status_text = "CSV FALLBACK MODE"
             else:
-                status_text = "🔵 CSV MODE"  # Blue for CSV-only
+                status_text = "CSV MODE"
             
             stats_str += f" | {status_text}"
         
@@ -1468,7 +1466,7 @@ class ModbusDashboard:
                 
                 self.current_cutoff_detected = True
                 current_direction = "Charge" if self.previous_current > 0 else "Discharge"
-                print(f"\n⚡ CURRENT CUTOFF DETECTED ({current_direction}): {self.previous_current:.1f}A → {current_current:.1f}A")
+                print(f"\nCURRENT CUTOFF DETECTED ({current_direction}): {self.previous_current:.1f}A → {current_current:.1f}A")
                 print(f"   Cell Delta at cutoff: {current_delta:.1f}mV")
                 
                 # If we weren't already tracking a peak, start now
@@ -1485,7 +1483,7 @@ class ModbusDashboard:
                 self.peak_detection_time = datetime.now()
                 self.recovery_data = []
                 cutoff_msg = " (with current cutoff)" if self.current_cutoff_detected else ""
-                print(f"\n🔴 PEAK CELL DELTA DETECTED: {current_delta:.1f}mV at {self.peak_detection_time.strftime('%H:%M:%S')}{cutoff_msg}")
+                print(f"\nPEAK CELL DELTA DETECTED: {current_delta:.1f}mV at {self.peak_detection_time.strftime('%H:%M:%S')}{cutoff_msg}")
                 print(f"Starting {self.recovery_time_seconds}-second recovery capture...")
             
             # Collect recovery data if we're tracking a peak
@@ -1527,7 +1525,7 @@ class ModbusDashboard:
     def capture_peak_recovery_screenshot(self):
         """Capture screenshot showing peak cell delta and recovery period"""
         if not self.recovery_data:
-            print("⚠️  No recovery data available for screenshot")
+            print("No recovery data available for screenshot")
             return
         
         try:
@@ -1558,7 +1556,7 @@ class ModbusDashboard:
             current_cutoff_event = any(point.get('current_cutoff', False) for point in self.recovery_data)
             cutoff_info = " (BMS Protection Activated)" if current_cutoff_event else ""
             
-            print(f"\n📸 SCREENSHOT CAPTURED: {filename}")
+            print(f"\nSCREENSHOT CAPTURED: {filename}")
             print(f"   Peak Delta: {peak_delta:.1f}mV{cutoff_info}")
             print(f"   Recovery: {recovery_amount:.1f}mV ({recovery_percent:.1f}%)")
             print(f"   Duration: {self.recovery_time_seconds}s")
@@ -1571,7 +1569,7 @@ class ModbusDashboard:
             print(f"   Data points captured: {len(self.recovery_data)}\n")
             
         except Exception as e:
-            print(f"❌ Error capturing screenshot: {e}")
+            print(f"Error capturing screenshot: {e}")
     
     def enable_screenshot_feature(self, threshold_mv: float = 50.0, recovery_seconds: int = 10, detect_cutoff: bool = True):
         """Enable the screenshot feature with specified parameters"""
@@ -1580,7 +1578,7 @@ class ModbusDashboard:
         self.recovery_time_seconds = recovery_seconds
         self.detect_current_cutoff = detect_cutoff
         screenshot_dir = self.get_screenshot_directory()
-        print(f"\n📸 Screenshot feature ENABLED")
+        print(f"\nScreenshot feature ENABLED")
         print(f"   Peak threshold: {threshold_mv}mV")
         print(f"   Recovery time: {recovery_seconds}s")
         print(f"   Current cutoff detection: {'ON' if detect_cutoff else 'OFF'}")
@@ -1628,7 +1626,8 @@ class ModbusDashboard:
         self.peak_detected = False
         self.peak_detection_time = None
         self.recovery_data = []
-        print("📸 Screenshot feature DISABLED\n")
+        print("Screenshot feature DISABLED
+")
     
     def cleanup(self):
         """Clean up resources, including WebSocket connections"""
@@ -1827,7 +1826,7 @@ Examples:
         # Apply performance optimizations
         if args.fast_mode:
             dashboard._plot_update_interval = 10  # Update plots less frequently
-            print("🚀 Fast mode enabled - reduced visual updates for better performance")
+            print("Fast mode enabled - reduced visual updates for better performance")
         
         if args.max_points != 300:
             # Adjust deque maxlen for real-time mode
@@ -1841,15 +1840,15 @@ Examples:
                 dashboard.temperature1 = deque(dashboard.temperature1, maxlen=args.max_points)
                 dashboard.temperature2 = deque(dashboard.temperature2, maxlen=args.max_points)
                 dashboard.timestamps = deque(dashboard.timestamps, maxlen=args.max_points)
-                print(f"📊 Display limited to {args.max_points} data points for better performance")
+                print(f"Display limited to {args.max_points} data points for better performance")
         
         # Configure current filtering
         if args.no_current_filter:
             dashboard.current_filter_enabled = False
-            print("🔧 Current spike filtering DISABLED")
+            print("Current spike filtering DISABLED")
         else:
             dashboard.current_spike_threshold = args.current_spike_threshold
-            print(f"🔧 Current spike filtering enabled (threshold: {args.current_spike_threshold}A)")
+            print(f"Current spike filtering enabled (threshold: {args.current_spike_threshold}A)")
         
         # Enable screenshot feature if requested
         if args.screenshot:
