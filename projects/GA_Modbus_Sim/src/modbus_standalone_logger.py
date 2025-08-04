@@ -2,6 +2,11 @@
 """
 Standalone Modbus Logger CLI Application
 
+Author: Alan Hu
+Title: Firmware Engineer
+Company: Custom Power LLC
+Date: August 3, 2025
+
 A standalone command-line interface for logging Modbus data from GA BMS systems.
 This application provides a simplified interface without the complex session management,
 focusing purely on data logging with historical tracking.
