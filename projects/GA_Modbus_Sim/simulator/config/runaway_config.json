@@ -1,0 +1,376 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-08-04",
+    "description": "Thermal Runaway Simulation Configuration",
+    "author": "simulation-architect-agent",
+    "config_type": "runaway_simulation"
+  },
+  "runaway_simulation": {
+    "enabled": true,
+    "debug_mode": false,
+    "simulation_frequency": 1.0,
+    "data_retention_hours": 24,
+    "auto_cleanup": true,
+    "thermal_model": {
+      "cell_count": 8,
+      "cell_spacing": 0.020,
+      "ambient_temperature": 25.0,
+      "convection_coefficient": 10.0,
+      "thermal_properties": {
+        "cell_mass": 0.045,
+        "specific_heat": 1020,
+        "thermal_conductivity": 2.5,
+        "surface_area": 0.0034,
+        "emissivity": 0.8
+      },
+      "runaway_parameters": {
+        "onset_temperature": 130.0,
+        "peak_temperature": 600.0,
+        "heat_generation_rate": 200.0,
+        "cooling_rate": 50.0,
+        "gas_generation_rate": 0.1,
+        "pressure_threshold": 1000000.0
+      },
+      "cell_geometry": {
+        "cell_type": "18650",
+        "diameter": 0.018,
+        "height": 0.065,
+        "arrangement": "linear",
+        "spacing_type": "uniform"
+      }
+    },
+    "p3e_detection": {
+      "enabled": true,
+      "update_frequency": 2.0,
+      "alert_aggregation_window": 5.0,
+      "prevention": {
+        "enabled": true,
+        "max_cell_voltage": 4.25,
+        "max_pack_voltage": 34.0,
+        "max_charge_current": 5.0,
+        "max_discharge_current": 10.0,
+        "max_temperature": 45.0,
+        "max_cell_delta": 0.1,
+        "max_voltage_rate": 0.1,
+        "max_temp_rate": 5.0,
+        "max_current_rate": 2.0,
+        "voltage_hysteresis": 0.05,
+        "temperature_hysteresis": 2.0,
+        "alert_thresholds": {
+          "voltage": {
+            "warning": 4.2,
+            "critical": 4.25,
+            "emergency": 4.3
+          },
+          "temperature": {
+            "warning": 40.0,
+            "critical": 45.0,
+            "emergency": 50.0
+          },
+          "current": {
+            "warning": 8.0,
+            "critical": 10.0,
+            "emergency": 12.0
+          }
+        }
+      },
+      "protection": {
+        "enabled": true,
+        "thermal_gradient_threshold": 10.0,
+        "voltage_instability_threshold": 0.05,
+        "current_anomaly_threshold": 0.5,
+        "thermal_gradient_window": 60.0,
+        "voltage_stability_window": 30.0,
+        "current_anomaly_window": 10.0,
+        "kalman_filter": {
+          "enabled": true,
+          "process_noise": 0.01,
+          "measurement_noise": 0.1,
+          "initial_error": 1.0
+        },
+        "anomaly_detection": {
+          "enabled": true,
+          "algorithm": "isolation_forest",
+          "contamination": 0.1,
+          "n_estimators": 100
+        },
+        "multivariate_analysis": {
+          "enabled": true,
+          "correlation_threshold": 0.8,
+          "pca_components": 3
+        }
+      },
+      "propagation": {
+        "enabled": true,
+        "runaway_onset_temp": 130.0,
+        "propagation_temp": 200.0,
+        "critical_temp": 400.0,
+        "thermal_coupling": 0.15,
+        "propagation_model": "exponential",
+        "heat_transfer_coefficient": 2.5,
+        "propagation_delay": 5.0,
+        "cell_isolation_threshold": 300.0,
+        "cascading_failure": {
+          "enabled": true,
+          "propagation_probability": 0.8,
+          "time_delay_factor": 1.2
+        }
+      },
+      "emergency": {
+        "enabled": true,
+        "emergency_temp": 200.0,
+        "evacuation_temp": 400.0,
+        "suppression_temp": 300.0,
+        "auto_actions_enabled": true,
+        "emergency_response_time": 10.0,
+        "evacuation_time": 300.0,
+        "suppression_activation_delay": 5.0,
+        "emergency_actions": {
+          "disconnect_load": {
+            "enabled": true,
+            "trigger_temp": 200.0,
+            "response_time": 2.0
+          },
+          "isolate_pack": {
+            "enabled": true,
+            "trigger_temp": 250.0,
+            "response_time": 5.0
+          },
+          "activate_suppression": {
+            "enabled": true,
+            "trigger_temp": 300.0,
+            "response_time": 10.0,
+            "suppression_type": "water_mist"
+          },
+          "evacuate_area": {
+            "enabled": true,
+            "trigger_temp": 400.0,
+            "evacuation_radius": 50.0,
+            "notification_delay": 0.0
+          },
+          "notify_emergency": {
+            "enabled": true,
+            "trigger_temp": 300.0,
+            "notification_methods": ["sms", "email", "alarm"]
+          }
+        }
+      }
+    },
+    "scenarios": {
+      "library_enabled": true,
+      "auto_reset_after_completion": true,
+      "scenario_timeout": 3600.0,
+      "predefined_scenarios": {
+        "single_cell_overcharge": {
+          "name": "Single Cell Overcharge",
+          "description": "Overcharge-induced runaway in cell 1",
+          "enabled": true,
+          "trigger_cell": 0,
+          "trigger_type": "overcharge",
+          "duration": 300,
+          "severity": "medium",
+          "propagation_enabled": true,
+          "parameters": {
+            "overcharge_voltage": 4.5,
+            "overcharge_current": 2.0,
+            "overcharge_duration": 60.0
+          }
+        },
+        "thermal_propagation": {
+          "name": "Thermal Propagation",
+          "description": "External heat causing propagation across cells",
+          "enabled": true,
+          "trigger_cell": 3,
+          "trigger_type": "external_heat",
+          "duration": 600,
+          "severity": "high",
+          "propagation_enabled": true,
+          "parameters": {
+            "external_heat_source": 150.0,
+            "heat_application_time": 120.0,
+            "heat_ramp_rate": 5.0
+          }
+        },
+        "internal_short": {
+          "name": "Internal Short Circuit",
+          "description": "Internal short causing rapid runaway",
+          "enabled": true,
+          "trigger_cell": 5,
+          "trigger_type": "internal_short",
+          "duration": 120,
+          "severity": "high",
+          "propagation_enabled": true,
+          "parameters": {
+            "short_resistance": 0.001,
+            "voltage_drop_rate": 0.5,
+            "current_spike": 20.0
+          }
+        },
+        "aging_degradation": {
+          "name": "Aging-Related Degradation",
+          "description": "Slow degradation leading to eventual runaway",
+          "enabled": true,
+          "trigger_cell": 2,
+          "trigger_type": "aging",
+          "duration": 1800,
+          "severity": "low",
+          "propagation_enabled": false,
+          "parameters": {
+            "degradation_rate": 0.001,
+            "capacity_loss": 0.2,
+            "resistance_increase": 2.0
+          }
+        },
+        "mechanical_abuse": {
+          "name": "Mechanical Abuse Test",
+          "description": "Physical damage simulation",
+          "enabled": true,
+          "trigger_cell": 4,
+          "trigger_type": "mechanical",
+          "duration": 180,
+          "severity": "high",
+          "propagation_enabled": true,
+          "parameters": {
+            "crush_force": 5000.0,
+            "deformation_rate": 0.1,
+            "puncture_depth": 0.005
+          }
+        },
+        "multi_cell_cascade": {
+          "name": "Multi-Cell Cascade Failure",
+          "description": "Multiple cell failures causing cascade",
+          "enabled": true,
+          "trigger_cell": 1,
+          "trigger_type": "overcharge",
+          "duration": 900,
+          "severity": "critical",
+          "propagation_enabled": true,
+          "parameters": {
+            "initial_cells": [1, 3, 6],
+            "cascade_delay": 30.0,
+            "propagation_acceleration": 1.5
+          }
+        }
+      }
+    },
+    "monitoring": {
+      "enabled": true,
+      "real_time_monitoring": true,
+      "log_level": "INFO",
+      "log_rotation": true,
+      "max_log_size_mb": 100,
+      "log_retention_days": 30,
+      "alert_notifications": true,
+      "data_export": {
+        "enabled": true,
+        "auto_export": false,
+        "export_format": "csv",
+        "export_interval": 3600,
+        "export_path": "./exports/runaway_data"
+      },
+      "performance_monitoring": {
+        "enabled": true,
+        "cpu_threshold": 80.0,
+        "memory_threshold": 512.0,
+        "update_frequency": 10.0
+      },
+      "alert_configuration": {
+        "email_alerts": {
+          "enabled": false,
+          "smtp_server": "smtp.example.com",
+          "smtp_port": 587,
+          "username": "",
+          "password": "",
+          "recipients": []
+        },
+        "sms_alerts": {
+          "enabled": false,
+          "api_key": "",
+          "phone_numbers": []
+        },
+        "slack_alerts": {
+          "enabled": false,
+          "webhook_url": "",
+          "channel": "#alerts"
+        }
+      }
+    },
+    "visualization": {
+      "enabled": false,
+      "real_time_plots": false,
+      "plot_update_frequency": 2.0,
+      "temperature_plots": true,
+      "voltage_plots": true,
+      "current_plots": true,
+      "thermal_map": true,
+      "save_plots": false,
+      "plot_format": "png"
+    },
+    "safety": {
+      "simulation_limits": {
+        "max_temperature": 800.0,
+        "max_simulation_time": 7200.0,
+        "max_concurrent_scenarios": 3,
+        "memory_limit_mb": 1024.0
+      },
+      "fail_safes": {
+        "emergency_shutdown": true,
+        "temperature_cutoff": 700.0,
+        "simulation_timeout": 3600.0,
+        "resource_monitoring": true
+      },
+      "validation": {
+        "parameter_validation": true,
+        "physics_constraints": true,
+        "energy_conservation": true,
+        "stability_checks": true
+      }
+    }
+  },
+  "integration": {
+    "modbus_extension": {
+      "enabled": true,
+      "extend_register_count": true,
+      "backward_compatibility": true,
+      "new_register_range": [46, 65],
+      "register_update_frequency": 1.0
+    },
+    "existing_simulator": {
+      "preserve_original_behavior": true,
+      "enhanced_mode": true,
+      "configuration_override": false,
+      "logging_integration": true
+    },
+    "external_interfaces": {
+      "rest_api": {
+        "enabled": false,
+        "port": 8080,
+        "host": "localhost",
+        "authentication": false
+      },
+      "websocket": {
+        "enabled": false,
+        "port": 8081,
+        "real_time_updates": true
+      },
+      "mqtt": {
+        "enabled": false,
+        "broker": "localhost",
+        "port": 1883,
+        "topic_prefix": "runaway_sim"
+      }
+    }
+  },
+  "validation": {
+    "config_version": "1.0.0",
+    "schema_validation": true,
+    "parameter_ranges_verified": true,
+    "thermal_model_validated": true,
+    "p3e_detection_validated": true,
+    "scenario_library_validated": true,
+    "integration_tested": false,
+    "last_validated": "2025-08-04",
+    "validator": "simulation-architect-agent"
+  }
+}
