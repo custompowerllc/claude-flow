@@ -1,0 +1,461 @@
+{
+  "document_info": {
+    "title": "Test Instruction",
+    "document_number": "MTI-102284-04",
+    "revision": "B",
+    "company": "Custom Power",
+    "product": "WPA-0239",
+    "controlled_copy_date": "JAN 30 2025",
+    "total_sheets": 14,
+    "drawn_by": "P. English",
+    "checked_by": "Kenny Le",
+    "approved_by": "Adnan Khan",
+    "dates": {
+      "drawn": "10/26/20",
+      "checked": "03/31/22",
+      "approved": "03/31/22"
+    },
+    "revision_history": [
+      {
+        "revision": "A",
+        "description": "Release",
+        "dco": "3762",
+        "by": "PE",
+        "date": "10/26/20",
+        "approved_by": "AK",
+        "approved_date": "03/31/22"
+      },
+      {
+        "revision": "B",
+        "description": "Switch from bq34z100 to bq34110",
+        "dco": "3841",
+        "by": "PE",
+        "date": "10/3/22",
+        "approved_by": "AK",
+        "approved_date": "10/21/22"
+      }
+    ],
+    "proprietary_notice": "THIS DOCUMENT AND INFORMATION CONTAINED MAY NOT BE REPRODUCED, USED OR DISCLOSED WITHOUT THE WRITTEN PERMISSION OF CUSTOM POWER"
+  },
+  "purpose": "This Test Instruction defines the programming instructions, test methods and procedures used in the performance of manufacturing acceptance testing of the Custom Power P/N WPA-0239 in accordance with requirements specified by Custom Power.",
+  "equipment_tools_materials": {
+    "list": [
+      {
+        "item": "2.1",
+        "part_number": "ZHB-FX0930",
+        "description": "Board Programming Fixture"
+      },
+      {
+        "item": "2.2",
+        "part_number": "ZHB-FX0987",
+        "description": "Resistor Ladder"
+      },
+      {
+        "item": "2.3",
+        "part_number": "ZHB-FX0988",
+        "description": "JTAG dongle connector cable"
+      },
+      {
+        "item": "2.4",
+        "part_number": "TI EV2400",
+        "description": "TI Programmer Interface Module"
+      },
+      {
+        "item": "2.5",
+        "part_number": "Computer",
+        "description": "With 'TI Battery Management Studio' and 'Easy Modbus Client'"
+      },
+      {
+        "item": "2.6",
+        "part_number": "Power Supply",
+        "description": "Agilent U8002A, 30V/5A, ID#156"
+      },
+      {
+        "item": "2.7",
+        "part_number": "Electronic Load",
+        "description": "BK8500, 300W, ID#353"
+      },
+      {
+        "item": "2.8",
+        "part_number": "USB cable",
+        "description": ""
+      },
+      {
+        "item": "2.9",
+        "part_number": "EV2300",
+        "description": ""
+      }
+    ]
+  },
+  "procedures": {
+    "bq34110_programming": {
+      "section": "3",
+      "title": "bq34110 Programming",
+      "steps": [
+        {
+          "step": "3.1",
+          "action": "Set Power Supply to 28.4V, 0.5A"
+        },
+        {
+          "step": "3.2",
+          "action": "Clip Power Supply to Batt – and Batt +"
+        },
+        {
+          "step": "3.3",
+          "action": "Clip Load to Pack – and Batt +",
+          "note": "(Load+ and Batt + both to Batt +)"
+        },
+        {
+          "step": "3.4",
+          "action": "Connect EV2300 I2C port to I2C cable"
+        },
+        {
+          "step": "3.5",
+          "action": "Keep Wake Switch open-circuit"
+        },
+        {
+          "step": "3.6",
+          "action": "Set Debug Switch to 0v"
+        },
+        {
+          "step": "3.7",
+          "action": "Plug-in Resistor Ladder to WPA-0930"
+        },
+        {
+          "step": "3.8",
+          "action": "Plug in JTAG dongle board connector to WPA-0930"
+        },
+        {
+          "step": "3.9",
+          "action": "Connect a USB cable to the JTAG dongle board"
+        },
+        {
+          "step": "3.10",
+          "action": "Run windows program 'Battery Management Studio 1.3.111'"
+        },
+        {
+          "step": "3.11",
+          "action": "Click on 'Programming'"
+        },
+        {
+          "step": "3.12",
+          "action": "Refer to Document G/Program Files/Gen Atomic/MSW-WPA-0239 to find latest revision of WPA-0239_xxx.ds.fs",
+          "note": "(where x is latest revision)"
+        },
+        {
+          "step": "3.13",
+          "action": "Browse and select WPA-0239_xxx.ds.fs"
+        },
+        {
+          "step": "3.14",
+          "action": "Press 'Program'"
+        },
+        {
+          "step": "3.15",
+          "action": "Press RESET"
+        },
+        {
+          "step": "3.16",
+          "action": "Verify the screen below (ignore SLEEP)"
+        },
+        {
+          "step": "3.17",
+          "action": "Select Data Memory"
+        },
+        {
+          "step": "3.18",
+          "action": "Verify the screen below - Configuration / Register: 8600,0110,8",
+          "verification_values": {
+            "operation_config_a": "8600",
+            "device_type": "0110", 
+            "number_of_series_cells": "8"
+          }
+        }
+      ]
+    },
+    "calibration_and_testing": {
+      "section": "4",
+      "title": "Stage 5: Calibration and Testing",
+      "steps": [
+        {
+          "step": "4.1",
+          "action": "Adjust Power Supply to 28.4v, 3A"
+        },
+        {
+          "step": "4.2",
+          "action": "Click 'Calibration' on the top bar"
+        },
+        {
+          "step": "4.3",
+          "action": "Measure Bat + - Bat- voltage, enter into Applied Voltage box, click Calibrate Voltage, click Calibrate Gas Gauge, deselect Calibrate Voltage"
+        },
+        {
+          "step": "4.4",
+          "action": "Select CC Offset and Board Offset, click Calibrate Gas Gauge, deselect CC Offset and Board Offset"
+        },
+        {
+          "step": "4.5",
+          "action": "Measure Temperature, enter into Applied Temperature, click External Temp and Calibrate Temperature, click Calibrate Gas Gauge, deselect Calibrate Temperature"
+        },
+        {
+          "step": "4.6",
+          "action": "Connect Load 2A"
+        },
+        {
+          "step": "4.7",
+          "action": "Enter -1000 into Applied Current, click Calibrate Current, Turn on 2A load, click Calibrate Gas Gauge"
+        },
+        {
+          "step": "4.8",
+          "action": "Verify current is -1000mA"
+        },
+        {
+          "step": "4.9",
+          "action": "Disconnect load fully"
+        },
+        {
+          "step": "4.10",
+          "action": "Refresh, verify current is 0 (-1 or 1) … Average Current will eventually drop to 0"
+        },
+        {
+          "step": "4.11",
+          "action": "Type in Serial Number to Block A 15 (Hi), 16 (Lo); starting 01",
+          "sub_steps": [
+            "uP s/w rev to Block A 17 ; starting 100",
+            "FG s/w rev to Block A 18; starting 100"
+          ]
+        },
+        {
+          "step": "4.12",
+          "action": "Write Serial # on PCB top-right"
+        },
+        {
+          "step": "4.13",
+          "action": "Select Data Memory / Calibration"
+        },
+        {
+          "step": "4.14",
+          "action": "Verify the CC_Gain and CC Delta are 2.0-2.3"
+        },
+        {
+          "step": "4.15",
+          "action": "Re-verify that no current shows -1,0,1 in the Register/Current"
+        },
+        {
+          "step": "4.16",
+          "action": "Click on RESET under Commands on the screens right side"
+        },
+        {
+          "step": "4.17",
+          "action": "Click on LIFETIME_EN"
+        },
+        {
+          "step": "4.18",
+          "action": "Click on SEALED"
+        },
+        {
+          "step": "4.19",
+          "action": "Click Refresh – Check LF_EN, FAS, and SS turn red as shown below"
+        },
+        {
+          "step": "4.20",
+          "action": "Skip to Section 5.0"
+        }
+      ]
+    },
+    "security_operations": {
+      "section": "4.2",
+      "title": "Security Key Operations",
+      "unseal_operations": {
+        "unseal_keys": "15 03 89 01",
+        "unseal_full_access_keys": "15 03 AB CD",
+        "procedures": [
+          {
+            "step": "4.21",
+            "description": "The Security Keys are: UNSEAL: 15 03 89 01    UNSEAL FULL_ACCESS: 15 03 AB CD"
+          },
+          {
+            "step": "4.22",
+            "description": "To UNSEAL use Advanced Comm and copy 03 15 in preparation, the following within 4 sec",
+            "sub_steps": [
+              "4.22.1 write 01 89",
+              "4.22.2 highlight 01 89", 
+              "4.22.3 ctrl+v",
+              "4.22.4 write 03 15"
+            ]
+          },
+          {
+            "step": "4.23",
+            "description": "To UNSEAL FULL ACCESS use Advanced Comm and copy 0315 in preparation, the following within 4 sec",
+            "sub_steps": [
+              "4.23.1 write CD AB,",
+              "4.23.2 highlight CD AB",
+              "4.23.3 ctrl+v", 
+              "4.23.4 write 0315"
+            ]
+          }
+        ]
+      }
+    },
+    "microcontroller_afe_programming": {
+      "section": "5",
+      "title": "Program Microcontroller and AFE Registers",
+      "steps": [
+        {
+          "step": "5.1",
+          "action": "Load ST-Link Program. See Figure 1."
+        },
+        {
+          "step": "5.2",
+          "action": "From the menu, select: Target -> Connect to connect the device to ST-Link. See Figure 2."
+        },
+        {
+          "step": "5.3",
+          "action": "Program AFE register: From the menu, select Target->Program and Verify …",
+          "details": [
+            "A file explorer will pop up.",
+            "Refer to Document G/Program Files/Gen Atomic/MSW-WPA-0239 to find latest revision of WPA-0239_xxx.hex, (where x is latest revision)",
+            "Select this file"
+          ],
+          "options_to_select": [
+            "1. Verify while programming",
+            "2. Reset after programming", 
+            "3. Full Flash memory Checksum",
+            "4. Hit Start to program. Make sure the log record: Verification … OK .",
+            "See Figure 3 and 4."
+          ]
+        }
+      ]
+    },
+    "electrical_tests": {
+      "section": "6",
+      "title": "Electrical Tests",
+      "steps": [
+        {
+          "step": "6.1.1",
+          "action": "Move Load + clip from Batt+ to Pack+"
+        },
+        {
+          "step": "6.1.2", 
+          "action": "Set Debug Switch to open-circuit"
+        },
+        {
+          "step": "6.1.3",
+          "action": "Set Wake Switch to 0v – the Pack Voltage should appear on the Electronic Load"
+        },
+        {
+          "step": "6.1.4",
+          "action": "Toggle Wake Switch 0v – open – 0v and Pack Voltage should disappear, then return"
+        },
+        {
+          "step": "6.1.5",
+          "action": "Set LOAD up as a voltmeter measuring pack voltage"
+        },
+        {
+          "step": "6.1.6",
+          "action": "Increase the power supply voltage across B+ and B- till pack voltage drops about 0.5v – this value should be within the POVP"
+        },
+        {
+          "step": "6.1.7",
+          "action": "Reduce the power supply voltage till the pack voltage recovers the 0.5v. This should be within the POVR"
+        },
+        {
+          "step": "6.1.8",
+          "action": "Reduce the power supply till pack voltage drops to 0v. This should be within the PUVP"
+        },
+        {
+          "step": "6.1.9",
+          "action": "Increase the power supply till pack voltage recovers (with no diode drop). This should be within the PUVR"
+        },
+        {
+          "step": "6.1.10",
+          "action": "Note if chip enters sleep during 6.1.5 the voltage will not recover, even at PUVR_Max. In this case, with the power supply at PUVR_Max, short Batt+ to Pack + for 30sec and the pack voltage will recover."
+        }
+      ],
+      "specifications_table": {
+        "title": "TABLE 1 - PCBA ELECTRICAL SPECIFICATIONS",
+        "parameters": [
+          {
+            "parameter": "Pack Over Voltage Protection",
+            "min": "31.04",
+            "typ": "31.2", 
+            "max": "31.36",
+            "units": "V"
+          },
+          {
+            "parameter": "Pack Over Voltage Recovery",
+            "min": "28.64",
+            "typ": "28.8",
+            "max": "28.96", 
+            "units": "V"
+          },
+          {
+            "parameter": "Pack Under Voltage Protection",
+            "min": "19.84",
+            "typ": "20",
+            "max": "20.16",
+            "units": "V"
+          },
+          {
+            "parameter": "Pack Under Voltage Recovery", 
+            "min": "20.64",
+            "typ": "20.8",
+            "max": "20.96",
+            "units": "V"
+          }
+        ]
+      }
+    },
+    "modbus_communication_verification": {
+      "section": "7",
+      "title": "Verify MODBUS Communication",
+      "steps": [
+        {
+          "step": "7.1",
+          "action": "Set Debug Switch to uProc (open-circuit)"
+        },
+        {
+          "step": "7.2", 
+          "action": "Connect 'Modbus USB' to computer"
+        },
+        {
+          "step": "7.3",
+          "action": "Identify the COM port # via Device Manager /Ports"
+        },
+        {
+          "step": "7.4",
+          "action": "Start up 'Easy Modbus Client'"
+        },
+        {
+          "step": "7.5",
+          "action": "Before pressing the 'connect' button, make sure that the 'ModbusRTU (Serial)' is selected; the Slave ID, Baudrate, Parity and Stopbits are selected as shown."
+        },
+        {
+          "step": "7.6",
+          "action": "After connection, Press 'FC3' command button with 'Starting Address' as 16 and 'Number of Values' as 2. The command should execute successfully, and output a 7-byte stream shown in the figure above."
+        }
+      ],
+      "modbus_settings": {
+        "protocol": "ModbusRTU (Serial)",
+        "slave_id": "configurable",
+        "baudrate": "9600",
+        "parity": "None", 
+        "stopbits": "1"
+      },
+      "test_command": {
+        "function_code": "FC3",
+        "starting_address": "16",
+        "number_of_values": "2",
+        "expected_output": "7-byte stream",
+        "example_response": "Tx: 01 03 00 0F 00 02 F4 08, Rx: 01 03 02 37 99 5E 1E"
+      }
+    },
+    "final_step": {
+      "section": "8",
+      "step": "Write S/N next to white REV Box on the back of the PCB"
+    }
+  },
+  "software_tools": {
+    "battery_management_studio": {
+      "version": "1.3.111",
+      "manufacturer": "Texas Instruments",

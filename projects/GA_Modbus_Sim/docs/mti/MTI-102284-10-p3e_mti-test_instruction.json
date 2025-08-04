@@ -1,0 +1,265 @@
+{
+  "document_info": {
+    "document_number": "MTI-102284-10",
+    "title": "Test Instruction",
+    "company": "Custom Power",
+    "document_type": "Testing Instruction",
+    "target_product": "XGD-JGTFR18650-X72PC",
+    "current_revision": "B",
+    "total_pages": 5,
+    "controlled_document": true,
+    "control_stamp_date": "JAN 30 2025",
+    "proprietary_notice": "THIS DOCUMENT AND INFORMATION CONTAINED MAY NOT BE REPRODUCED, USED OR DISCLOSED WITHOUT THE WRITTEN PERMISSION OF CUSTOM POWER"
+  },
+  "revision_history": [
+    {
+      "revision": "A",
+      "description": "Release",
+      "dco": "3762",
+      "by": "PE",
+      "date": "10/26/20",
+      "approved_by": "AK",
+      "approval_date": "03/31/22"
+    },
+    {
+      "revision": "B", 
+      "description": "Switch from bq34Z100 to bq34110",
+      "dco": "3841",
+      "by": "PE",
+      "date": "10/24/22",
+      "approved_by": "AK",
+      "approval_date": null
+    }
+  ],
+  "personnel": {
+    "drawn_by": {
+      "name": "P. English",
+      "date": "10/26/20"
+    },
+    "checked_by": {
+      "name": "Kenny Le", 
+      "date": "03/31/22"
+    },
+    "approved_by": {
+      "name": "Adnan Khan",
+      "date": "03/31/22"
+    }
+  },
+  "test_sections": {
+    "section_1": {
+      "title": "Final Test with covered Pack",
+      "description": "Final testing procedure for the battery pack in its covered/enclosed state"
+    },
+    "section_2": {
+      "title": "Equipment, Tools, Materials",
+      "required_equipment": [
+        {
+          "item": "Computer",
+          "specifications": "With 'Easy Modbus Client' software",
+          "purpose": "MODBUS communication interface"
+        },
+        {
+          "item": "ZHB-FX0926",
+          "specifications": "Test Harness for RS232 and Pack+/-",
+          "purpose": "Interface between computer and battery pack"
+        },
+        {
+          "item": "Power Supply",
+          "specifications": "Agilent U8002A, 30V/5A, ID#156",
+          "purpose": "Charging power source"
+        },
+        {
+          "item": "Electronic Load",
+          "specifications": "BK8500, 300W, ID#353", 
+          "purpose": "Discharge load testing"
+        }
+      ]
+    },
+    "section_3": {
+      "title": "Test Setup",
+      "setup_steps": [
+        {
+          "step": "3.1",
+          "action": "Connect computer USB to ZHB-FX0926",
+          "purpose": "Establish communication link"
+        },
+        {
+          "step": "3.2", 
+          "action": "Connect the Load to ZHB-FX0926 Pack+/-",
+          "purpose": "Connect discharge load"
+        },
+        {
+          "step": "3.3",
+          "action": "Set Power Supply to 28.4V 5A",
+          "purpose": "Configure charging voltage and current"
+        }
+      ],
+      "test_setup_image_included": true
+    },
+    "section_4": {
+      "title": "Verify MODBUS Communication",
+      "communication_setup": {
+        "signal_ground": {
+          "step": "4.1",
+          "action": "Set SIGNAL_GND Switch to ON",
+          "note": "button depressed at maximum extension"
+        },
+        "port_identification": {
+          "step": "4.2", 
+          "action": "Identify the COM port # via Device Manager/Ports"
+        },
+        "software_startup": {
+          "step": "4.3",
+          "action": "Start up 'Easy Modbus Client'"
+        }
+      },
+      "modbus_settings": {
+        "protocol": "ModbusRTU (Serial)",
+        "port": "COM8",
+        "baudrate": 9600,
+        "parity": "None", 
+        "stopbits": 1,
+        "slave_id": "As selected",
+        "connection_verification": "ModbusRTU (Serial) must be selected before connecting"
+      },
+      "communication_tests": [
+        {
+          "test": "4.2",
+          "description": "Initial communication test",
+          "parameters": {
+            "command": "FC3",
+            "starting_address": 16,
+            "number_of_values": 2
+          },
+          "expected_result": "7-byte stream output",
+          "success_criteria": "Command executes successfully"
+        },
+        {
+          "test": "4.3",
+          "description": "State of Charge reading",
+          "parameters": {
+            "starting_address": 64,
+            "command": "FC3"
+          },
+          "expected_result": "3rd byte from 7-byte output ≤ 1E (30%)",
+          "note": "Example shown: 1A = 26%"
+        }
+      ],
+      "software_interface": {
+        "read_functions": [
+          "Read Coils - FC1",
+          "Read Discrete Inputs - FC2", 
+          "Read Holding Registers - FC3",
+          "Read Input Registers - FC4"
+        ],
+        "write_functions": [
+          "Write Single Coil - FC5",
+          "Write Single Register - FC6",
+          "Write Multiple Coils - FC15",
+          "Write Multiple Registers - FC16"
+        ]
+      }
+    },
+    "section_5": {
+      "title": "Electrical Test - Manual",
+      "test_procedures": [
+        {
+          "step": "5.1",
+          "description": "Verify Pack OCV from Table below",
+          "reference": "See test requirements table"
+        },
+        {
+          "step": "5.2", 
+          "description": "Pack Enable Function",
+          "procedure": "Press-hold the Pack_Enable button, and the Pack Voltage will show up. Release the Pack_Enable button, and the Pack Voltage will drop to 0V."
+        },
+        {
+          "step": "5.3",
+          "description": "Charge Acceptance",
+          "procedure": "Charge at 5A to 28.4V for 15 secs"
+        },
+        {
+          "step": "5.4",
+          "description": "Discharge Function", 
+          "procedure": "Set the load to discharge at 5A. Verify discharging occurs for 15 seconds."
+        }
+      ],
+      "test_requirements": [
+        {
+          "test_number": 1,
+          "test_name": "Pack Open Circuit Voltage",
+          "requirements": "OCV ≥ 25V"
+        },
+        {
+          "test_number": 2,
+          "test_name": "Charge Acceptance: 28.4V, 10A",
+          "requirements": "29V ≤ Vbat ≤ 29.4V and 9.9A ≤ Ibat ≤ 10.1A"
+        },
+        {
+          "test_number": 3,
+          "test_name": "Discharge Function: 20A",
+          "requirements": "20V ≤ Vbat ≤ 28.4V and -19.6A ≤ Ibat ≤ -20.4A"
+        },
+        {
+          "test_number": 4,
+          "test_name": "Peak Discharge Function: 45A, 5 sec",
+          "requirements": "TBD - not specified in document"
+        },
+        {
+          "test_number": 5,
+          "test_name": "Discharge Overcurrent 1: 47A, 10 seconds", 
+          "requirements": "TBD - not specified in document"
+        }
+      ],
+      "testing_notes": [
+        "Reduced Load testing to Prevent SOC (25%) dropping to 0% if Pack Voltage hits 24V"
+      ]
+    }
+  },
+  "technical_specifications": {
+    "target_battery_pack": "XGD-JGTFR18650-X72PC",
+    "test_voltages": {
+      "charge_voltage": "28.4V",
+      "charge_current": "5A",
+      "minimum_ocv": "25V",
+      "low_voltage_cutoff": "24V"
+    },
+    "test_currents": {
+      "charge_acceptance": "10A",
+      "standard_discharge": "20A", 
+      "peak_discharge": "45A",
+      "overcurrent_test": "47A"
+    },
+    "communication_protocol": {
+      "type": "MODBUS RTU",
+      "interface": "RS232",
+      "baudrate": 9600,
+      "parity": "None",
+      "stopbits": 1
+    }
+  },
+  "safety_considerations": {
+    "voltage_limits": {
+      "maximum_charge": "28.4V",
+      "minimum_operating": "24V"
+    },
+    "current_limits": {
+      "test_duration_limits": {
+        "peak_discharge": "5 seconds at 45A",
+        "overcurrent_test": "10 seconds at 47A"
+      }
+    },
+    "state_of_charge_protection": "Testing modified to prevent SOC dropping below 25%"
+  },
+  "document_metadata": {
+    "creation_purpose": "Testing procedure for battery pack validation",
+    "scope": "Final testing of covered battery pack",
+    "test_type": "Production/Quality validation testing",
+    "automation_level": "Manual testing with computer-assisted MODBUS communication",
+    "dependencies": [
+      "Easy Modbus Client software",
+      "ZHB-FX0926 test harness", 
+      "Calibrated test equipment"
+    ]
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "document_info": {
+    "document_number": "MTI-102284-05",
+    "title": "Test Instruction",
+    "company": "Custom Power",
+    "document_type": "Testing Instruction for XGD-JGTFR18650-X72PC",
+    "total_sheets": 5,
+    "control_number": "54470",
+    "controlled_copy": true,
+    "control_date": "JAN 30 2025",
+    "proprietary_notice": "THIS DOCUMENT AND INFORMATION CONTAINED MAY NOT BE REPRODUCED, USED OR DISCLOSED WITHOUT THE WRITTEN PERMISSION OF CUSTOM POWER"
+  },
+  "revision_history": [
+    {
+      "revision": "A",
+      "description": "Release",
+      "dco": "3762",
+      "by": "PE",
+      "date": "10/26/20",
+      "approved_by": "AK",
+      "approval_date": "03/31/22"
+    },
+    {
+      "revision": "B",
+      "description": "Switch to bq34110",
+      "dco": "3841",
+      "by": "PE",
+      "date": "9/15/22",
+      "approved_by": "AK",
+      "approval_date": "10/21/22"
+    }
+  ],
+  "document_control": {
+    "drawn_by": "P. English",
+    "drawn_date": "10/26/20",
+    "checked_by": "Kenny Le",
+    "checked_date": "03/31/22",
+    "approved_by": "Adnan Khan",
+    "approved_date": "03/31/22",
+    "current_revision": "B"
+  },
+  "test_overview": {
+    "purpose": "Final Test with uncovered Pack",
+    "target_product": "XGD-JGTFR18650-X72PC",
+    "test_type": "Production validation and Modbus communication verification"
+  },
+  "required_equipment": {
+    "computer": {
+      "description": "Computer with Easy Modbus Client software",
+      "software_required": "Easy Modbus Client"
+    },
+    "test_harness": {
+      "part_number": "ZHB-FX0926",
+      "description": "Test Harness for RS232 and Pack+/-"
+    },
+    "power_supply": {
+      "model": "Agilent U8002A",
+      "specifications": "30V/5A",
+      "id": "ID#156"
+    },
+    "electronic_load": {
+      "model": "BK8500",
+      "specifications": "300W",
+      "id": "ID#353"
+    }
+  },
+  "test_setup_procedure": {
+    "step_1": {
+      "action": "Connect computer USB to ZHB-FX0926",
+      "description": "Establish USB communication link"
+    },
+    "step_2": {
+      "action": "Connect the Load to ZHB-FX0926 Pack+/-",
+      "description": "Connect electronic load to battery pack terminals"
+    },
+    "step_3": {
+      "action": "Set Power Supply to 28.4V 5A",
+      "description": "Configure power supply for charging voltage"
+    }
+  },
+  "modbus_communication_verification": {
+    "overview": "Verify MODBUS Communication using Easy Modbus Client software",
+    "setup_steps": {
+      "step_1": {
+        "action": "Set SIGNAL_GND Switch to ON",
+        "detail": "Button depressed at maximum extension"
+      },
+      "step_2": {
+        "action": "Identify the COM port",
+        "method": "Via Device Manager/Ports"
+      },
+      "step_3": {
+        "action": "Start up Easy Modbus Client",
+        "software": "Easy Modbus Client application"
+      },
+      "step_4": {
+        "action": "Configure Modbus connection",
+        "requirements": [
+          "Select ModbusRTU (Serial)",
+          "Configure Slave ID, Baudrate, Parity and Stopbits as shown"
+        ]
+      }
+    },
+    "communication_test_1": {
+      "step": "4.5",
+      "action": "Press FC3 command button",
+      "parameters": {
+        "starting_address": 16,
+        "number_of_values": 2
+      },
+      "expected_result": "Command should execute successfully and output a 7-byte stream"
+    },
+    "communication_test_2": {
+      "step": "4.6",
+      "action": "Change Starting Address to 64 and press FC3 again",
+      "validation": "Observe that the 3rd byte from the 7-byte output needs to be less or equal than 1E (30%)",
+      "example_result": "13=19%"
+    },
+    "modbus_settings": {
+      "protocol": "ModbusRTU (Serial)",
+      "function_code": "FC3 (Read Holding Registers)",
+      "communication_parameters": "As configured in Easy Modbus Client"
+    }
+  },
+  "electrical_test_procedures": {
+    "test_name": "Electrical Test - Manual",
+    "preparation_steps": {
+      "step_1": {
+        "number": "5.1",
+        "action": "Verify Pack OCV from Table below",
+        "requirement": "Check open circuit voltage"
+      },
+      "step_2": {
+        "number": "5.2",
+        "action": "Set SIGNAL_GND Switch to OFF",
+        "detail": "Button depressed at minimum extension, loose Pack Voltage"
+      },
+      "step_3": {
+        "number": "5.3",
+        "action": "Set SIGNAL_GND Switch to ON",
+        "detail": "Button depressed at maximum extension, Pack Voltage back"
+      },
+      "step_4": {
+        "number": "5.4",
+        "action": "Charge Acceptance test",
+        "parameters": "Charge at 5A to 28.4V for 15 secs"
+      },
+      "step_5": {
+        "number": "5.5",
+        "action": "Discharge Function test",
+        "parameters": "Set the load to discharge at 5A. Verify discharging occurs for 15 seconds"
+      }
+    }
+  },
+  "test_requirements_table": {
+    "tests": [
+      {
+        "test_number": 1,
+        "test_name": "Pack Open Circuit Voltage",
+        "requirement": "OCV ≥ 25V"
+      },
+      {
+        "test_number": 2,
+        "test_name": "Charge Acceptance: 28.4V, 10A",
+        "requirement": "29V ≤ Vbat ≤ 29.4V and 9.9A ≤ Ibat ≤ 10.1A"
+      },
+      {
+        "test_number": 3,
+        "test_name": "Discharge Function: 20A",
+        "requirement": "20V ≤ Vbat ≤ 28.4V and -19.6A ≤ Ibat ≤ -20.4A"
+      },
+      {
+        "test_number": 4,
+        "test_name": "Peak Discharge Function: 45A 5 sec",
+        "requirement": "Peak discharge capability verification"
+      },
+      {
+        "test_number": 5,
+        "test_name": "Discharge Overcurrent 1: 47A, 10 seconds",
+        "requirement": "Overcurrent protection verification"
+      }
+    ],
+    "special_notes": [
+      "Reduced Load testing to Prevent SOC (25%) dropping to 0% if Pack Voltage hits 24V"
+    ]
+  },
+  "software_interface_details": {
+    "easy_modbus_client": {
+      "connection_type": "ModbusRTU (Serial)",
+      "interface_elements": {
+        "com_port_selection": "COM7 (example)",
+        "slave_id": "Configurable",
+        "baudrate": "9600 (typical)",
+        "parity": "None",
+        "stopbits": "1"
+      },
+      "read_functions": {
+        "read_coils_fc1": "Available",
+        "read_discrete_inputs_fc2": "Available", 
+        "read_holding_registers_fc3": "Primary test function",
+        "read_input_registers_fc4": "Available"
+      },
+      "write_functions": {
+        "write_single_coil_fc5": "Available",
+        "write_single_register_fc6": "Available",
+        "write_multiple_coils_fc15": "Available",
+        "write_multiple_registers_fc16": "Available"
+      }
+    }
+  },
+  "test_validation_criteria": {
+    "modbus_communication": {
+      "success_criteria": [
+        "Successful connection to server",
+        "Proper 7-byte response from FC3 command",
+        "State of charge reading within acceptable range (≤30%)"
+      ]
+    },
+    "electrical_performance": {
+      "voltage_requirements": {
+        "open_circuit": "≥25V",
+        "charge_acceptance_range": "29V to 29.4V",
+        "discharge_range": "20V to 28.4V"
+      },
+      "current_requirements": {
+        "charge_current_range": "9.9A to 10.1A",
+        "discharge_current_range": "-19.6A to -20.4A"
+      }
+    }
+  },
+  "safety_considerations": {
+    "electrical_safety": [
+      "Ensure proper grounding through SIGNAL_GND switch",
+      "Verify voltage levels before connecting load",
+      "Monitor for overcurrent conditions"
+    ],
+    "equipment_protection": [
+      "Do not exceed maximum current ratings",
+      "Verify pack voltage before applying charge",
+      "Monitor temperature during testing"
+    ]
+  },
+  "procedural_notes": {
+    "critical_steps": [
+      "SIGNAL_GND switch position is critical for proper operation",
+      "Starting address 16 and 64 are key test points for Modbus verification",
+      "3rd byte of 7-byte output must be ≤1E (30%) for proper SOC reading"
+    ],
+    "troubleshooting": [
+      "If Modbus communication fails, verify COM port and connection settings",
+      "If electrical tests fail, check pack voltage and connection integrity",
+      "Reduced load testing prevents SOC from dropping below safe levels"
+    ]
+  }
+}
