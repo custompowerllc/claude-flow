@@ -20,7 +20,7 @@ npx claude-flow@alpha --agents 8 --topology hierarchical --strategy parallel
 
 ### Agent Roles & Responsibilities
 
-1. **🏗️ Architecture Agent** (Type: `architect`)
+1. **🏗️ Architecture Agent** (Type: `architecture`)
    - Design WebSocket server/client architecture
    - Define message protocol and data structures
    - Create integration patterns for logger and dashboard
@@ -44,7 +44,7 @@ npx claude-flow@alpha --agents 8 --topology hierarchical --strategy parallel
    - Add sequence numbers and timestamps
    - Handle message compression and batching
 
-5. **🛡️ Error Handling Agent** (Type: `analyst`)
+5. **🛡️ Error Handling Agent** (Type: `perf-analyzer`)
    - Design connection failure recovery mechanisms
    - Implement automatic reconnection with exponential backoff
    - Create CSV fallback activation logic
@@ -62,7 +62,7 @@ npx claude-flow@alpha --agents 8 --topology hierarchical --strategy parallel
    - Create deployment configurations
    - Document configuration options
 
-8. **📊 Coordinator Agent** (Type: `coordinator`)
+8. **📊 Coordinator Agent** (Type: `task-orchestrator`)
    - Monitor implementation progress
    - Ensure component integration
    - Validate against requirements
@@ -76,10 +76,10 @@ npx claude-flow@alpha --agents 8 --topology hierarchical --strategy parallel
 
 ```javascript
 // Coordinator initializes shared memory for agent coordination
-Task("coordinator", "Initialize shared memory with WebSocket specs and coordinate all agents", "coordinator")
+Task("coordinator", "Initialize shared memory with WebSocket specs and coordinate all agents", "task-orchestrator")
 
 // Architecture design in parallel with initial implementations
-Task("architect", "Design WebSocket architecture and message protocol. Store decisions in memory.", "architect")
+Task("architect", "Design WebSocket architecture and message protocol. Store decisions in memory.", "architecture")
 
 // Server and client skeleton creation
 Task("server-coder", "Create WebSocketBroadcaster class skeleton in logger", "coder")
@@ -91,7 +91,7 @@ Task("config-coder", "Prepare TOML configuration schema for WebSocket settings",
 
 // Testing and error handling frameworks
 Task("tester", "Set up test framework and create test structure", "tester")
-Task("analyst", "Design error handling patterns and recovery strategies", "analyst")
+Task("analyst", "Design error handling patterns and recovery strategies", "perf-analyzer")
 ```
 
 ### Phase 2: Core Implementation (Coordinated Development)
@@ -102,7 +102,7 @@ Task("server-coder", "Implement WebSocket server with broadcasting, client manag
 Task("client-coder", "Implement WebSocket client with connection management and data callbacks", "coder")
 Task("protocol-coder", "Implement message serialization, compression, and batching", "coder")
 Task("config-coder", "Integrate WebSocket configuration into both logger and dashboard", "coder")
-Task("analyst", "Implement reconnection logic and fallback mechanisms", "analyst")
+Task("analyst", "Implement reconnection logic and fallback mechanisms", "perf-analyzer")
 Task("tester", "Create unit tests for all WebSocket components", "tester")
 ```
 
@@ -110,11 +110,11 @@ Task("tester", "Create unit tests for all WebSocket components", "tester")
 
 ```javascript
 // Parallel integration and comprehensive testing
-Task("coordinator", "Coordinate integration testing across all components", "coordinator")
+Task("coordinator", "Coordinate integration testing across all components", "task-orchestrator")
 Task("server-coder", "Integrate WebSocket server with Modbus data flow", "coder")
 Task("client-coder", "Update dashboard to use DataSourceManager with fallback", "coder")
 Task("tester", "Execute integration tests and performance benchmarks", "tester")
-Task("analyst", "Validate error handling and recovery mechanisms", "analyst")
+Task("analyst", "Validate error handling and recovery mechanisms", "perf-analyzer")
 ```
 
 ## 📐 Technical Specifications
@@ -230,7 +230,7 @@ npx claude-flow@alpha hooks post-task --task-id "websocket-[component]" --analyz
 npx claude-flow@alpha sparc run swarm-init "WebSocket integration for GA Modbus Simulator"
 
 # 2. Execute this prompt with parallel agents
-npx claude-flow@alpha sparc batch "architect,coder,tester,analyst,coordinator" "Implement WebSocket integration as specified"
+npx claude-flow@alpha sparc batch "architecture,coder,tester,perf-analyzer,task-orchestrator" "Implement WebSocket integration as specified"
 
 # 3. Monitor progress
 npx claude-flow@alpha swarm status
