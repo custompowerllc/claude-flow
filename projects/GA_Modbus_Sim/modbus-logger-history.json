@@ -13,6 +13,42 @@
   ],
   "sessions": [
     {
+      "filename": "logs\\20250804_111429-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:14:29.104696",
+      "end_time": "2025-08-04T11:14:35.460835",
+      "record_count": 9,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_111429-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:14:29.104696",
+      "end_time": "2025-08-04T11:14:35.317691",
+      "record_count": 9,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_111218-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:12:18.645903",
+      "end_time": "2025-08-04T11:13:05.597534",
+      "record_count": 74,
+      "interval": 0.5
+    },
+    {
+      "filename": "logs\\20250804_111218-0001-test.csv",
+      "serial_number": "0001",
+      "rma_number": "test",
+      "start_time": "2025-08-04T11:12:18.645903",
+      "end_time": "2025-08-04T11:13:05.589142",
+      "record_count": 74,
+      "interval": 0.5
+    },
+    {
       "filename": "logs\\20250804_111131-0001-test.csv",
       "serial_number": "0001",
       "rma_number": "test",
