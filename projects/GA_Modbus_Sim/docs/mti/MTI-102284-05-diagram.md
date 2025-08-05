@@ -37,13 +37,13 @@ flowchart TD
     D6 -->|Yes| D7[Communication Test 2<br/>FC3, Address 64]
     D6 -->|No| D8[Check Connection<br/>& Retry]
     D8 --> D2
-    D7 --> D9[Verify SOC Reading<br/>3rd byte ≤ 1E (30%)]
+    D7 --> D9[Verify SOC Reading<br/>3rd byte must be 1E or less - 30 percent max]
     
     D9 --> E[Electrical Tests<br/>Section 5]
     
-    E --> E1[Verify Pack OCV<br/>≥ 25V]
-    E1 --> E2[SIGNAL_GND Switch Test<br/>OFF -> Voltage Lost]
-    E2 --> E3[SIGNAL_GND Switch Test<br/>ON -> Voltage Restored]
+    E --> E1[Verify Pack OCV<br/>25V or greater]
+    E1 --> E2[SIGNAL_GND Switch Test<br/>OFF - Voltage Lost]
+    E2 --> E3[SIGNAL_GND Switch Test<br/>ON - Voltage Restored]
     E3 --> E4[Charge Acceptance Test<br/>5A to 28.4V for 15 sec]
     E4 --> E5[Discharge Function Test<br/>5A discharge for 15 sec]
     
@@ -77,7 +77,7 @@ graph TB
     end
     
     subgraph "Device Under Test"
-        PACK[XGD-JGTFR18650-X72PC<br/>Battery Pack<br/>(Uncovered)]
+        PACK[XGD-JGTFR18650-X72PC<br/>Battery Pack<br/>Uncovered]
         BMS[BMS Controller<br/>with MODBUS]
         CELLS[Li-ion Cells<br/>18650 Configuration]
     end
@@ -130,10 +130,10 @@ sequenceDiagram
     TH->>BMS: Forward Request
     BMS-->>TH: SOC Response (3rd byte)
     TH-->>EMC: Forward Response
-    EMC-->>User: Display SOC (≤30%)
+    EMC-->>User: Display SOC - 30% or less
     
     Note over User,BMS: Validation
-    User->>User: Verify 3rd byte ≤ 1E (30%)
+    User->>User: Verify 3rd byte is 1E or less - 30 percent max
 ```
 
 ## Electrical Test Requirements Matrix
@@ -141,9 +141,9 @@ sequenceDiagram
 ```mermaid
 graph TD
     subgraph "Test Requirements Table"
-        T1[Test 1: Pack OCV<br/>Requirement: ≥25V]
-        T2[Test 2: Charge Acceptance<br/>28.4V, 10A<br/>29V ≤ Vbat ≤ 29.4V<br/>9.9A ≤ Ibat ≤ 10.1A]
-        T3[Test 3: Discharge Function<br/>20A<br/>20V ≤ Vbat ≤ 28.4V<br/>-19.6A ≤ Ibat ≤ -20.4A]
+        T1[Test 1: Pack OCV<br/>Requirement: 25V or greater]
+        T2[Test 2: Charge Acceptance<br/>28.4V, 10A<br/>29V to 29.4V range<br/>9.9A to 10.1A range]
+        T3[Test 3: Discharge Function<br/>20A<br/>20V to 28.4V range<br/>-19.6A to -20.4A range]
         T4[Test 4: Peak Discharge<br/>45A for 5 sec]
         T5[Test 5: Discharge Overcurrent<br/>47A for 10 sec]
     end
@@ -204,8 +204,8 @@ graph TB
         end
     end
     
-    FC3 -.Primary Test.-> TEST1[Address 16, Values 2<br/>→ 7-byte response]
-    FC3 -.SOC Test.-> TEST2[Address 64<br/>→ SOC reading ≤30%]
+    FC3 -.Primary Test.-> TEST1[Address 16, Values 2<br/>Results in 7-byte response]
+    FC3 -.SOC Test.-> TEST2[Address 64<br/>Results in SOC reading 30% or less]
     
     style FC3 fill:#c8e6c9
     style TEST1 fill:#fff3e0
@@ -227,7 +227,7 @@ flowchart LR
     subgraph "Critical Operations"
         SIGNAL[SIGNAL_GND Switch<br/>Critical for operation]
         ADDR[Test Addresses<br/>16 & 64 are key points]
-        BYTE3[3rd Byte Monitoring<br/>Must be ≤1E (30%)]
+        BYTE3[3rd Byte Monitoring<br/>Must be 1E or less - 30%]
     end
     
     ELEC --> SIGNAL

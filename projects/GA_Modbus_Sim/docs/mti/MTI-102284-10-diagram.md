@@ -37,7 +37,7 @@ flowchart TD
     D6 -->|Yes| D7[SOC Test: FC3<br/>Address 64]
     D6 -->|No| D8[Check Settings<br/>& Connection]
     D8 --> D4
-    D7 --> D9[Verify 3rd Byte<br/>≤ 1E (30%), Example: 1A=26%]
+    D7 --> D9[Verify 3rd Byte<br/>less than or equal to 1E 30%<br/>Example: 1A=26%]
     
     D9 --> E[Electrical Tests<br/>Section 5]
     
@@ -49,9 +49,9 @@ flowchart TD
     
     E4 --> F[Test Requirements<br/>Validation]
     
-    F --> F1[Test 1: Pack OCV ≥ 25V]
-    F --> F2[Test 2: Charge 28.4V/10A<br/>29V ≤ Vbat ≤ 29.4V<br/>9.9A ≤ Ibat ≤ 10.1A]
-    F --> F3[Test 3: Discharge 20A<br/>20V ≤ Vbat ≤ 28.4V<br/>-19.6A ≤ Ibat ≤ -20.4A]
+    F --> F1[Test 1: Pack OCV greater than or equal to 25V]
+    F --> F2[Test 2: Charge 28.4V/10A<br/>29V less than or equal to Vbat less than or equal to 29.4V<br/>9.9A less than or equal to Ibat less than or equal to 10.1A]
+    F --> F3[Test 3: Discharge 20A<br/>20V less than or equal to Vbat less than or equal to 28.4V<br/>-19.6A less than or equal to Ibat less than or equal to -20.4A]
     F --> F4[Test 4: Peak Discharge<br/>45A for 5 sec]
     F --> F5[Test 5: Overcurrent<br/>47A for 10 sec]
     
@@ -78,29 +78,29 @@ flowchart TD
 ```mermaid
 graph TB
     subgraph "Test Equipment Layer"
-        COMP[Computer<br/>Easy Modbus Client<br/>COM8 Interface]
-        PS[Power Supply<br/>Agilent U8002A<br/>30V/5A, ID#156]
-        EL[Electronic Load<br/>BK8500<br/>300W, ID#353]
+        COMP["Computer<br/>Easy Modbus Client<br/>COM8 Interface"]
+        PS["Power Supply<br/>Agilent U8002A<br/>30V/5A, ID#156"]
+        EL["Electronic Load<br/>BK8500<br/>300W, ID#353"]
     end
     
     subgraph "Interface Layer"
-        TH[Test Harness<br/>ZHB-FX0926<br/>RS232 + Pack+/-]
-        SGS[SIGNAL_GND Switch<br/>ON/OFF Control]
-        PEB[Pack_Enable Button<br/>Press-Hold Function]
+        TH["Test Harness<br/>ZHB-FX0926<br/>RS232 + Pack+/-"]
+        SGS["SIGNAL_GND Switch<br/>ON/OFF Control"]
+        PEB["Pack_Enable Button<br/>Press-Hold Function"]
     end
     
     subgraph "Device Under Test"
         subgraph "Covered Pack"
-            PACK[XGD-JGTFR18650-X72PC<br/>Battery Pack<br/>(Covered/Enclosed)]
-            BMS[BMS Controller<br/>MODBUS Interface]
-            PROT[Protection Circuits<br/>Enable/Disable Logic]
+            PACK["XGD-JGTFR18650-X72PC<br/>Battery Pack<br/>Covered/Enclosed"]
+            BMS["BMS Controller<br/>MODBUS Interface"]
+            PROT["Protection Circuits<br/>Enable/Disable Logic"]
         end
     end
     
     COMP -.USB.-> TH
     TH -.RS232.-> BMS
-    PS -.Charge 28.4V.-> TH
-    EL -.Load Testing.-> TH
+    PS -.Charge 28V.-> TH
+    EL -.Load Test.-> TH
     TH -.Pack+/-.-> PACK
     
     SGS --> TH
