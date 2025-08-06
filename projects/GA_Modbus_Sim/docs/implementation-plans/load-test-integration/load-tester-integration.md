@@ -5,11 +5,13 @@
 # Features
 ## Features added
 - BK8520 API
-GET /api/health Health Check
+    - GET /api/health Health Check
     - POST /api/device/connect Connect Device
     - POST /api/device/disconnect Disconnect Device
     - GET /api/device/readings (Get Readings, Get current voltage, current, and power readings)
     - POST /api/device/input (Control Input)
+    - POST /api/device/current (Set discharge current for constant current mode)
+    - POST /api/device/voltage (Set battery cutoff voltage)
 
 Turn device input on/off
 # Usage
