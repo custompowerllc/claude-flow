@@ -32,6 +32,49 @@ All API responses follow a consistent JSON format:
 }
 ```
 
+## API Endpoints Overview
+
+```mermaid
+graph TB
+    subgraph "GET Endpoints"
+        A[GET /] --> A1["Returns HTML web interface"]
+        B[GET /api/health] --> B1["Server & device health status<br/>• server_status<br/>• device_connected<br/>• uptime_seconds<br/>• monitoring_active"]
+        C[GET /api/status] --> C1["Real-time device measurements<br/>• voltage_set/actual<br/>• current_set/actual<br/>• power_actual<br/>• output_enabled<br/>• operating_mode"]
+        D[GET /api/taper/config] --> D1["Taper detection configuration<br/>• threshold (A)<br/>• duration (s)<br/>• enabled<br/>• last_triggered"]
+        E[GET /ws] --> E1["WebSocket real-time streaming<br/>• Status updates<br/>• Monitoring events<br/>• Taper events"]
+    end
+
+    subgraph "POST Endpoints"
+        F[POST /api/voltage] --> F1["Set output voltage<br/>Range: 0.0 - 60.0V<br/>Precision: 0.1V<br/>Body: {voltage: 25.0}"]
+        G[POST /api/current] --> G1["Set current limit<br/>Range: 0.0 - 5.0A<br/>Precision: 0.01A<br/>Body: {current: 2.0}"]
+        H[POST /api/output/enable] --> H1["Enable power output<br/>No body required<br/>Returns success status"]
+        I[POST /api/output/disable] --> I1["Disable power output<br/>No body required<br/>Returns success status"]
+        J[POST /api/taper/threshold] --> J1["Set taper current threshold<br/>Range: 0.01 - 5.0A<br/>Body: {threshold: 0.1}"]
+        K[POST /api/taper/duration] --> K1["Set taper detection duration<br/>Range: 1 - 3600s<br/>Body: {duration: 30}"]
+    end
+
+    subgraph "Response Types"
+        L[Success Response] --> L1["{<br/>  success: true,<br/>  message: 'Operation completed',<br/>  timestamp: '2025-07-23T16:56:13'<br/>}"]
+        M[Error Response] --> M1["{<br/>  error: 'Error description',<br/>  detail: 'Additional details',<br/>  timestamp: '2025-07-23T16:56:13'<br/>}"]
+        N[Status Codes] --> N1["200 - Success<br/>400 - Bad Request<br/>404 - Not Found<br/>422 - Validation Error<br/>500 - Internal Server Error<br/>503 - Service Unavailable"]
+    end
+
+    style A fill:#e1f5fe
+    style B fill:#e1f5fe
+    style C fill:#e1f5fe
+    style D fill:#e1f5fe
+    style E fill:#e1f5fe
+    style F fill:#fff3e0
+    style G fill:#fff3e0
+    style H fill:#fff3e0
+    style I fill:#fff3e0
+    style J fill:#fff3e0
+    style K fill:#fff3e0
+    style L fill:#e8f5e8
+    style M fill:#ffebee
+    style N fill:#f3e5f5
+```
+
 ## API Endpoints
 
 ### 1. Server Information
