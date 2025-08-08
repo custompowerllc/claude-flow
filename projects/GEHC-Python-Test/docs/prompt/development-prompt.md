@@ -7,15 +7,16 @@ Develop a Python application to test the GEHC PHTC Communication Protocol over R
 ## 📋 Core Requirements
 
 ### 1. Communication Protocol Implementation
-- **Protocol**: RS422 serial communication
+- **Protocol**: RS422 serial communication (GE Healthcare Protocol)
 - **Baud Rate**: 115200 (configurable via config.json)
 - **Data Format**: 8N1 (8 data bits, no parity, 1 stop bit)
 - **Message Structure**: Following GEHC RS422 Protocol Structure
-  - Synchronization Header: `0x23` (Host to Battery) / `0x40` (Battery to Host)
-  - Command Message Code Byte
-  - Number of Data Bytes
-  - Data Bytes (if any)
-  - CRC-8 checksum
+  - **Preamble**: `0xAA` (GE Healthcare Protocol identifier)
+  - **Synchronization Header**: `0x23` (Host to Battery) / `0x40` (Battery to Host)
+  - **Command Message Code Byte**
+  - **Number of Data Bytes**
+  - **Data Bytes** (if any)
+  - **CRC-8 checksum** (SMBus PEC polynomial)
 
 ### 2. Command Processing Workflow
 1. **Load Commands**: Read command list from JSON configuration file
@@ -107,6 +108,8 @@ class ProtocolHandler:
     def validate_response(self, response: bytes) -> bool
     def calculate_crc8(self, data: bytes) -> int
     def extract_response_data(self, response: bytes) -> Tuple[int, bytes]
+    def build_ge_message(self, command_code: int, data: bytes = b'') -> bytes
+    def parse_ge_response(self, response: bytes) -> Tuple[bool, int, bytes]
 ```
 
 #### MessageParser Class
@@ -130,6 +133,18 @@ class ConsoleDisplay:
 ```
 
 ## 📊 Protocol Specification Integration
+
+### GE Healthcare Protocol Message Format
+Based on the RS422 implementation report, the complete message structure is:
+```
+[0xAA] [0x23] [CMD] [LEN] [DATA...] [CRC8]
+```
+- **Preamble (0xAA)**: GE Healthcare Protocol identifier
+- **Sync Header (0x23)**: Host-to-battery direction indicator  
+- **Command Code**: SMBus-compatible command byte (0x00-0xFF)
+- **Data Length**: Number of data bytes following
+- **Data Bytes**: Command payload (optional)
+- **CRC-8**: SMBus PEC polynomial checksum
 
 ### Command Data Structure (from gehc-rs422-protocol.json)
 - **68 Total Commands** available in the protocol specification
