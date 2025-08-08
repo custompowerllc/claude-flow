@@ -19,14 +19,16 @@ Develop a Python application to test the GEHC PHTC Communication Protocol over R
   - **CRC-8 checksum** (SMBus PEC polynomial)
 
 ### 2. Command Processing Workflow
-1. **Load Commands**: Read command list from JSON configuration file
-2. **Iterate Commands**: Process each command sequentially with minimum 0.5-second delay
-3. **Send Command**: Transmit formatted command to PHTC device
-4. **Wait for Response**: Listen for device response with timeout
-5. **Parse Response**: Extract and validate response data
-6. **Process Data**: Apply scaling, data type conversion, and unit formatting
-7. **Display Results**: Show formatted output to console using Rich library
-8. **Continue Loop**: Move to next command until all processed
+1. **Load Configuration**: Read command table from JSON configuration file
+2. **Filter Commands**: Select only enabled commands based on implementation status
+3. **Iterate Commands**: Process each enabled command sequentially with minimum 0.5-second delay
+4. **Send Command**: Transmit formatted command to PHTC device
+5. **Wait for Response**: Listen for device response with timeout
+6. **Parse Response**: Extract and validate response data (handle unsupported commands gracefully)
+7. **Process Data**: Apply scaling, data type conversion, and unit formatting
+8. **Display Results**: Show formatted output to console using Rich library
+9. **Log Status**: Record command success/failure and implementation status
+10. **Continue Loop**: Move to next enabled command until all processed
 
 ### 3. Data Processing & Parsing
 - **Data Types**: Support for unsigned int, signed int, word, boolean, string, block data
@@ -35,16 +37,105 @@ Develop a Python application to test the GEHC PHTC Communication Protocol over R
 - **Error Handling**: Validate CRC-8, handle communication timeouts, malformed responses
 
 ### 4. Configuration Management
-- **config.json Structure**:
-  ```json
-  {
-    "serial_com_port": "COM3",
-    "baud_rate": 115200,
-    "timeout_ms": 1000,
-    "inter_command_delay": 0.5,
-    "retry_count": 3
+
+#### Main Configuration (config.json)
+```json
+{
+  "serial_com_port": "COM3",
+  "baud_rate": 115200,
+  "timeout_ms": 1000,
+  "inter_command_delay": 0.5,
+  "retry_count": 3,
+  "command_table_file": "commands.json",
+  "log_unsupported_commands": true,
+  "skip_unsupported_commands": true
+}
+```
+
+#### Command Table Configuration (commands.json)
+```json
+{
+  "command_table": {
+    "0x08": {
+      "name": "Temperature_1",
+      "description": "Returns the cell-pack's internal temperature (°C)",
+      "enabled": true,
+      "implemented": true,
+      "datatype": "unsigned int",
+      "unit": "°C",
+      "range": "-40 to 120",
+      "granularity": 1,
+      "byte_count": 2,
+      "test_priority": "high",
+      "notes": "Core temperature sensor - always works"
+    },
+    "0x09": {
+      "name": "Voltage",
+      "description": "Returns the cell-pack voltage (mV)",
+      "enabled": true,
+      "implemented": true,
+      "datatype": "unsigned int",
+      "unit": "mV",
+      "range": "0 to 65535",
+      "granularity": 10,
+      "byte_count": 2,
+      "test_priority": "high",
+      "notes": "Pack voltage monitoring - critical measurement"
+    },
+    "0x04": {
+      "name": "AtRate",
+      "description": "Used in calculations by AtRateTimeToFull/Empty functions",
+      "enabled": false,
+      "implemented": false,
+      "datatype": "signed int",
+      "unit": "mA/10mW",
+      "range": "±1 to ±32,767",
+      "granularity": 1,
+      "byte_count": 2,
+      "test_priority": "medium",
+      "notes": "Not implemented yet - requires AtRate calculation support"
+    },
+    "0x11": {
+      "name": "RunTimeToEmpty",
+      "description": "Returns predicted remaining battery life at present discharge rate",
+      "enabled": false,
+      "implemented": false,
+      "datatype": "unsigned int",
+      "unit": "minutes",
+      "range": "0 to 65534",
+      "granularity": 2,
+      "byte_count": 2,
+      "test_priority": "high",
+      "notes": "Predictive algorithm not implemented - enable when ready"
+    }
+  },
+  "command_groups": {
+    "basic_monitoring": ["0x08", "0x09", "0x0A", "0x0D", "0x0F", "0x10"],
+    "cell_voltages": ["0x3C", "0x3D", "0x3E", "0x3F", "0x40", "0x41", "0x42", "0x43", "0x44", "0x45", "0x46", "0x47", "0x48"],
+    "safety_status": ["0x4A", "0x4B", "0x4C"],
+    "not_implemented": ["0x04", "0x05", "0x06", "0x07", "0x11", "0x12", "0x13"],
+    "device_info": ["0x1C", "0x20", "0x21"]
+  },
+  "test_profiles": {
+    "quick_test": {
+      "description": "Fast test of core implemented commands only",
+      "enabled_groups": ["basic_monitoring", "device_info"],
+      "max_commands": 10
+    },
+    "full_implemented": {
+      "description": "Test all currently implemented commands",
+      "enabled_groups": ["basic_monitoring", "cell_voltages", "safety_status", "device_info"],
+      "max_commands": 50
+    },
+    "development_test": {
+      "description": "Include not-yet-implemented commands for development testing",
+      "enabled_groups": ["basic_monitoring", "not_implemented"],
+      "max_commands": 20,
+      "expect_failures": true
+    }
   }
-  ```
+}
+```
 
 ### 5. Console Output with Rich Library
 - **Real-time Display**: Show command sending and response receiving
@@ -77,7 +168,8 @@ gehc_phtc_test/
 │       └── console_display.py  # Rich library output formatting
 ├── config/
 │   ├── config.json            # Serial port and timing configuration
-│   └── commands.json          # PHTC command definitions
+│   ├── commands.json          # PHTC command table with enable/disable flags
+│   └── command_profiles.json  # Predefined test profiles
 ├── tests/
 │   ├── __init__.py
 │   ├── test_communication.py
@@ -121,6 +213,18 @@ class MessageParser:
     def get_command_info(self, command_code: int) -> Dict[str, Any]
 ```
 
+#### ConfigManager Class
+```python
+class ConfigManager:
+    def load_config(self, config_path: str) -> Dict[str, Any]
+    def load_command_table(self, commands_path: str) -> Dict[str, Any]
+    def get_enabled_commands(self, profile: str = None) -> List[Dict]
+    def is_command_implemented(self, command_code: str) -> bool
+    def get_command_info(self, command_code: str) -> Dict[str, Any]
+    def get_test_profile(self, profile_name: str) -> Dict[str, Any]
+    def validate_configuration(self) -> bool
+```
+
 #### ConsoleDisplay Class
 ```python
 class ConsoleDisplay:
@@ -130,6 +234,8 @@ class ConsoleDisplay:
     def show_progress(self, current: int, total: int)
     def display_final_summary(self, results: List[Dict])
     def show_error(self, error_message: str)
+    def display_command_status_table(self, commands: List[Dict])
+    def show_implementation_summary(self, implemented: int, total: int)
 ```
 
 ## 📊 Protocol Specification Integration
@@ -240,6 +346,37 @@ mypy>=1.0.0
 - **PHTC Device**: For real hardware testing (optional for development)
 - **Test Environment**: Windows/Linux compatibility
 
+### Implementation Status Management
+
+#### Command Implementation Tracking
+Based on the RS422 implementation status (85% complete), the application must:
+
+- **Track Implementation Status**: Each command has `implemented` flag in configuration
+- **Graceful Degradation**: Handle unsupported commands without crashing
+- **Status Reporting**: Clear indication of which commands work vs. don't work
+- **Flexible Testing**: Ability to test only implemented commands or include experimental ones
+- **Development Support**: Easy enabling/disabling of commands as implementation progresses
+
+#### Current Implementation Status (from rs422-implementation-status.json)
+```python
+IMPLEMENTATION_STATUS = {
+    "overall_completion": 85,  # percent
+    "ge_protocol_commands": {
+        "total": 68,
+        "implemented": 32,
+        "not_implemented": 36
+    },
+    "command_categories": {
+        "basic_monitoring": "100% implemented",
+        "cell_voltages": "100% implemented", 
+        "safety_protection": "100% implemented",
+        "device_info": "75% implemented",
+        "extended_smbus": "60% implemented",
+        "predictive_algorithms": "0% implemented"
+    }
+}
+```
+
 ## 🎯 Success Criteria
 
 ### Functional Requirements
@@ -247,9 +384,11 @@ mypy>=1.0.0
 - [x] Receive and validate responses with CRC-8 checking
 - [x] Parse response data with correct data types and scaling
 - [x] Display formatted output with units using Rich library
-- [x] Handle configuration through JSON files
+- [x] Handle configuration through JSON files with enable/disable per command
 - [x] Implement proper error handling and recovery
 - [x] Maintain minimum 0.5-second delay between commands
+- [x] Gracefully handle partially implemented protocol commands
+- [x] Provide clear status reporting for implemented vs unimplemented commands
 
 ### Quality Requirements
 - [x] 90%+ test coverage across all modules
