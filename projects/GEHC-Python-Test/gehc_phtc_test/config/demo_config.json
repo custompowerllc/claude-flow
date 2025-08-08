@@ -1,0 +1,83 @@
+{
+  "serial": {
+    "port": "DEMO",
+    "baudrate": 115200,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "timeout": 0.1,
+    "write_timeout": 0.1,
+    "xonxoff": false,
+    "rtscts": false,
+    "dsrdtr": false
+  },
+  "protocol": {
+    "start_bytes": [170, 35],
+    "inter_command_delay": 0.1,
+    "max_retries": 1,
+    "response_timeout": 0.5,
+    "crc_polynomial": 7,
+    "max_data_length": 255
+  },
+  "logging": {
+    "level": "DEBUG",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "logs/demo_gehc_phtc_test.log",
+    "max_size": "5MB",
+    "backup_count": 3,
+    "console_output": true,
+    "structured_logging": true
+  },
+  "testing": {
+    "enabled_commands": "auto",
+    "command_profile": "smoke_test",
+    "enable_progress_bar": true,
+    "save_responses": true,
+    "response_log_file": "logs/demo_responses.json",
+    "max_test_duration": 60,
+    "stop_on_error": false,
+    "simulation_mode": true
+  },
+  "display": {
+    "console_width": 100,
+    "show_hex_data": true,
+    "show_timestamps": true,
+    "color_scheme": "bright",
+    "table_style": "simple",
+    "progress_style": "dots",
+    "enable_live_display": true,
+    "demo_delays": true
+  },
+  "hardware": {
+    "device_type": "DEMO_PHTC",
+    "firmware_version": "v1.0.0-demo",
+    "supported_protocols": ["DEMO_RS422"],
+    "connection_check": false,
+    "auto_reconnect": false,
+    "reconnect_attempts": 1,
+    "reconnect_delay": 0.5
+  },
+  "performance": {
+    "command_batch_size": 5,
+    "parallel_execution": false,
+    "memory_buffer_size": 512,
+    "enable_caching": true,
+    "cache_size": 50,
+    "profiling_enabled": true
+  },
+  "security": {
+    "validate_responses": false,
+    "checksum_verification": false,
+    "data_sanitization": true,
+    "secure_logging": false,
+    "audit_trail": false
+  },
+  "demo": {
+    "simulate_responses": true,
+    "response_delay_ms": 100,
+    "error_simulation_rate": 0.05,
+    "random_response_data": true,
+    "show_demo_messages": true,
+    "interactive_mode": false
+  }
+}

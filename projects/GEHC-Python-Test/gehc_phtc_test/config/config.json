@@ -1,0 +1,73 @@
+{
+  "serial": {
+    "port": "COM3",
+    "baudrate": 115200,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "timeout": 2.0,
+    "write_timeout": 2.0,
+    "xonxoff": false,
+    "rtscts": false,
+    "dsrdtr": false
+  },
+  "protocol": {
+    "start_bytes": [170, 35],
+    "inter_command_delay": 0.5,
+    "max_retries": 3,
+    "response_timeout": 2.0,
+    "crc_polynomial": 7,
+    "max_data_length": 255
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "logs/gehc_phtc_test.log",
+    "max_size": "10MB",
+    "backup_count": 5,
+    "console_output": true,
+    "structured_logging": true
+  },
+  "testing": {
+    "enabled_commands": "auto",
+    "command_profile": "full_test",
+    "enable_progress_bar": true,
+    "save_responses": true,
+    "response_log_file": "logs/responses.json",
+    "max_test_duration": 300,
+    "stop_on_error": false
+  },
+  "display": {
+    "console_width": 120,
+    "show_hex_data": true,
+    "show_timestamps": true,
+    "color_scheme": "dark",
+    "table_style": "rounded",
+    "progress_style": "bar",
+    "enable_live_display": true
+  },
+  "hardware": {
+    "device_type": "PHTC",
+    "firmware_version": "auto_detect",
+    "supported_protocols": ["RS422", "RS232"],
+    "connection_check": true,
+    "auto_reconnect": true,
+    "reconnect_attempts": 5,
+    "reconnect_delay": 1.0
+  },
+  "performance": {
+    "command_batch_size": 10,
+    "parallel_execution": false,
+    "memory_buffer_size": 1024,
+    "enable_caching": true,
+    "cache_size": 100,
+    "profiling_enabled": false
+  },
+  "security": {
+    "validate_responses": true,
+    "checksum_verification": true,
+    "data_sanitization": true,
+    "secure_logging": false,
+    "audit_trail": true
+  }
+}

@@ -35,7 +35,7 @@ setup(
     install_requires=requirements,
     entry_points={
         "console_scripts": [
-            "gehc-phtc-test=src.main:main",
+            "gehc-phtc-test=gehc_phtc_test.src.main:main",
         ],
     },
     include_package_data=True,

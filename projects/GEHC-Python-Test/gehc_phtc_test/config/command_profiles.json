@@ -1,0 +1,205 @@
+{
+  "profiles": {
+    "basic_test": {
+      "name": "Basic System Test",
+      "description": "Essential system verification commands",
+      "priority": "high",
+      "estimated_duration": 30,
+      "commands": [
+        "0x01",
+        "0x02",
+        "0x05",
+        "0x07"
+      ]
+    },
+    "sensor_test": {
+      "name": "Sensor Functionality Test",
+      "description": "Comprehensive sensor testing suite",
+      "priority": "high",
+      "estimated_duration": 60,
+      "commands": [
+        "0x10",
+        "0x11", 
+        "0x14",
+        "0x17"
+      ]
+    },
+    "actuator_test": {
+      "name": "Actuator Control Test",
+      "description": "Actuator operation and control verification",
+      "priority": "high",
+      "estimated_duration": 90,
+      "commands": [
+        "0x21",
+        "0x25",
+        "0x20",
+        "0x23"
+      ]
+    },
+    "diagnostic_test": {
+      "name": "Diagnostic and Maintenance Test",
+      "description": "System diagnostic and maintenance functions",
+      "priority": "medium", 
+      "estimated_duration": 120,
+      "commands": [
+        "0x30",
+        "0x31",
+        "0x32",
+        "0x36"
+      ]
+    },
+    "configuration_test": {
+      "name": "Configuration Management Test",
+      "description": "Configuration save/load and factory reset",
+      "priority": "medium",
+      "estimated_duration": 45,
+      "commands": [
+        "0x43",
+        "0x40",
+        "0x41"
+      ]
+    },
+    "full_test": {
+      "name": "Complete Protocol Test",
+      "description": "All implemented commands (85% coverage)",
+      "priority": "high",
+      "estimated_duration": 300,
+      "commands": [
+        "0x01", "0x02", "0x03", "0x04", "0x05", "0x06", "0x07", "0x08",
+        "0x10", "0x11", "0x12", "0x13", "0x14", "0x15", "0x16", "0x17",
+        "0x20", "0x21", "0x22", "0x23", "0x24", "0x25", "0x26", "0x27",
+        "0x30", "0x31", "0x32", "0x33", "0x34", "0x35", "0x36", "0x37",
+        "0x40", "0x41", "0x42", "0x43"
+      ]
+    },
+    "smoke_test": {
+      "name": "Smoke Test",
+      "description": "Quick verification of core functionality",
+      "priority": "critical",
+      "estimated_duration": 15,
+      "commands": [
+        "0x01",
+        "0x02", 
+        "0x05"
+      ]
+    },
+    "safety_critical": {
+      "name": "Safety Critical Functions",
+      "description": "Safety-critical operations and emergency stops",
+      "priority": "critical",
+      "estimated_duration": 45,
+      "commands": [
+        "0x03",
+        "0x22",
+        "0x42"
+      ]
+    },
+    "calibration_test": {
+      "name": "Calibration Procedures",
+      "description": "Sensor and actuator calibration routines",
+      "priority": "high",
+      "estimated_duration": 180,
+      "commands": [
+        "0x12",
+        "0x27"
+      ]
+    },
+    "performance_test": {
+      "name": "Performance Validation",
+      "description": "System performance and response time testing",
+      "priority": "medium",
+      "estimated_duration": 60,
+      "commands": [
+        "0x36",
+        "0x37",
+        "0x11",
+        "0x21"
+      ]
+    },
+    "maintenance_check": {
+      "name": "Maintenance Status Check",
+      "description": "Maintenance tracking and status verification",
+      "priority": "low",
+      "estimated_duration": 30,
+      "commands": [
+        "0x32",
+        "0x33",
+        "0x34",
+        "0x35"
+      ]
+    },
+    "error_handling": {
+      "name": "Error Handling Test",
+      "description": "Error detection, reporting, and recovery",
+      "priority": "high",
+      "estimated_duration": 45,
+      "commands": [
+        "0x05",
+        "0x06",
+        "0x34",
+        "0x35"
+      ]
+    },
+    "custom_sequence": {
+      "name": "Custom Test Sequence",
+      "description": "User-defined command sequence",
+      "priority": "medium",
+      "estimated_duration": "variable",
+      "commands": []
+    }
+  },
+  "schedule_templates": {
+    "daily_check": {
+      "name": "Daily System Check",
+      "description": "Recommended daily verification routine",
+      "frequency": "daily",
+      "profiles": ["smoke_test", "basic_test"]
+    },
+    "weekly_test": {
+      "name": "Weekly Comprehensive Test",
+      "description": "Weekly thorough system testing",
+      "frequency": "weekly", 
+      "profiles": ["full_test", "performance_test"]
+    },
+    "monthly_maintenance": {
+      "name": "Monthly Maintenance Check",
+      "description": "Monthly maintenance and calibration",
+      "frequency": "monthly",
+      "profiles": ["calibration_test", "maintenance_check", "diagnostic_test"]
+    },
+    "pre_deployment": {
+      "name": "Pre-Deployment Validation",
+      "description": "Complete validation before system deployment",
+      "frequency": "on_demand",
+      "profiles": ["full_test", "safety_critical", "calibration_test"]
+    }
+  },
+  "command_dependencies": {
+    "0x03": {
+      "requires": ["0x01", "0x02"],
+      "description": "Device reset requires system status check"
+    },
+    "0x12": {
+      "requires": ["0x14"],
+      "description": "Sensor calibration requires status check"
+    },
+    "0x22": {
+      "requires": ["0x21"],
+      "description": "Actuator stop requires status check"
+    },
+    "0x27": {
+      "requires": ["0x25", "0x21"],
+      "description": "Actuator calibration requires limits and status"
+    },
+    "0x42": {
+      "requires": ["0x01", "0x02"],
+      "description": "Factory reset requires system verification"
+    }
+  },
+  "safety_interlocks": {
+    "emergency_stop_sequence": ["0x22", "0x03"],
+    "pre_calibration_checks": ["0x02", "0x05", "0x14", "0x21"],
+    "safe_shutdown_sequence": ["0x22", "0x40", "0x03"],
+    "startup_verification": ["0x01", "0x02", "0x05", "0x07"]
+  }
+}

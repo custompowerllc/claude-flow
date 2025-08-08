@@ -1,0 +1,93 @@
+{
+  "serial": {
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "timeout": 2.0,
+    "xonxoff": false,
+    "rtscts": true,
+    "dsrdtr": false
+  },
+  "communication": {
+    "timeout": 30.0,
+    "retries": 3,
+    "retry_delay": 1.0,
+    "command_delay": 0.1
+  },
+  "test_profiles": {
+    "default": [
+      {
+        "command": "STATUS",
+        "description": "Check system status",
+        "expected": "OK"
+      },
+      {
+        "command": "VERSION", 
+        "description": "Get firmware version",
+        "expected": ""
+      },
+      {
+        "command": "ID",
+        "description": "Get device identification",
+        "expected": ""
+      }
+    ],
+    "quick": [
+      {
+        "command": "STATUS",
+        "description": "Quick status check",
+        "expected": "OK"
+      }
+    ],
+    "full": [
+      {
+        "command": "STATUS",
+        "description": "System status check",
+        "expected": "OK"
+      },
+      {
+        "command": "VERSION",
+        "description": "Firmware version",
+        "expected": ""
+      },
+      {
+        "command": "ID",
+        "description": "Device identification",
+        "expected": ""
+      },
+      {
+        "command": "CONFIG",
+        "description": "Configuration dump",
+        "expected": ""
+      },
+      {
+        "command": "DIAG",
+        "description": "Diagnostic information", 
+        "expected": ""
+      },
+      {
+        "command": "RESET",
+        "description": "Software reset",
+        "expected": "RESET"
+      }
+    ],
+    "custom": [
+      {
+        "command": "CUSTOM_CMD_1",
+        "description": "Custom command 1",
+        "expected": "ACK"
+      },
+      {
+        "command": "CUSTOM_CMD_2",
+        "description": "Custom command 2", 
+        "expected": ""
+      }
+    ]
+  },
+  "display": {
+    "colors": true,
+    "progress_bars": true,
+    "table_format": "rounded"
+  }
+}
