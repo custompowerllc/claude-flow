@@ -1,0 +1,175 @@
+# BK-Integration
+
+Unified control interface for BK8520 Electronic Load and BK9206b Power Supply, enabling comprehensive battery testing workflows through a single command-line application.
+
+## Features
+
+- **Unified CLI**: Single interface controlling both BK8520 and BK9206b devices
+- **Battery Testing**: Complete charge-discharge-recharge cycle automation
+- **Real-time Monitoring**: Live displays with Rich formatting
+- **Safety Protocols**: Input validation, emergency stops, safety monitoring
+- **External Integration**: REST API server for inter-application communication
+- **Data Export**: CSV/JSON export with capacity and energy calculations
+- **WebSocket Support**: Real-time monitoring and event streaming
+
+## Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd bk-integration
+
+# Install dependencies
+pip install -e .
+
+# For development
+pip install -e ".[dev]"
+```
+
+## Configuration
+
+Copy the example configuration and modify for your setup:
+
+```bash
+cp config.example.json config.json
+# Edit config.json with your device URLs and settings
+```
+
+## Usage
+
+### Basic Commands
+
+```bash
+# Check device status
+bk-integration device status
+
+# Connect to devices
+bk-integration device connect
+
+# Run battery test with default profile
+bk-integration test battery
+
+# Run battery test with custom profile
+bk-integration test battery --profile high_capacity --cycles 3
+
+# Real-time monitoring
+bk-integration monitor --interval 0.5
+
+# Start API server
+bk-integration serve --port 8080
+```
+
+### Battery Test Profiles
+
+- `default`: 16.8V charge, 2.0A charge current, 5.0A discharge
+- `high_capacity`: 16.8V charge, 4.0A charge current, 10.0A discharge
+- Custom profiles can be created in the configuration file
+
+## API Integration
+
+The REST API provides programmatic access to all CLI functionality:
+
+```bash
+# Health check
+curl http://localhost:8080/api/health
+
+# Start battery test
+curl -X POST http://localhost:8080/api/test/battery \
+  -H "Content-Type: application/json" \
+  -d '{"profile": "default", "cycles": 1}'
+
+# Real-time monitoring via WebSocket
+ws://localhost:8080/ws/monitor
+```
+
+## Safety Features
+
+- **Input Validation**: All parameters validated against device specifications
+- **Emergency Stop**: Immediate shutdown capability with `Ctrl+C`
+- **Safety Monitoring**: Continuous monitoring with automatic protection
+- **Connection Health**: Automatic detection of communication failures
+- **Graceful Degradation**: Continues operation when possible during failures
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   BK-Integration CLI                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
+│  │   Click CLI  │  │ Rich Display │  │  Config Mgr  │ │
+│  └──────────────┘  └──────────────┘  └──────────────┘ │
+├─────────────────────────────────────────────────────────┤
+│            HTTP Client Layer (httpx/requests)           │
+├─────────────────────────────────────────────────────────┤
+│  ┌──────────────────────┐  ┌─────────────────────────┐ │
+│  │  BK8520 API Client   │  │  BK9206b API Client   │ │
+│  │  :8000                │  │  :5300                │ │
+│  └──────────────────────┘  └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────┘
+               ↓                            ↓
+    ┌─────────────────────┐      ┌─────────────────────┐
+    │  BK8520 Load Tester │      │  BK9206b Power      │
+    │  FastAPI Server     │      │  Supply FastAPI     │
+    └─────────────────────┘      └─────────────────────┘
+```
+
+## Device Specifications
+
+### BK8520 Electronic Load
+- **Maximum Voltage**: 120V
+- **Maximum Current**: 60A  
+- **Maximum Power**: 999W
+- **API Base URL**: http://10.100.10.190:8000
+
+### BK9206b Power Supply
+- **Maximum Voltage**: 60V
+- **Maximum Current**: 5A
+- **Taper Detection**: Configurable threshold and duration
+- **API Base URL**: http://10.100.10.190:5300
+
+## Development
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=bk_integration --cov-report=html
+
+# Run specific test file
+pytest tests/test_clients.py -v
+```
+
+### Code Quality
+
+```bash
+# Format code
+black bk_integration/
+
+# Lint code
+flake8 bk_integration/
+
+# Type checking
+mypy bk_integration/
+```
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Submit a pull request
+
+## Support
+
+For issues and questions:
+- Check the documentation in the `docs/` directory
+- Open an issue on GitHub
+- Review the API documentation for device integration details

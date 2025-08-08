@@ -1,0 +1,117 @@
+{
+  "devices": {
+    "load_tester": {
+      "name": "BK8520",
+      "device_address": "10.100.10.190",
+      "device_url": "http://10.100.10.190:8000",
+      "port": 8000,
+      "serial_port": "/dev/ttyUSB0",
+      "connection": {
+        "baudrate": 9600,
+        "timeout": 3.0,
+        "reset_input_on_connect": true
+      },
+      "defaults": {
+        "mode": "CC",
+        "max_current": 60.0,
+        "max_voltage": 120.0,
+        "max_power": 999.0
+      },
+      "safety_limits": {
+        "max_temperature": 85.0,
+        "max_current_spike": 65.0,
+        "communication_timeout": 5.0
+      }
+    },
+    "power_supply": {
+      "name": "BK9206b",
+      "device_address": "10.100.10.190", 
+      "device_url": "http://10.100.10.190:5300",
+      "port": 5300,
+      "defaults": {
+        "voltage": 15.0,
+        "current_limit": 2.0,
+        "taper_threshold": 0.1,
+        "taper_duration": 60
+      },
+      "safety_limits": {
+        "max_voltage": 60.0,
+        "max_current": 5.0,
+        "max_power": 300.0
+      }
+    }
+  },
+  "test_profiles": {
+    "default": {
+      "name": "Default Battery Test",
+      "description": "Standard 12V lead-acid battery test",
+      "charge_voltage": 16.8,
+      "charge_current": 2.0,
+      "discharge_current": 5.0,
+      "cutoff_voltage": 10.0,
+      "rest_time": 60,
+      "taper_threshold": 0.1,
+      "taper_duration": 60,
+      "max_charge_time_hours": 12,
+      "max_discharge_time_hours": 24
+    },
+    "high_capacity": {
+      "name": "High Capacity Test",
+      "description": "High current test for large batteries",
+      "charge_voltage": 16.8,
+      "charge_current": 4.0,
+      "discharge_current": 10.0,
+      "cutoff_voltage": 10.0,
+      "rest_time": 120,
+      "taper_threshold": 0.2,
+      "taper_duration": 120,
+      "max_charge_time_hours": 8,
+      "max_discharge_time_hours": 12
+    },
+    "low_current": {
+      "name": "Low Current Test",
+      "description": "Gentle test for sensitive batteries",
+      "charge_voltage": 16.8,
+      "charge_current": 1.0,
+      "discharge_current": 2.0,
+      "cutoff_voltage": 10.5,
+      "rest_time": 300,
+      "taper_threshold": 0.05,
+      "taper_duration": 180,
+      "max_charge_time_hours": 16,
+      "max_discharge_time_hours": 48
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "bk_integration.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_file_size": "10MB",
+    "backup_count": 3
+  },
+  "api": {
+    "timeout": 30,
+    "retry_count": 3,
+    "retry_delay": 1.0,
+    "connection_pool_size": 10
+  },
+  "monitoring": {
+    "data_collection_interval": 1.0,
+    "status_update_interval": 0.1,
+    "safety_check_interval": 0.5,
+    "websocket_heartbeat": 30
+  },
+  "export": {
+    "default_format": "csv",
+    "include_raw_data": true,
+    "timestamp_format": "ISO",
+    "precision": 6
+  },
+  "safety": {
+    "enable_emergency_stop": true,
+    "auto_disconnect_on_error": true,
+    "max_consecutive_failures": 5,
+    "voltage_tolerance_percent": 5.0,
+    "current_tolerance_percent": 10.0
+  }
+}

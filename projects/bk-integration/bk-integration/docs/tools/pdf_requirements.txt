@@ -1,0 +1,5 @@
+# PDF Generation Requirements
+markdown>=3.4.0
+weasyprint>=60.0
+Pygments>=2.15.0
+requests>=2.32.0

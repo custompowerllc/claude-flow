@@ -1,0 +1,413 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BK-Integration Implementation Guide</title>
+        <style>
+            @page {
+                size: A4;
+                margin: 2cm;
+                @bottom-center {
+                    content: counter(page);
+                }
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 210mm;
+                margin: 0 auto;
+                padding: 20px;
+                background: white;
+            }
+            
+            h1 {
+                color: #2c3e50;
+                border-bottom: 3px solid #3498db;
+                padding-bottom: 10px;
+                margin-top: 40px;
+                page-break-before: auto;
+            }
+            
+            h2 {
+                color: #34495e;
+                border-bottom: 2px solid #ecf0f1;
+                padding-bottom: 8px;
+                margin-top: 30px;
+                page-break-after: avoid;
+            }
+            
+            h3 {
+                color: #7f8c8d;
+                margin-top: 25px;
+                page-break-after: avoid;
+            }
+            
+            /* Mermaid diagrams */
+            .mermaid-diagram {
+                margin: 20px 0;
+                text-align: center;
+                page-break-inside: avoid;
+                padding: 15px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                border: 1px solid #dee2e6;
+            }
+            
+            .mermaid-diagram svg {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            /* Code blocks */
+            pre {
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 4px;
+                padding: 12px;
+                overflow-x: auto;
+                page-break-inside: avoid;
+                font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+            
+            code {
+                background-color: #f8f9fa;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+                font-size: 0.9em;
+                color: #e83e8c;
+            }
+            
+            pre code {
+                background-color: transparent;
+                padding: 0;
+                color: inherit;
+            }
+            
+            /* Tables */
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 20px 0;
+                page-break-inside: avoid;
+            }
+            
+            th, td {
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+            }
+            
+            th {
+                background-color: #3498db;
+                color: white;
+                font-weight: bold;
+            }
+            
+            tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+            
+            /* Print-specific styles */
+            @media print {
+                body {
+                    font-size: 10pt;
+                }
+                
+                .mermaid-diagram {
+                    background: white;
+                    border: 2px solid #e0e0e0;
+                }
+                
+                h1, h2, h3, h4, h5, h6 {
+                    page-break-after: avoid;
+                }
+                
+                p, blockquote, ul, ol {
+                    orphans: 3;
+                    widows: 3;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="bk8520-electronic-load-rest-api-flow-diagram">BK8520 Electronic Load REST API Flow Diagram</h1>
+<p>This Mermaid diagram illustrates the POST and GET API endpoints for the BK8520 Electronic Load Control system.</p>
+<h2 id="api-architecture-overview">API Architecture Overview</h2>
+<pre><code class="language-mermaid">graph TB
+    subgraph "Client Applications"
+        WEB[Web Interface]
+        PYTHON[Python Client]
+        CURL[cURL/CLI]
+        JS[JavaScript Client]
+    end
+
+    subgraph "BK8520 REST API Server"
+        subgraph "Health & System"
+            HEALTH["GET /api/health<br/>📊 Check service status<br/>Returns: API health info"]
+        end
+
+        subgraph "Device Management"
+            CONNECT["POST /api/device/connect<br/>🔌 Connect to BK8520<br/>Params: port, baudrate<br/>Action: Establish serial connection"]
+            DISCONNECT["POST /api/device/disconnect<br/>🔌 Disconnect device<br/>Params: none<br/>Action: Close serial connection"]
+            STATUS["GET /api/device/status<br/>📋 Get connection status<br/>Returns: connection state, device status"]
+            INFO["GET /api/device/info<br/>ℹ️ Get device details<br/>Returns: model, firmware, capabilities"]
+            READINGS["GET /api/device/readings<br/>⚡ Get live measurements<br/>Returns: voltage, current, power"]
+        end
+
+        subgraph "Device Control"
+            INPUT["POST /api/device/input<br/>⚡ Control load input<br/>Params: enabled (true/false)<br/>Action: Turn input on/off"]
+            CURRENT["POST /api/device/current<br/>⚡ Set discharge current<br/>Params: current (amperes)<br/>Action: Configure CC mode current"]
+            VOLTAGE["POST /api/device/voltage<br/>⚡ Set cutoff voltage<br/>Params: voltage (volts)<br/>Action: Set battery protection limit"]
+            MODE["POST /api/device/mode<br/>⚙️ Set operation mode<br/>Params: mode (0=CC,1=CV,2=CW,3=CR)<br/>Action: Change load operation mode"]
+            MAXCURRENT["POST /api/device/max-current<br/>🛡️ Set current limit<br/>Params: current (amperes)<br/>Action: Configure safety limit"]
+            MAXPOWER["POST /api/device/max-power<br/>🛡️ Set power limit<br/>Params: power (watts)<br/>Action: Configure safety limit"]
+            MAXVOLTAGE["POST /api/device/max-voltage<br/>🛡️ Set voltage limit<br/>Params: voltage (volts)<br/>Action: Configure safety limit"]
+            SETUP["POST /api/device/setup-discharge<br/>⚙️ Setup CC discharge<br/>Params: current (amperes)<br/>Action: Enable constant current mode"]
+        end
+
+        subgraph "Battery Testing"
+            TESTSTART["POST /api/battery-test/start<br/>🔋 Start capacity test<br/>Params: discharge_current, cutoff_voltage<br/>Action: Begin automated test"]
+            TESTSTOP["POST /api/battery-test/stop<br/>🛑 Stop active test<br/>Params: none<br/>Action: Halt test, save results"]
+            TESTSTATUS["GET /api/battery-test/status<br/>📊 Get test progress<br/>Returns: test state, measurements<br/>Updates: capacity, elapsed time"]
+            TESTRESULTS["GET /api/battery-test/results<br/>📈 Get complete results<br/>Returns: full test data<br/>Includes: capacity, duration, summary"]
+        end
+    end
+
+    subgraph "BK8520 Hardware Device"
+        DEVICE["BK8520 Electronic Load<br/>📡 Serial Communication<br/>Port: /dev/ttyUSB0<br/>Baudrate: 4800<br/>Max: 120V, 60A, 999W"]
+    end
+
+    %% Client connections
+    WEB --> HEALTH
+    WEB --> CONNECT
+    WEB --> STATUS
+    WEB --> READINGS
+    WEB --> INPUT
+    WEB --> TESTSTART
+    WEB --> TESTSTATUS
+
+    PYTHON --> CONNECT
+    PYTHON --> CURRENT
+    PYTHON --> VOLTAGE
+    PYTHON --> TESTSTART
+    PYTHON --> TESTRESULTS
+
+    CURL --> HEALTH
+    CURL --> INFO
+    CURL --> MODE
+
+    JS --> READINGS
+    JS --> TESTSTATUS
+
+    %% API to Device connections
+    CONNECT --> DEVICE
+    STATUS --> DEVICE
+    INFO --> DEVICE
+    READINGS --> DEVICE
+    INPUT --> DEVICE
+    CURRENT --> DEVICE
+    VOLTAGE --> DEVICE
+    MODE --> DEVICE
+    MAXCURRENT --> DEVICE
+    MAXPOWER --> DEVICE
+    MAXVOLTAGE --> DEVICE
+    SETUP --> DEVICE
+    TESTSTART --> DEVICE
+    TESTSTOP --> DEVICE
+    TESTSTATUS --> DEVICE
+
+    %% Styling
+    classDef getEndpoint fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef postEndpoint fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef device fill:#fff3e0,stroke:#f57c00,stroke-width:3px
+    classDef client fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+
+    class HEALTH,STATUS,INFO,READINGS,TESTSTATUS,TESTRESULTS getEndpoint
+    class CONNECT,DISCONNECT,INPUT,CURRENT,VOLTAGE,MODE,MAXCURRENT,MAXPOWER,MAXVOLTAGE,SETUP,TESTSTART,TESTSTOP postEndpoint
+    class DEVICE device
+    class WEB,PYTHON,CURL,JS client</code></pre>
+
+<h2 id="api-endpoint-details">API Endpoint Details</h2>
+<h3 id="get-endpoints-data-retrieval">GET Endpoints (Data Retrieval)</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Purpose</th>
+<th>Response Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/health</code></td>
+<td>Service health check</td>
+<td>Status and version info</td>
+</tr>
+<tr>
+<td><code>GET /api/device/status</code></td>
+<td>Connection and operational status</td>
+<td>Connection state, device status</td>
+</tr>
+<tr>
+<td><code>GET /api/device/info</code></td>
+<td>Device information</td>
+<td>Model, firmware, capabilities</td>
+</tr>
+<tr>
+<td><code>GET /api/device/readings</code></td>
+<td>Real-time measurements</td>
+<td>Voltage, current, power values</td>
+</tr>
+<tr>
+<td><code>GET /api/battery-test/status</code></td>
+<td>Active test status</td>
+<td>Test progress, measurements</td>
+</tr>
+<tr>
+<td><code>GET /api/battery-test/results</code></td>
+<td>Complete test results</td>
+<td>Full test data and summary</td>
+</tr>
+</tbody>
+</table>
+<h3 id="post-endpoints-control-operations">POST Endpoints (Control Operations)</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Purpose</th>
+<th>Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/device/connect</code></td>
+<td>Connect to device</td>
+<td>Port, baudrate, timeout</td>
+</tr>
+<tr>
+<td><code>POST /api/device/disconnect</code></td>
+<td>Disconnect device</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>POST /api/device/input</code></td>
+<td>Control input on/off</td>
+<td>enabled (boolean)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/current</code></td>
+<td>Set discharge current</td>
+<td>current (amperes)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/voltage</code></td>
+<td>Set cutoff voltage</td>
+<td>voltage (volts)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/mode</code></td>
+<td>Set operation mode</td>
+<td>mode (0=CC, 1=CV, 2=CW, 3=CR)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/max-current</code></td>
+<td>Set current limit</td>
+<td>current (amperes)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/max-power</code></td>
+<td>Set power limit</td>
+<td>power (watts)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/max-voltage</code></td>
+<td>Set voltage limit</td>
+<td>voltage (volts)</td>
+</tr>
+<tr>
+<td><code>POST /api/device/setup-discharge</code></td>
+<td>Setup CC discharge</td>
+<td>current (amperes)</td>
+</tr>
+<tr>
+<td><code>POST /api/battery-test/start</code></td>
+<td>Start battery test</td>
+<td>discharge_current, cutoff_voltage, max_time_hours</td>
+</tr>
+<tr>
+<td><code>POST /api/battery-test/stop</code></td>
+<td>Stop battery test</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-flow-examples">Data Flow Examples</h2>
+<h3 id="device-connection-flow">Device Connection Flow</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Client
+    participant API
+    participant Device
+
+    Client->>API: POST /api/device/connect
+    Note right of Client: {"port": "/dev/ttyUSB0", "baudrate": 4800}
+
+    API->>Device: Serial connection attempt
+    Device-->>API: Connection confirmation
+    API->>Device: Setup basic test parameters
+    Device-->>API: Setup confirmation
+
+    API-->>Client: {"success": true, "connected": true}
+
+    Client->>API: GET /api/device/info
+    API->>Device: Request device information
+    Device-->>API: Model, firmware, capabilities
+    API-->>Client: Device info response</code></pre>
+
+<h3 id="battery-test-flow">Battery Test Flow</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Client
+    participant API
+    participant Device
+
+    Client->>API: POST /api/battery-test/start
+    Note right of Client: {"discharge_current": 2.0, "cutoff_voltage": 10.5}
+
+    API->>Device: Set current and voltage parameters
+    Device-->>API: Parameters set
+    API->>Device: Enable input (start discharge)
+    Device-->>API: Input enabled
+
+    API-->>Client: {"test_active": true}
+
+    loop Monitoring
+        Client->>API: GET /api/battery-test/status
+        API->>Device: Read current measurements
+        Device-->>API: Voltage, current, power
+        API-->>Client: Test progress and measurements
+    end
+
+    Note over API,Device: Test stops when cutoff voltage reached
+    API->>Device: Disable input
+    API-->>Client: Test completed with results</code></pre>
+
+<h2 id="system-architecture">System Architecture</h2>
+<p>The API server acts as a bridge between client applications and the physical BK8520 device:</p>
+<ul>
+<li><strong>FastAPI Server</strong>: Handles HTTP requests and provides OpenAPI documentation</li>
+<li><strong>Serial Communication</strong>: Direct communication with BK8520 via RS232/USB</li>
+<li><strong>Real-time Monitoring</strong>: Continuous measurement reading during tests</li>
+<li><strong>Data Persistence</strong>: Test results saved to JSON files</li>
+<li><strong>Error Handling</strong>: Comprehensive error reporting and device safety checks</li>
+</ul>
+<p>Base URL: <code>http://10.100.10.190:8000</code></p>
+    </body>
+    </html>
+    
