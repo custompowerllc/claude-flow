@@ -1,0 +1,83 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="300" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">
+    5-Pin JST GH Connector Pinout
+  </text>
+  
+  <!-- Connector housing -->
+  <rect x="150" y="80" width="220" height="60" rx="5" fill="#2c3e50" stroke="#1a252f" stroke-width="2"/>
+  
+  <!-- Pin contacts -->
+  <rect x="170" y="90" width="20" height="40" fill="#ffd700" stroke="#e6c200" stroke-width="1"/>
+  <rect x="210" y="90" width="20" height="40" fill="#ffd700" stroke="#e6c200" stroke-width="1"/>
+  <rect x="250" y="90" width="20" height="40" fill="#ffd700" stroke="#e6c200" stroke-width="1"/>
+  <rect x="290" y="90" width="20" height="40" fill="#ffd700" stroke="#e6c200" stroke-width="1"/>
+  <rect x="330" y="90" width="20" height="40" fill="#ffd700" stroke="#e6c200" stroke-width="1"/>
+  
+  <!-- Pin numbers -->
+  <text x="180" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333">1</text>
+  <text x="220" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333">2</text>
+  <text x="260" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333">3</text>
+  <text x="300" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333">4</text>
+  <text x="340" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333">5</text>
+  
+  <!-- Pin labels with lines -->
+  <!-- Pin 1 - Pack- -->
+  <line x1="180" y1="150" x2="180" y2="175" stroke="#e74c3c" stroke-width="2"/>
+  <text x="180" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#e74c3c">Pack-</text>
+  <text x="180" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#666">(Ground)</text>
+  
+  <!-- Pin 2 - SDA -->
+  <line x1="220" y1="150" x2="220" y2="175" stroke="#3498db" stroke-width="2"/>
+  <text x="220" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#3498db">SDA</text>
+  
+  <!-- Pin 3 - SCL -->
+  <line x1="260" y1="150" x2="260" y2="175" stroke="#9b59b6" stroke-width="2"/>
+  <text x="260" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#9b59b6">SCL</text>
+  
+  <!-- Pin 4 - DEBUG -->
+  <line x1="300" y1="150" x2="300" y2="175" stroke="#f39c12" stroke-width="2"/>
+  <text x="300" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#f39c12">DEBUG</text>
+  
+  <!-- Pin 5 - Unused -->
+  
+  <!-- Orientation arrows and labels -->
+  <g>
+    <!-- Left side arrow pointing to battery bus -->
+    <path d="M 80 110 L 120 110" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+    <text x="100" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#e74c3c">Battery Bus</text>
+    <text x="100" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#e74c3c">(Left Side)</text>
+    
+    <!-- Right side arrow pointing away from battery bus -->
+    <path d="M 480 110 L 520 110" stroke="#95a5a6" stroke-width="2" marker-end="url(#arrowhead-gray)"/>
+    <text x="500" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#95a5a6">Away from</text>
+    <text x="500" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#95a5a6">Battery Bus</text>
+    <text x="500" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#95a5a6">(Right Side)</text>
+  </g>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+    </marker>
+    <marker id="arrowhead-gray" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#95a5a6"/>
+    </marker>
+  </defs>
+
+  <!-- Connector type label -->
+  <text x="300" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">
+    JST GH Series 5-Pin Connector
+  </text>
+  <text x="300" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#666">
+    1.25mm Pitch • Mating Side View
+  </text>
+  
+  <!-- Pin assignment table -->
+  <rect x="50" y="260" width="500" height="2" fill="#ddd"/>
+  <text x="60" y="280" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#333">Pin Layout (Left to Right):</text>
+  <text x="60" y="295" font-family="Arial, sans-serif" font-size="10" fill="#333">1: Pack- (GND) | 2: SDA | 3: SCL | 4: DEBUG | 5: UNUSED</text>
+</svg>
