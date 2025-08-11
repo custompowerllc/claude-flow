@@ -6,7 +6,7 @@ This module defines all data structures used throughout the application,
 providing type safety, validation, and serialization capabilities.
 """
 
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Dict, List, Optional, Union, Any
 from enum import Enum
 from datetime import datetime
@@ -72,7 +72,7 @@ class SerialConfig(BaseModel):
     log_unsupported_commands: bool = Field(True, description="Log unsupported command attempts")
     skip_unsupported_commands: bool = Field(True, description="Skip unsupported commands in execution")
     
-    @validator('baud_rate')
+    @field_validator('baud_rate')
     def validate_baud_rate(cls, v):
         """Validate baud rate is a standard value."""
         valid_rates = [9600, 19200, 38400, 57600, 115200, 230400, 460800]
@@ -80,14 +80,14 @@ class SerialConfig(BaseModel):
             raise ValueError(f"Baud rate must be one of: {valid_rates}")
         return v
     
-    @validator('timeout_ms')
+    @field_validator('timeout_ms')
     def validate_timeout(cls, v):
         """Validate timeout is reasonable."""
         if v < 100 or v > 30000:
             raise ValueError("Timeout must be between 100ms and 30000ms")
         return v
     
-    @validator('inter_command_delay')
+    @field_validator('inter_command_delay')
     def validate_delay(cls, v):
         """Validate inter-command delay."""
         if v < 0.1 or v > 10.0:
@@ -109,14 +109,14 @@ class CommandSpec(BaseModel):
     test_priority: Priority = Field(Priority.MEDIUM, description="Test execution priority level")
     notes: str = Field("", description="Implementation notes and comments")
     
-    @validator('granularity')
+    @field_validator('granularity')
     def validate_granularity(cls, v):
         """Validate granularity is positive."""
         if v <= 0:
             raise ValueError("Granularity must be positive")
         return v
     
-    @validator('byte_count')
+    @field_validator('byte_count')
     def validate_byte_count(cls, v):
         """Validate byte count is reasonable."""
         if v < 1 or v > 32:
@@ -133,14 +133,14 @@ class TestProfile(BaseModel):
     timeout_multiplier: float = Field(1.0, description="Timeout adjustment factor for this profile")
     command_filter: Optional[List[str]] = Field(None, description="Specific commands to include/exclude")
     
-    @validator('max_commands')
+    @field_validator('max_commands')
     def validate_max_commands(cls, v):
         """Validate maximum commands is reasonable."""
         if v < 1 or v > 1000:
             raise ValueError("Max commands must be between 1 and 1000")
         return v
     
-    @validator('timeout_multiplier')
+    @field_validator('timeout_multiplier')
     def validate_timeout_multiplier(cls, v):
         """Validate timeout multiplier."""
         if v < 0.1 or v > 10.0:
@@ -154,7 +154,7 @@ class CommandTable(BaseModel):
     command_groups: Dict[str, List[str]] = Field(default_factory=dict, description="Named command groups")
     test_profiles: Dict[str, TestProfile] = Field(default_factory=dict, description="Test execution profiles")
     
-    @validator('command_table')
+    @field_validator('command_table')
     def validate_command_codes(cls, v):
         """Validate command codes are valid hex strings."""
         for code in v.keys():
@@ -181,35 +181,33 @@ class GEHCMessage(BaseModel):
     class Config:
         arbitrary_types_allowed = True
     
-    @validator('preamble')
+    @field_validator('preamble')
     def validate_preamble(cls, v):
         """Validate preamble is correct."""
         if v != 0xAA:
             raise ValueError("Preamble must be 0xAA for GE Healthcare protocol")
         return v
     
-    @validator('sync_header')
+    @field_validator('sync_header')
     def validate_sync_header(cls, v):
         """Validate sync header values."""
         if v not in [0x23, 0x40]:
             raise ValueError("Sync header must be 0x23 (Host to Battery) or 0x40 (Battery to Host)")
         return v
     
-    @validator('command_code')
+    @field_validator('command_code')
     def validate_command_code(cls, v):
         """Validate command code range."""
         if v < 0 or v > 255:
             raise ValueError("Command code must be between 0 and 255")
         return v
     
-    @root_validator
-    def validate_data_consistency(cls, values):
+    @model_validator(mode='after')
+    def validate_data_consistency(self):
         """Validate data length matches actual data."""
-        data_length = values.get('data_length', 0)
-        data = values.get('data', b'')
-        if data_length != len(data):
-            raise ValueError(f"Data length ({data_length}) does not match actual data size ({len(data)})")
-        return values
+        if self.data_length != len(self.data):
+            raise ValueError(f"Data length ({self.data_length}) does not match actual data size ({len(self.data)})")
+        return self
 
 
 # Response Models
