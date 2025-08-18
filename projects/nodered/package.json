@@ -6,8 +6,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "node-red -s ./settings.js -u ./data",
+    "start": "npx node-red -s ./settings.js -u ./data",
     "start-custom": "node ./start-nodered.js",
+    "start-direct": "node ./node_modules/node-red/red.js -s ./settings.js -u ./data",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

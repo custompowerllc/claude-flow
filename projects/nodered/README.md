@@ -12,24 +12,42 @@ All required packages have been installed:
 
 ## Quick Start
 
-### Method 1: Standard Node-RED Command (Recommended)
+### Cross-Platform Support (Windows & Linux)
+
+#### Method 1: NPM Script (Works on Both)
 ```bash
 cd projects/nodered
 npm start
 ```
-This runs Node-RED with the custom settings file.
 
-### Method 2: Custom Express Server
+#### Method 2: Platform-Specific Scripts
+
+**Windows (PowerShell/CMD):**
+```batch
+cd projects\nodered
+start.bat
+```
+Or:
+```powershell
+npm start
+```
+
+**Linux/macOS:**
 ```bash
 cd projects/nodered
-npm run start-custom
+./start.sh
 ```
-This runs Node-RED embedded in an Express server.
 
-### Method 3: Direct Node-RED Command
+#### Method 3: Direct Command (Both Platforms)
 ```bash
 cd projects/nodered
 npx node-red -s ./settings.js -u ./data
+```
+
+#### Method 4: Custom Express Server (Both Platforms)
+```bash
+cd projects/nodered
+npm run start-custom
 ```
 
 ## Access Node-RED
