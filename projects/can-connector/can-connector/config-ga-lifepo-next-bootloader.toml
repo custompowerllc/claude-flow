@@ -14,6 +14,6 @@ handshake = "none"
 hex-file-content = [ { max-size = 212_992, signature = "custom-power-general-atomics-LiFePO4-8S9P" } ]
 upgrade-tasks = [ { firmware-index = 0, id-prefix = 0x1CAB0000 } ]
 reboot-time = 1_000
-normal-timeout = 5_000
-verify-timeout = 10_000
+normal-timeout = 30_000
+verify-timeout = 45_000
 auto-exit = true
