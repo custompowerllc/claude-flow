@@ -1,0 +1,7 @@
+node_modules/
+data/
+lib/flows/
+*.backup
+*.log
+.npm
+.node-red/
