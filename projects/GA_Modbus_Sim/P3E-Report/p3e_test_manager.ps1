@@ -265,16 +265,17 @@ function Test-FileDiscovery {
 
 # Function to generate screenshots for all packs
 function Generate-AllScreenshots {
-    $release_path = "release"
+    # Use the correct test-artifacts path in GA_Modbus_Python_App
+    $test_artifacts_path = "../../GA_Modbus_Python_App/P3E-Report/test-artifacts"
     
-    # Debug: Show current directory and release path
+    # Debug: Show current directory and test-artifacts path
     $current_location = Get-Location
     Write-Host "Working from directory: $current_location" -ForegroundColor Gray
     
-    # Check if release directory exists
-    if (-not (Test-Path $release_path)) {
-        Write-Host "Release directory not found: $release_path" -ForegroundColor Red
-        Write-Host "Full path would be: $(Join-Path $current_location $release_path)" -ForegroundColor Gray
+    # Check if test-artifacts directory exists
+    if (-not (Test-Path $test_artifacts_path)) {
+        Write-Host "Test-artifacts directory not found: $test_artifacts_path" -ForegroundColor Red
+        Write-Host "Full path would be: $(Join-Path $current_location $test_artifacts_path)" -ForegroundColor Gray
         Read-Host "Press Enter to exit"
         return
     }
@@ -284,10 +285,10 @@ function Generate-AllScreenshots {
     Write-Host "Screenshots will capture cell voltages when cell delta is at its peak value.`n" -ForegroundColor Yellow
     
     # Get all serial number directories
-    $serial_dirs = Get-ChildItem -Path $release_path -Directory | Where-Object { $_.Name -match '^\d{4}$' }
+    $serial_dirs = Get-ChildItem -Path $test_artifacts_path -Directory | Where-Object { $_.Name -match '^\d{4}$' }
     
     if ($serial_dirs.Count -eq 0) {
-        Write-Host "No serial number directories found in $release_path" -ForegroundColor Red
+        Write-Host "No serial number directories found in $test_artifacts_path" -ForegroundColor Red
         Read-Host "Press Enter to exit"
         return
     }
@@ -316,8 +317,8 @@ function Generate-AllScreenshots {
         
         # Process charge and discharge
         foreach ($test_type in @("charge", "discharge")) {
-            $csv_path = "$release_path/$serial/$test_type"
-            $screenshots_path = "$release_path/$serial/screenshots"
+            $csv_path = "$test_artifacts_path/$serial/$test_type"
+            $screenshots_path = "$test_artifacts_path/$serial/screenshots"
             
             # Find latest CSV file
             if (Test-Path $csv_path) {
@@ -371,7 +372,7 @@ function Generate-AllScreenshots {
     # Show summary of generated screenshots
     foreach ($serial_dir in $serial_dirs) {
         $serial = $serial_dir.Name
-        $screenshots_path = "$release_path/$serial/screenshots"
+        $screenshots_path = "$test_artifacts_path/$serial/screenshots"
         if (Test-Path $screenshots_path) {
             $screenshots = Get-ChildItem -Path $screenshots_path -Filter "$serial-*.png" -ErrorAction SilentlyContinue
             if ($screenshots.Count -gt 0) {
