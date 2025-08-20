@@ -16,8 +16,8 @@ flowchart TD
     
     %% CAN ID Structure Detail
     EXTRACT --> |Parse 29-bit ID| ID_BREAKDOWN{CAN ID Breakdown<br/>29-bit Extended ID}
-    ID_BREAKDOWN --> |Bits [10:2]| MSG_FIELD[Message Field: a_msg<br/>0x01-0x1D + 0x400]
-    ID_BREAKDOWN --> |Bits [1:0]| PACK_FIELD[Pack Field: a_pck<br/>0-3 for PACK_0 to PACK_3]
+    ID_BREAKDOWN --> |Bits 10 to 2| MSG_FIELD[Message Field: a_msg<br/>0x01-0x1D + 0x400]
+    ID_BREAKDOWN --> |Bits 1 to 0| PACK_FIELD[Pack Field: a_pck<br/>0-3 for PACK_0 to PACK_3]
     ID_BREAKDOWN --> |High bits| PREFIX_FIELD[ID Prefix<br/>Stored in m_id_prefix]
     
     %% Message Processing Core
@@ -69,9 +69,9 @@ flowchart TD
     QUERY_TYPE --> |Specific Message| SINGLE_QUERY[Single Message Query<br/>Messages 01-1D<br/>Empty Data Payload]
     QUERY_TYPE --> |ALL Query| ALL_QUERY[Query All Messages<br/>Command 0x0001<br/>Message 0x00]
     
-    SINGLE_QUERY --> GEN_QUERY[Generate Query Message<br/>compute_outgoing_id()]
+    SINGLE_QUERY --> GEN_QUERY[Generate Query Message<br/>compute_outgoing_id]
     ALL_QUERY --> GEN_QUERY
-    GEN_QUERY --> |CAN ID: Prefix + MSG + PCK| OUTGOING_ID[Outgoing CAN ID<br/>Format: ID_PREFIX | MSG << 2 | PCK]
+    GEN_QUERY --> |CAN ID: Prefix + MSG + PCK| OUTGOING_ID[Outgoing CAN ID<br/>Format: ID_PREFIX OR MSG LEFT-SHIFT 2 OR PCK]
     OUTGOING_ID --> OUTGOING[Add to Outgoing Queue]
     
     %% Command Processing Branch
@@ -79,12 +79,12 @@ flowchart TD
     VALIDATE_CMD_DEST --> |Valid Destination| COMMAND_TYPE{Command Type}
     VALIDATE_CMD_DEST --> |Invalid| CMD_ERROR[Command Error]
     
-    COMMAND_TYPE --> |Simple Mode| SIMPLE_CMDS[Simple Commands<br/>- Query All (0x0001)<br/>- Enter Bootloader (0x0002)]
+    COMMAND_TYPE --> |Simple Mode| SIMPLE_CMDS[Simple Commands<br/>- Query All 0x0001<br/>- Enter Bootloader 0x0002]
     COMMAND_TYPE --> |Advanced Mode| ADVANCED_CMDS[Advanced Commands<br/>- AFE Operations<br/>- Calibration<br/>- Configuration]
     
     SIMPLE_CMDS --> GEN_CMD[Generate Command Message<br/>Message 0x00]
     ADVANCED_CMDS --> GEN_CMD
-    GEN_CMD --> |Command + Data Encoding| CMD_OUTGOING_ID[Command CAN ID<br/>Format: ID_PREFIX | 0x00 << 2 | PCK<br/>Data: Command Word + Parameters]
+    GEN_CMD --> |Command + Data Encoding| CMD_OUTGOING_ID[Command CAN ID<br/>Format: ID_PREFIX OR 0x00 LEFT-SHIFT 2 OR PCK<br/>Data: Command Word + Parameters]
     CMD_OUTGOING_ID --> OUTGOING
     
     %% Configuration & State
@@ -112,10 +112,10 @@ flowchart TD
     
     %% Utility Functions
     subgraph Utilities [Utility Functions]
-        TEMP_CONV[Temperature Conversion<br/>to_celsius()]
-        ENCODE_LE[Little Endian Encoding<br/>Misc.encode_le()]
-        DECODE_LE[Little Endian Decoding<br/>Misc.decode_le()]
-        ID_COMPUTE[ID Computation<br/>compute_outgoing_id()]
+        TEMP_CONV[Temperature Conversion<br/>to_celsius function]
+        ENCODE_LE[Little Endian Encoding<br/>Misc.encode_le function]
+        DECODE_LE[Little Endian Decoding<br/>Misc.decode_le function]
+        ID_COMPUTE[ID Computation<br/>compute_outgoing_id function]
     end
     
     %% Styling
