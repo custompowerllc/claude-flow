@@ -1,0 +1,41 @@
+# SSH Configuration File
+# Home Assistant Connections
+
+# Direct Home Assistant connection
+Host homeassistant
+    HostName 10.0.0.24
+    User alan
+    Port 22
+    ForwardAgent yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# Home Assistant with port forwarding for VSCodium and services
+Host ha-tunnel
+    HostName 10.0.0.24
+    User alan
+    Port 22
+    LocalForward 8443 localhost:8443
+    LocalForward 8123 localhost:8123
+    LocalForward 1880 localhost:1880
+    LocalForward 8086 localhost:8086
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# Home Assistant VSCodium development
+Host ha-dev
+    HostName 10.0.0.24
+    User alan
+    Port 22
+    ForwardAgent yes
+    LocalForward 8443 localhost:8443
+    LocalForward 8123 localhost:8123
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# Short alias for quick access
+Host ha
+    HostName 10.0.0.24
+    User alan
+    Port 22
+    ForwardAgent yes
