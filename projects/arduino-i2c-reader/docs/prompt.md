@@ -374,4 +374,71 @@ timestamp,soc_pct,soh_pct,fg_voltage_mv,fg_current_ma,fg_temp_k,remaining_mah,fu
 - **Error Rate**: < 1% communication failures under normal conditions
 - **Recovery Time**: < 5 seconds to recover from bus errors
 
-This Arduino I2C reader system should provide comprehensive monitoring and diagnostic capabilities for TI BQ-based battery management systems, with robust error handling and clear data presentation suitable for both human operators and automated analysis systems.
+## Python Companion Application
+
+### Serial Communication Interface
+
+Implement a companion Python application to parse and display data from the Arduino transmitted via serial communications. The Python application will serve as the primary user interface for monitoring the battery management system.
+
+#### Phase 1: CLI Dashboard Application
+```python
+class ArduinoBatteryMonitor:
+    def __init__(self, serial_port='/dev/ttyUSB0', baud_rate=115200):
+        """Initialize serial connection to Arduino"""
+        
+    def parse_serial_data(self, raw_data):
+        """Parse incoming Arduino data packets"""
+        
+    def display_realtime_dashboard(self):
+        """CLI-based real-time data dashboard"""
+        
+    def log_data_to_csv(self, filename):
+        """Log parsed data to CSV for analysis"""
+        
+    def generate_reports(self):
+        """Generate summary reports and trends"""
+```
+
+**CLI Dashboard Features:**
+- Real-time battery status display with color-coded health indicators
+- Live cell voltage monitoring with visual bar graphs
+- Current/voltage/temperature trend displays
+- Alarm and protection status notifications
+- Data logging controls and export options
+- Historical data visualization (ASCII charts)
+
+#### Phase 2: GUI Application Planning
+**Future GUI Implementation:**
+- Tkinter/PyQt-based graphical interface
+- Real-time plotting with matplotlib integration
+- Interactive data exploration and analysis tools
+- Configuration management for Arduino parameters
+- Advanced alarm management and notification system
+- Multi-battery system support for fleet monitoring
+
+#### Serial Protocol Specification
+```python
+# Expected Arduino serial output format
+# JSON-based for easy parsing:
+{
+    "timestamp": 1234567890,
+    "fuel_gauge": {
+        "soc": 85, "voltage": 3870, "current": -1250,
+        "temperature": 253, "capacity": 2450, "cycles": 45
+    },
+    "afe": {
+        "cells": [3850, 3847, 3851, 3849],
+        "pack_voltage": 15397, "current": -1248,
+        "protection": 0, "alarms": 0
+    },
+    "charger": {
+        "input_v": 15200, "output_v": 15400,
+        "current": 1200, "temperature": 285, "enabled": true
+    },
+    "status": {
+        "afe_online": true, "fg_online": true, "charger_online": true
+    }
+}
+```
+
+This Arduino I2C reader system should provide comprehensive monitoring and diagnostic capabilities for TI BQ-based battery management systems, with robust error handling and clear data presentation suitable for both human operators and automated analysis systems. The companion Python application will enhance usability with modern CLI dashboards and future GUI capabilities for advanced battery management workflows.
