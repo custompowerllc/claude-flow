@@ -25,10 +25,11 @@ Based on the GEHC battery management system implementation, the shared I2C bus c
    - Function: Cell voltage monitoring and protection
    - R_sense: 0.5mΩ for current measurement
 
-3. **TI BQ Fuel Gauge (BQ34110)**
+3. **TI BQ Fuel Gauge (BQ34Z100)**
    - I2C Address: `0x55` (7-bit address) 
    - Function: State of charge, capacity, and fuel gauge data
    - Unsealing keys: `0x17916789` and `0x1791AABB`
+   - **Device Confirmed**: Real hardware testing shows `bq34z100` with firmware version `2_02`
 
 ## Key I2C Implementation Requirements
 
@@ -43,7 +44,43 @@ Based on the GEHC battery management system implementation, the shared I2C bus c
 - **Register Access**: Support both single-byte and multi-byte register reads/writes
 - **Word Operations**: Handle 16-bit register operations with proper endianness
 
-## TI BQ Fuel Gauge (BQ34110) Interface
+## TI BQ Fuel Gauge (BQ34Z100) Interface
+
+### Real Hardware Data Analysis
+Based on actual fuel gauge datalog from hardware testing, the following parameters and values have been confirmed:
+
+#### Confirmed Device Information
+- **Device**: `bq34z100` (confirmed via register read)
+- **Firmware Version**: `2_02` 
+- **Device Version**: `0100_2_02`
+- **Battery Configuration**: 4.3Ah capacity (4300-4311 mAh observed)
+- **Voltage Range**: ~52.1V nominal (52104-52117 mV observed)
+- **Current Range**: 281-308 mA typical operation
+- **Temperature**: 24.7-24.8°C operational range
+
+#### Observed Register Values and Patterns
+```cpp
+// Confirmed register data from real hardware logs:
+// Control Status: 0x000D (consistent across all samples)
+// State of Charge: 100% (full battery during testing)
+// Voltage: 52117 mV (typical), occasional 52104 mV
+// Current: 281-308 mA (positive = charging)
+// Average Current: 304-307 mA
+// Temperature: -39.2°C offset indicates raw ADC value needs conversion
+// Internal Temperature: 24.7-24.8°C (processed value)
+// Remaining Capacity: 4303-4311 mAh (increases during charging)
+// Full Charge Capacity: Matches remaining capacity at 100% SOC
+// Cycle Count: 4 cycles
+// State of Health: 92%
+// Flags: 0x09E1, Flags B: 0x0A00, GridNumber: 0x0600
+```
+
+#### Critical Observations for Arduino Implementation
+1. **Temperature Conversion**: Raw temperature shows -39.2°C, but internal temp shows 24.7°C
+2. **Capacity Tracking**: Values increment during charging (4303→4311 mAh observed)
+3. **Voltage Stability**: Voltage very stable at 52.1V with occasional minor variations
+4. **Current Direction**: Positive values indicate charging current
+5. **Status Consistency**: Control status and flags remain stable during operation
 
 ### Key Registers and Data Points
 
